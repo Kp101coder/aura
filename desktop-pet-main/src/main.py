@@ -14,6 +14,7 @@ from .config_reader import XMLReader
 import customtkinter as ctk
 from tkcalendar import Calendar
 from tkinter import ttk
+from .calendar import CalendarApp
 
 
 def start_program(current_pet: str = None):
@@ -89,26 +90,8 @@ def start_program(current_pet: str = None):
     # create menu
 
     def cal():
-
-        ctk.set_appearance_mode("Dark")
-        ctk.set_default_color_theme("blue")
-
-        root = Toplevel(window)
-        window.title("Calendar")
-        root.geometry("550x400")
-
-        frame = ctk.CTkFrame(root)
-        frame.pack(fill="both", padx=10, pady=10, expand=True)
-
-        style = ttk.Style(root)
-        style.theme_use("default")
-
-        calendar = Calendar(frame, selectmode='day', locale='en_US', disabledforeground='red',
-                       cursor="hand2", background=ctk.ThemeManager.theme["CTkFrame"]["fg_color"][1],
-                       selectbackground=ctk.ThemeManager.theme["CTkButton"]["fg_color"][1])
-        calendar.pack(fill="both", expand=True, padx=10, pady=10)
-
-        window.mainloop()
+        calendar_app = CalendarApp()
+        calendar_app.mainloop()
 
     def talk():
         pass
