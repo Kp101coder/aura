@@ -5,8 +5,6 @@ import os
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
 import pygame
 import time
-import sys
-from io import StringIO
 import base64
 
 class AI:
