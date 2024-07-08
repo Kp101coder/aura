@@ -130,3 +130,5 @@ except Exception as e:
 
 cap.release()
 cv2.destroyAllWindows()
+
+input("Press any key to continue...\nUse this time to copy the error messages if done through .exe")
