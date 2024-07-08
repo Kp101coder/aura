@@ -1,5 +1,4 @@
 import os
-import json
 from tkcalendar import Calendar as tkCalendar
 import customtkinter as ctk
 from tkinter import ttk, Text, messagebox
@@ -13,21 +12,22 @@ import pytz  # For timezone support
 
 # Set up Google Calendar API
 SCOPES = ['https://www.googleapis.com/auth/calendar']
-CREDS_FILE = r'path to credentials.json'
-TOKEN_FILE = r'path to token.json'
 
 def get_google_calendar_service():
-    creds = None
-    if os.path.exists(TOKEN_FILE):
-        creds = Credentials.from_authorized_user_file(TOKEN_FILE, SCOPES)
-    if not creds or not creds.valid:
-        if creds and creds.expired and creds.refresh_token:
-            creds.refresh(Request())
-        else:
-            flow = InstalledAppFlow.from_client_secrets_file(CREDS_FILE, SCOPES)
-            creds = flow.run_local_server(port=0)
-        with open(TOKEN_FILE, 'w') as token:
-            token.write(creds.to_json())
+    flow = InstalledAppFlow.from_client_config({
+        "installed": {
+            "client_id": "437972213285-7nfkfeujsg5f1p9471lfc7okokpuka4d",
+            "project_id": "aura-428720",
+            "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+            "token_uri": "https://oauth2.googleapis.com/token",
+            "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+            "client_secret": "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",
+            "redirect_uris": [
+                "http://localhost"
+            ]
+        }
+    }, SCOPES)
+    creds = flow.run_local_server(port=0)
     return build('calendar', 'v3', credentials=creds)
 
 service = get_google_calendar_service()
@@ -214,7 +214,7 @@ class CalendarApp(ctk.CTk):
         for date_str in self.events_by_date:
             date = datetime.strptime(date_str, '%Y-%m-%d')
             self.cal.calevent_create(date, '', 'event')
-        self.cal.tag_config('event', background='green', foreground='white')
+        self.cal.tag_config('event', background='red', foreground='white')
 
     def add_event_prompt(self):
         selected_date = self.selected_date
@@ -234,24 +234,24 @@ class CalendarApp(ctk.CTk):
 
         summary_label = ctk.CTkLabel(prompt, text="Summary:")
         summary_label.pack(pady=5)
-        summary_entry = ctk.CTkEntry(prompt, width=300)
+        summary_entry = ctk.CTkEntry(prompt, width=60)
         summary_entry.pack(pady=5)
 
         description_label = ctk.CTkLabel(prompt, text="Description:")
         description_label.pack(pady=5)
-        description_entry = ctk.CTkEntry(prompt, width=300)
+        description_entry = ctk.CTkEntry(prompt, width=60)
         description_entry.pack(pady=5)
 
         location_label = ctk.CTkLabel(prompt, text="Location:")
         location_label.pack(pady=5)
-        location_entry = ctk.CTkEntry(prompt, width=300)
+        location_entry = ctk.CTkEntry(prompt, width=60)
         location_entry.pack(pady=5)
 
         start_label = ctk.CTkLabel(prompt, text="Start Time (HH:MM):")
         start_label.pack(pady=5)
         start_frame = ctk.CTkFrame(prompt)
         start_frame.pack(pady=5)
-        start_entry = ctk.CTkEntry(start_frame, width=100)
+        start_entry = ctk.CTkEntry(start_frame, width=20)
         start_entry.pack(side="left")
         start_ampm = ttk.Combobox(start_frame, values=["AM", "PM"], width=5)
         start_ampm.set("AM")
@@ -261,7 +261,7 @@ class CalendarApp(ctk.CTk):
         end_label.pack(pady=5)
         end_frame = ctk.CTkFrame(prompt)
         end_frame.pack(pady=5)
-        end_entry = ctk.CTkEntry(end_frame, width=100)
+        end_entry = ctk.CTkEntry(end_frame, width=20)
         end_entry.pack(side="left")
         end_ampm = ttk.Combobox(end_frame, values=["AM", "PM"], width=5)
         end_ampm.set("AM")
@@ -354,3 +354,6 @@ class CalendarApp(ctk.CTk):
         self.selected_tag_id = self.cal.calevent_create(today, '', 'selected_date')
         self.display_events_for_day(today.strftime('%Y-%m-%d'))
 
+if __name__ == "__main__":
+    app = CalendarApp()
+    app.mainloop()
