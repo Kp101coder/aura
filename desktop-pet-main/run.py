@@ -2,6 +2,7 @@ from src.main import start_program
 import os
 import sys
 
+
 # Update the current working directory to always work with relative imports
 # regardless of where the script was called
 os.chdir(os.path.dirname(os.path.realpath(__file__)))

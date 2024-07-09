@@ -6,12 +6,14 @@ import base64
 from AI import Chatbot
 import threading as t
 import os
+import subprocess
 
 APIKEY = open("apikey openai.txt", "r+").read()
 
-HOST = s.gethostbyname(s.gethostname())
+HOST = subprocess.check_output(['hostname', '-I']).decode('utf-8').strip()#Windows: s.gethostbyname(s.gethostname())
+print(HOST)
 PORT = 7106
-MAX_BYTES_ACCEPTED = 4096
+MAX_BYTES_ACCEPTED = 4096*8
 
 server = s.socket(s.AF_INET, s.SOCK_STREAM)
 server.bind((HOST,PORT))
@@ -56,12 +58,14 @@ def count(directory):
     return file_count
 
 def receive_data(sock):
+    # First, read the length of the JSON data (4 bytes)
+    data_length = int.from_bytes(sock.recv(4), 'big')
+    
+    # Now, read the actual JSON data
     data = b''
-    while True:
-        part = sock.recv(MAX_BYTES_ACCEPTED)
+    while len(data) < data_length:
+        part = sock.recv(min(data_length - len(data), MAX_BYTES_ACCEPTED))
         data += part
-        if len(part) < MAX_BYTES_ACCEPTED:
-            break
     return data.decode('utf-8')
     
 print("Starting Server")

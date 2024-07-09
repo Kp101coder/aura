@@ -70,6 +70,7 @@ class SimplePet:
         logger.debug(f"{self.animator.state.__repr__()}, {self.animator.frame_number}")
 
     def set_geometry(self):
+
         """Update the window position and scale to match that of the pet instance's location and size"""
         size = self.animator.animations[self.animator.state].target_resolution
         self.canvas.window.geometry(

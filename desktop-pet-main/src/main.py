@@ -74,7 +74,7 @@ def start_program(current_pet: str = None):
     ## Initialize pet
     # Create the desktop pet
     logger.debug("Create pet")
-    x = int(canvas.resolution["width"] / 2)
+    x = int(canvas.resolution["width"]/2)
     y = int(canvas.resolution["height"])
     pet = Pet(x, y, canvas=canvas, animator=animator)
     # bind key events to the pet and start the app
