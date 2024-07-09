@@ -1,3 +1,8 @@
+import cv2
+import os
+import base64
+
+
 class Client:
     def Capture(self):
             cap = cv2.VideoCapture(0)
