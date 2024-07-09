@@ -8,7 +8,7 @@ class Client:
     def __init__(self):
         global client_socket
         global MAX_BYTES_ACCEPTED
-        HOST = "192.168.3.120" #"Whats my IP"
+        HOST = "57.132.171.87" #"Whats my IP"
         PORT = 7106
         MAX_BYTES_ACCEPTED = 4096
         client_socket = s.socket(s.AF_INET, s.SOCK_STREAM)
