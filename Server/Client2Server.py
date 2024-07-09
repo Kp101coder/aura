@@ -76,7 +76,6 @@ class Client:
                         time.sleep(1)
                 
 client = Client()
-client.sendData("Question", "What color shirt am I wearing?", client.capture())
 while True:
     ask = input("T: terminate, C: convo or ask question: ")
     if ask == "T":
