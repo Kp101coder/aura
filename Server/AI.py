@@ -41,16 +41,11 @@ class Chatbot:
         while pygame.mixer.music.get_busy():
             time.sleep(1)
 
-    def encode_image(self, image_path):
-        with open(image_path, "rb") as image_file:
-            return base64.b64encode(image_file.read()).decode('utf-8')
-
-    def questionImage(self, question, image):
+    def questionImage(self, question, imagedata):
         '''Send a question to ChatGPT along with an image for analysis'''
         global messageList
         global client
         # Getting the base64 string
-        base64_image = self.encode_image(image)
         headers = {
         "Content-Type": "application/json",
         "Authorization": f"Bearer {client.api_key}"
@@ -69,7 +64,7 @@ class Chatbot:
                 {
                 "type": "image_url",
                 "image_url": {
-                    "url": f"data:image/jpeg;base64,{base64_image}"
+                    "url": f"data:image/jpeg;base64,{imagedata}"
                 }
                 }
             ]

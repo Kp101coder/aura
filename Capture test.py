@@ -1,4 +1,4 @@
-from AI_package.AI import Chatbot
+from Server.AI import Chatbot
 
 ai = Chatbot("")
 image = ai.Capture()
