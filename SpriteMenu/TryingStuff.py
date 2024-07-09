@@ -1,6 +1,5 @@
 import customtkinter as ctk
-import time
-from PIL import Image, ImageTk
+from PIL import Image, ImageTk, ImageSequence
 
 class SpriteDashboard(ctk.CTk):
     def __init__(self, sprites):
@@ -18,16 +17,28 @@ class SpriteDashboard(ctk.CTk):
 
     def load_sprites(self):
         self.sprite_buttons = []
+        self.sprite_images = []
+
         for name, file_path in self.sprites:
             try:
                 image = Image.open(file_path)
-                image = image.resize((100, 100), Image.Resampling.LANCZOS)
-                photo = ImageTk.PhotoImage(image)
-                button = ctk.CTkButton(self.sprite_frame, image=photo, text=name, compound="top")
-                button.image = photo  # keep a reference to avoid garbage collection
+                frames = [frame.copy() for frame in ImageSequence.Iterator(image)]
+                frames = [frame.resize((100, 100), Image.Resampling.LANCZOS) for frame in frames]
+                photos = [ImageTk.PhotoImage(frame) for frame in frames]
+                button = ctk.CTkButton(self.sprite_frame, image=photos[0], text=name, compound="top")
+                button.image_frames = photos  # keep a reference to avoid garbage collection
+                button.image_index = 0
+                button.image = photos[0]
                 self.sprite_buttons.append(button)
+                self.sprite_images.append((button, frames))
             except Exception as e:
                 print(f"Error loading image for {name}: {e}")
+
+    def animate(self):
+        for button, frames in self.sprite_images:
+            button.image_index = (button.image_index + 1) % len(button.image_frames)
+            button.configure(image=button.image_frames[button.image_index])
+        self.after(100, self.animate)  # Adjust the interval for smoother or faster animations
 
     def arrange_sprites(self):
         max_columns = 3  # Number of buttons per row
@@ -66,6 +77,8 @@ class SpriteDashboard(ctk.CTk):
         self.sprite_canvas.update_idletasks()
         self.sprite_canvas.configure(scrollregion=self.sprite_canvas.bbox("all"))
 
+        self.animate()  # Start animation
+
     def on_mousewheel(self, event):
         self.sprite_canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
 
@@ -90,6 +103,8 @@ if __name__ == "__main__":
         ("Catherine", "desktop-pet-main/src/sprites/blob/slimeidle.gif"),
         # Add more sprites here
     ]
+
+        
 
     app = SpriteDashboard(sprites)
     app.mainloop()
