@@ -1,3 +1,5 @@
+wget "https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-$(uname)-$(uname -m).sh"
+bash Miniforge3-$(uname)-$(uname -m).sh
 import socket as s
 import PIL.Image as Image
 import io
