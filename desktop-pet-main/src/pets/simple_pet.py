@@ -74,7 +74,7 @@ class SimplePet:
         """Update the window position and scale to match that of the pet instance's location and size"""
         size = self.animator.animations[self.animator.state].target_resolution
         self.canvas.window.geometry(
-            str(size[0]) + "x" + str(size[1]) + "+" + str(self.x) + "+" + str(self.y)
+            str(170) + "x" + str(170) + "+" + str(self.x) + "+" + str(self.y)
         )
 
     def handle_event(self):
