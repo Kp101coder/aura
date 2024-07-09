@@ -1,6 +1,6 @@
-from AI import AI
+from AI import Chatbot
 
-ai = AI("")
+ai = Chatbot("")
 
 while(True):
     choice = input("0: Break, 1: Question, 2: Image and Question: ")

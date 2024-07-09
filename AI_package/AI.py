@@ -6,8 +6,9 @@ os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
 import pygame
 import time
 import base64
+import cv2
 
-class AI:
+class Chatbot:
     def __init__(self, apiKey):
         global messageList
         global client
@@ -76,13 +77,21 @@ class AI:
         ],
         "max_tokens": 300
         }
-        response = requests.post("https://api.openai.com/v1/chat/completions", headers=headers, json=payload)
-        responseText = str(response.content)
-        responseText = responseText[responseText.index("\"content\": \"") + len("\"content\": \""):]
-        responseText = responseText[:responseText.index("\"")]
-        messageList.append({"role": "assistant", "content": responseText})
-        return responseText
+        response = requests.post("https://api.openai.com/v1/chat/completions", headers=headers, json=payload).json()['choices'][0]['message']['content']
+        messageList.append({"role": "assistant", "content": response})
+        return response
     
     def getConvo(self):
         global messageList
         return messageList
+    
+class Client2Server:
+    def Capture(self):
+            cap = cv2.VideoCapture(0)
+            ret, frame = cap.read()
+            path = os.path.join("Temp" , 'GPT-Image.jpg')
+            cv2.imwrite(path, frame)
+            return path
+    def encode_image(self, path):
+            with open(path, "rb") as image_file:
+                return base64.b64encode(image_file.read()).decode('utf-8')
