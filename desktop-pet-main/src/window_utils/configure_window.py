@@ -3,11 +3,12 @@ import pathlib
 import os
 from .window_visability import show_in_tray, show_window, hide_window
 from .canvas import Canvas
+import platform
+
 
 
 def configure_window(
-    window: tk.Tk, topmost=True, bg_color="#000", pet_name="Pet", resolution=(100, 100)
-):
+    window: tk.Tk, topmost=True, bg_color="#000", pet_name="Pet", resolution=(100, 100) ):
     # We pick a transparent color here for the background
     # ! This should be different for mac as mac os has alpha channel
     # ! so this is not really needed there
@@ -15,7 +16,21 @@ def configure_window(
     label = tk.Label(window, bd=0, bg=bg_color)
     window.overrideredirect(True)
     window.update_idletasks()
-    window.wm_attributes("-transparentcolor", bg_color)
+    
+    os_name = platform.system()
+
+    if os_name == 'Darwin':  # macOS
+        # macOS specific code
+        print("Running macOS specific code")
+        window.wm_attributes("-alpha", 1)
+    elif os_name == 'Windows':  # Windows
+        # Windows specific code]
+        print("Running Windows specific code")
+        window.wm_attributes("-transparentcolor", bg_color)
+    else:
+        print(f"Unsupported OS: {os_name}")
+
+    
     label.pack()
 
     # Set on top attribute to True (at least at first) to bring it to the top
