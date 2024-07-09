@@ -57,10 +57,11 @@ class Client:
                 
 client = Client()
 while True:
-    ask = input("T: terminate, C: convo or ask question")
+    ask = input("T: terminate, C: convo or ask question: ")
     if ask == "T":
         client.sendData("Quit")
         client.disconnect()
+        break
     elif ask == "C":
         client.sendData("Convo")
     else:
