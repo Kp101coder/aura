@@ -1,4 +1,6 @@
+
 import os
+import pickle
 from tkcalendar import Calendar as tkCalendar
 import customtkinter as ctk
 from tkinter import ttk, Text, messagebox
@@ -12,22 +14,33 @@ import pytz  # For timezone support
 
 # Set up Google Calendar API
 SCOPES = ['https://www.googleapis.com/auth/calendar']
+TOKEN_FILE = 'token.pickle'
 
 def get_google_calendar_service():
-    flow = InstalledAppFlow.from_client_config({
-        "installed": {
-            "client_id": "437972213285-7nfkfeujsg5f1p9471lfc7okokpuka4d",
-            "project_id": "aura-428720",
-            "auth_uri": "https://accounts.google.com/o/oauth2/auth",
-            "token_uri": "https://oauth2.googleapis.com/token",
-            "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-            "client_secret": "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",
-            "redirect_uris": [
-                "http://localhost"
-            ]
-        }
-    }, SCOPES)
-    creds = flow.run_local_server(port=0)
+    creds = None
+    if os.path.exists(TOKEN_FILE):
+        with open(TOKEN_FILE, 'rb') as token:
+            creds = pickle.load(token)
+    if not creds or not creds.valid:
+        if creds and creds.expired and creds.refresh_token:
+            creds.refresh(Request())
+        else:
+            flow = InstalledAppFlow.from_client_config({
+                "installed": {
+                    "client_id": "437972213285-7nfkfeujsg5f1p9471lfc7okokpuka4d",
+                    "project_id": "aura-428720",
+                    "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+                    "token_uri": "https://oauth2.googleapis.com/token",
+                    "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+                    "client_secret": "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",
+                    "redirect_uris": [
+                        "http://localhost"
+                    ]
+                }
+            }, SCOPES)
+            creds = flow.run_local_server(port=0)
+        with open(TOKEN_FILE, 'wb') as token:
+            pickle.dump(creds, token)
     return build('calendar', 'v3', credentials=creds)
 
 service = get_google_calendar_service()
