@@ -7,17 +7,28 @@ from AI import Chatbot
 import threading as t
 import os
 import subprocess
+import miniupnpc
+import signal
+import atexit
 
 APIKEY = open("apikey openai.txt", "r+").read()
 
-HOST = subprocess.check_output(['hostname', '-I']).decode('utf-8').strip()#Windows: s.gethostbyname(s.gethostname())
-print(HOST)
+# Create a UPnP object and discover devices
+upnp = miniupnpc.UPnP()
+upnp.discoverdelay = 2000
+upnp.discover()
+upnp.selectigd()
+
+HOST = subprocess.check_output(['hostname', '-I']).decode('utf-8').strip()  # Windows: s.gethostbyname(s.gethostname())
 PORT = 7106
-MAX_BYTES_ACCEPTED = 4096*8
+MAX_BYTES_ACCEPTED = 4096 * 8
+
+# Request port forwarding
+external_ip = upnp.externalipaddress()
+upnp.addportmapping(PORT, 'TCP', HOST, PORT, 'My Server', '')
 
 server = s.socket(s.AF_INET, s.SOCK_STREAM)
-server.bind((HOST,PORT))
-
+server.bind((HOST, PORT))
 server.listen(100)
 
 def handle_client(communication_socket, ai):
@@ -67,7 +78,24 @@ def receive_data(sock):
         part = sock.recv(min(data_length - len(data), MAX_BYTES_ACCEPTED))
         data += part
     return data.decode('utf-8')
-    
+
+# Cleanup function to remove port mapping
+def cleanup():
+    upnp.deleteportmapping(PORT, 'TCP')
+    print("Port mapping removed.")
+
+# Register the cleanup function to run on normal program exit
+atexit.register(cleanup)
+
+# Handle termination signals to ensure cleanup is run
+def signal_handler(sig, frame):
+    print('Shutting down gracefully...')
+    cleanup()
+    exit(0)
+
+signal.signal(signal.SIGINT, signal_handler)
+signal.signal(signal.SIGTERM, signal_handler)
+
 print("Starting Server")
 while True:
     print("Listening for new connection")
