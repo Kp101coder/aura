@@ -6,40 +6,17 @@ from AI import Chatbot
 import threading as t
 import os
 import subprocess
-import miniupnpc
-import signal
-import atexit
 
 APIKEY = open("apikey openai.txt", "r+").read()
 
-# Create a UPnP object and discover devices
-upnp = miniupnpc.UPnP()
-upnp.discoverdelay = 2000
-
-try:
-    ndevices = upnp.discover()
-    print(f"Number of UPnP devices discovered: {ndevices}")
-    upnp.selectigd()
-except Exception as e:
-    print(f"UPnP discovery failed: {e}")
-    exit(1)
-
-HOST = subprocess.check_output(['hostname', '-I']).decode('utf-8').strip()  # Windows: s.gethostbyname(s.gethostname())
+HOST = subprocess.check_output(['hostname', '-I']).decode('utf-8').strip()#Windows: s.gethostbyname(s.gethostname())
+print(HOST)
 PORT = 7106
-MAX_BYTES_ACCEPTED = 4096 * 8
-
-try:
-    # Request port forwarding
-    external_ip = upnp.externalipaddress()
-    print(f"External IP address: {external_ip}")
-    upnp.addportmapping(PORT, 'TCP', HOST, PORT, 'My Server', '')
-    print(f"Port {PORT} forwarding to {HOST} enabled.")
-except Exception as e:
-    print(f"Failed to add port mapping: {e}")
-    exit(1)
+MAX_BYTES_ACCEPTED = 4096
 
 server = s.socket(s.AF_INET, s.SOCK_STREAM)
-server.bind((HOST, PORT))
+server.bind((HOST,PORT))
+
 server.listen(100)
 
 def handle_client(communication_socket, ai):
@@ -89,27 +66,7 @@ def receive_data(sock):
         part = sock.recv(min(data_length - len(data), MAX_BYTES_ACCEPTED))
         data += part
     return data.decode('utf-8')
-
-# Cleanup function to remove port mapping
-def cleanup():
-    try:
-        upnp.deleteportmapping(PORT, 'TCP')
-        print("Port mapping removed.")
-    except Exception as e:
-        print(f"Failed to remove port mapping: {e}")
-
-# Register the cleanup function to run on normal program exit
-atexit.register(cleanup)
-
-# Handle termination signals to ensure cleanup is run
-def signal_handler(sig, frame):
-    print('Shutting down gracefully...')
-    cleanup()
-    exit(0)
-
-signal.signal(signal.SIGINT, signal_handler)
-signal.signal(signal.SIGTERM, signal_handler)
-
+    
 print("Starting Server")
 while True:
     print("Listening for new connection")
