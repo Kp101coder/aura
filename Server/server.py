@@ -15,7 +15,10 @@ APIKEY = open("apikey openai.txt", "r+").read()
 # Create a UPnP object and discover devices
 upnp = miniupnpc.UPnP()
 upnp.discoverdelay = 2000
-upnp.discover()
+try:
+    upnp.discover()
+except Exception as e:
+    print(e)
 upnp.selectigd()
 
 HOST = subprocess.check_output(['hostname', '-I']).decode('utf-8').strip()  # Windows: s.gethostbyname(s.gethostname())
