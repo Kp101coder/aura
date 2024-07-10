@@ -1,5 +1,4 @@
 import socket as s
-import PIL.Image as Image
 import io
 import json
 import base64
@@ -54,8 +53,8 @@ def handle_client(communication_socket, ai):
             communication_socket.send(data)
         elif image_data:
             image = base64.b64decode(image_data)
-            image = Image.open(io.BytesIO(image))
-            image.save("Temp/received_image" + str(count("Temp")) + ".jpg")
+            with open("Temp/received_image" + str(count("Temp")) + ".jpg", "wb") as f:
+                f.write(image)
             print("Image received.")
             communication_socket.send(ai.questionImage(question, image_data).encode('utf-8'))
         else:
