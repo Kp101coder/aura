@@ -9,7 +9,9 @@ class ChatbotGUI(ctk.CTk):
 
         self.title(f"{name}'s Corner")
         self.geometry("550x600")
-
+         
+         
+        
         # Create main frame
         self.main_frame = ctk.CTkScrollableFrame(self)
         self.main_frame.pack(pady=20, padx=20, fill="both", expand=True)
@@ -20,15 +22,18 @@ class ChatbotGUI(ctk.CTk):
         # Input frame
         self.input_frame = ctk.CTkFrame(self)
         self.input_frame.pack(fill="x", padx=20, pady=20, expand=False)
+        frame_width = self.input_frame.winfo_screenwidth()
+        print(frame_width)
+        frame_height = self.input_frame.winfo_screenheight()
 
         # Entry box
-        self.entry = ctk.CTkEntry(self.input_frame)
-        self.entry.place(rely=0.9525, relx=0.0125, anchor="sw")
+        self.entry = ctk.CTkEntry(self.input_frame, width = 500)
+        self.entry.place(rely=0.9525, relx=0.0125,anchor="sw")
         self.entry.bind("<Return>", self.send_message)
 
        # Send button
         self.send_button = ctk.CTkButton(self.input_frame, text="Send", command=self.send_message)
-        self.send_button.place(rely=.9525, relx=0.9175, anchor="se")
+        self.send_button.place(rely=.9525, relx=0.985, anchor="se")
          
         # Bind the mouse wheel to the canvas for scrolling
         #self.canvas.bind_all("<MouseWheel>", self._on_mousewheel)
