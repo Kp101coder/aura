@@ -50,7 +50,7 @@ class Animation:
         a_y: float = 0,
         repititions: int = 0,
         frame_multiplier: int = 1,
-        target_resolution: Tuple[int, int] = (100, 100),
+        target_resolution: Tuple[int, int] = (200, 200),
         reverse: bool = False,
     ):
         """
