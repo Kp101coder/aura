@@ -19,16 +19,16 @@ class ChatbotGUI(ctk.CTk):
 
         # Input frame
         self.input_frame = ctk.CTkFrame(self)
-        self.input_frame.pack(fill="x", padx=20, pady=21)
+        self.input_frame.pack(fill="x", padx=20, pady=20)
 
         # Entry box
-        self.entry = ctk.CTkEntry(self.input_frame, width=360)
-        self.entry.grid(row=0, column=0, padx=(0, 10))
+        self.entry = ctk.CTkEntry(self.input_frame)
+        self.entry.place(rely=0.1, relx=0.0125, anchor="w")
         self.entry.bind("<Return>", self.send_message)
 
-        # Send button
+       # Send button
         self.send_button = ctk.CTkButton(self.input_frame, text="Send", command=self.send_message)
-        self.send_button.grid(row=0, column=1) 
+        self.send_button.place(rely=.1, relx=0.9875, anchor="e")
          
         # Bind the mouse wheel to the canvas for scrolling
         #self.canvas.bind_all("<MouseWheel>", self._on_mousewheel)
