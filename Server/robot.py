@@ -50,6 +50,9 @@ def download_file(service, file_id, filepath):
             if not character == "\n":
                 j.write(character)
 
+def delete_file(service, file_id):
+    service.files().delete(fileId=file_id).execute()
+
 def mouseKeyboard():
     mouse.position = 143,18
     mouse.click(Button.left)
@@ -71,7 +74,7 @@ def mouseKeyboard():
 
     # Press and release space
 
-    keyboard.type("cd \"Desktop\\Aura Server\"")
+    keyboard.type("cd \"Desktop/Aura Server\"")
     keyboard.press(Key.enter)
     keyboard.release(Key.enter)
 
@@ -105,6 +108,7 @@ try:
         os.remove("server.py")
     download_file(serviceD, id, "server.py")
     time.sleep(5)
+    delete_file(serviceD, id)
     print("Updated")
 except:
     print("No update")
