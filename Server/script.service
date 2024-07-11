@@ -4,7 +4,7 @@ Requires=multi-user.target sound.target network-online.target keyboard-setup.ser
 After=multi-user.target sound.target network-online.target keyboard-setup.service graphical.target
 
 [Service]
-ExecStart=/bin/bash -c 'cd /home/krishpyddev/Desktop && export DISPLAY=:0.0 && /usr/bin/python robot.py'
+ExecStart=/bin/bash -c 'cd "/home/krishpyddev/Desktop/Aura Server" && export DISPLAY=:0.0 && /usr/bin/python robot.py'
 ExecStartPre=/bin/sleep 60
 StandardError=file:/home/krishpyddev/script_error.log
 User=krishpyddev
