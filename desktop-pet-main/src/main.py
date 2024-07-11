@@ -1,22 +1,15 @@
 import customtkinter as tk
 from tkinter import *
-from PIL import Image
 from src.animation.animation import AnimationStates
 from src.animation.animator import Animator
 from src.animation.load_animations import get_animations
 from src.pets import Pet
 from screeninfo import get_monitors
-from xml.dom import minidom
-import distutils.util
 from src import logger
-import pathlib
-import os
 from .window_utils import configure_window, show_window
 from .config_reader import XMLReader
-import customtkinter as ctk
-from tkcalendar import Calendar
-from tkinter import ttk
 from .calendar import CalendarApp
+from .MenuFinal import SpriteDashboard
 
 
 def start_program(current_pet: str = None):
@@ -90,6 +83,10 @@ def start_program(current_pet: str = None):
     show_window(window)
 
     # create menu
+    def buddies():
+        app = SpriteDashboard()
+        app.mainloop()
+
 
     def cal():
         calendar_app = CalendarApp()
@@ -103,6 +100,7 @@ def start_program(current_pet: str = None):
         my_menu.grab_release()
 
     my_menu = Menu(window, tearoff=False)
+    my_menu.add_command(label="Buddies", command=buddies)
     my_menu.add_command(label="Calendar", command=cal)
     my_menu.add_command(label="Talk", command=talk)
     my_menu.add_separator()

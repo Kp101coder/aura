@@ -29,6 +29,8 @@ class SpriteDashboard(ctk.CTk):
                 button.image_frames = photos  # keep a reference to avoid garbage collection
                 button.image_index = 0
                 button.image = photos[0]
+                button.name = name  # Store the name in the button instance
+                button.configure(command=lambda btn=button: self.on_sprite_button_click(btn.name))  # Bind click event
                 self.sprite_buttons.append(button)
                 self.sprite_images.append((button, frames))
             except Exception as e:
@@ -82,29 +84,30 @@ class SpriteDashboard(ctk.CTk):
     def on_mousewheel(self, event):
         self.sprite_canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
 
+    def on_sprite_button_click(self, name):
+        print(f"Clicked on sprite: {name}")
+
 if __name__ == "__main__":
     ctk.set_appearance_mode("System")  # Modes: "System" (standard), "Dark", "Light"
     ctk.set_default_color_theme("dark-blue")  # Themes: "blue" (standard), "green", "dark-blue"
 
     # List of sprites with names and file paths
     sprites = [
-        ("Jerry", "desktop-pet-main/src/sprites/blob/slimeidle.gif"),
-        ("Cat", "desktop-pet-main/src/sprites/blob/slimeidle.gif"),
-        ("Horse", "desktop-pet-main/src/sprites/blob/slimeidle.gif"),
-        ("Dog", "desktop-pet-main/src/sprites/blob/slimeidle.gif"),
-        ("Rabbit", "desktop-pet-main/src/sprites/blob/slimeidle.gif"),
-        ("John", "desktop-pet-main/src/sprites/blob/slimeidle.gif"),
-        ("AndySucks", "desktop-pet-main/src/sprites/blob/slimeidle.gif"),
-        ("Harith", "desktop-pet-main/src/sprites/blob/slimeidle.gif"),
-        ("KrishpyDonuts", "desktop-pet-main/src/sprites/blob/slimeidle.gif"),
-        ("VAYU", "desktop-pet-main/src/sprites/blob/slimeidle.gif"),
-        ("Aashi", "desktop-pet-main/src/sprites/blob/slimeidle.gif"),
-        ("Laya", "desktop-pet-main/src/sprites/blob/slimeidle.gif"),
-        ("Catherine", "desktop-pet-main/src/sprites/blob/slimeidle.gif"),
+        ("Jerry", ["desktop-pet-main/src/sprites/blob/slimeidle.gif","desktop-pet-main/src/sprites/blob/slimegrabbed.gif"]),
+        ("Cat", ["desktop-pet-main/src/sprites/blob/slimeidle.gif","desktop-pet-main/src/sprites/blob/slimegrabbed.gif"]),
+        ("Horse", ["desktop-pet-main/src/sprites/blob/slimeidle.gif","desktop-pet-main/src/sprites/blob/slimegrabbed.gif"]),
+        ("Dog", ["desktop-pet-main/src/sprites/blob/slimeidle.gif","desktop-pet-main/src/sprites/blob/slimegrabbed.gif"]),
+        ("Rabbit", ["desktop-pet-main/src/sprites/blob/slimeidle.gif","desktop-pet-main/src/sprites/blob/slimegrabbed.gif"]),
+        ("John", ["desktop-pet-main/src/sprites/blob/slimeidle.gif","desktop-pet-main/src/sprites/blob/slimegrabbed.gif"]),
+        ("AndySucks", ["desktop-pet-main/src/sprites/blob/slimeidle.gif","desktop-pet-main/src/sprites/blob/slimegrabbed.gif"]),
+        ("Harith", ["desktop-pet-main/src/sprites/blob/slimeidle.gif","desktop-pet-main/src/sprites/blob/slimegrabbed.gif"]),
+        ("KrishpyDonuts", ["desktop-pet-main/src/sprites/blob/slimeidle.gif","desktop-pet-main/src/sprites/blob/slimegrabbed.gif"]),
+        ("VAYU", ["desktop-pet-main/src/sprites/blob/slimeidle.gif","desktop-pet-main/src/sprites/blob/slimegrabbed.gif"]),
+        ("Aashi", ["desktop-pet-main/src/sprites/blob/slimeidle.gif","desktop-pet-main/src/sprites/blob/slimegrabbed.gif"]),
+        ("Laya", ["desktop-pet-main/src/sprites/blob/slimeidle.gif","desktop-pet-main/src/sprites/blob/slimegrabbed.gif"]),
+        ("Catherine", ["desktop-pet-main/src/sprites/blob/slimeidle.gif","desktop-pet-main/src/sprites/blob/slimegrabbed.gif"]),
         # Add more sprites here
     ]
-
-        
 
     app = SpriteDashboard(sprites)
     app.mainloop()

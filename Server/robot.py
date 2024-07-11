@@ -102,15 +102,12 @@ except:
     
 serviceD = build('drive', 'v3', credentials=creds)
 
-try:
-    id = search_for_file(serviceD, "server.py", "text/x-python", search_for_file(serviceD, "Server Update", "application/vnd.google-apps.folder", None))
-    if os.path.exists("server.py"):
-        os.remove("server.py")
-    download_file(serviceD, id, "server.py")
-    time.sleep(5)
-    delete_file(serviceD, id)
-    print("Updated")
-except:
-    print("No update")
-
 mouseKeyboard()
+
+while(True):
+    try:
+        id = search_for_file(serviceD, "server.py", "text/x-python", search_for_file(serviceD, "Server Update", "application/vnd.google-apps.folder", None))
+        os.system("sudo reboot")
+    except:
+        print("No update")
+    time.sleep(1800)
