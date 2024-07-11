@@ -30,11 +30,12 @@ def get_animations(
     elif pet_name == "blob":
         animations = get_blob_animations(impath, target_resolution)
 
+
     return animations
 
 
 def get_cat_animations(impath: str, target_resolution: Tuple[int, int]):
-    """Loads all of the animations for a cat
+    """Loads all of the animations for a horse
     Args:
         impath (str): path to the folder the animations are in
         target_resolution (Tuple[int, int]): target size of the animations
@@ -55,15 +56,17 @@ def get_cat_animations(impath: str, target_resolution: Tuple[int, int]):
     # ! See the example in src.animations.get_cat_animations where although not having gif files for falling and landing animations
     # ! other animations are repurposed for these animation states.
     animations: Dict[AnimationStates, Animation] = {
+        ######### IDLE
         AnimationStates.IDLE: Animation(
             standing_actions,
-            gif_location=pj(impath, "idle.gif"),
+            gif_location=pj(impath, "catidle.gif"),
             frame_timer=400,
             target_resolution=target_resolution,
         ),
+        ######### SLEEP
         AnimationStates.IDLE_TO_SLEEP: Animation(
             [AnimationStates.SLEEP],
-            gif_location=pj(impath, "idle_to_sleep.gif"),
+            gif_location=pj(impath, "catidletosleep.gif"),
             target_resolution=target_resolution,
         ),
         AnimationStates.SLEEP: Animation(
@@ -74,52 +77,57 @@ def get_cat_animations(impath: str, target_resolution: Tuple[int, int]):
                 AnimationStates.SLEEP,
                 AnimationStates.SLEEP_TO_IDLE,
             ],
-            gif_location=pj(impath, "sleep.gif"),
+            gif_location=pj(impath, "catsleeping.gif"),
             frame_timer=1000,
             target_resolution=target_resolution,
         ),
         AnimationStates.SLEEP_TO_IDLE: Animation(
             [AnimationStates.IDLE],
-            gif_location=pj(impath, "sleep_to_idle.gif"),
+            gif_location=pj(impath, "catsleeptoidle.gif"),
             target_resolution=target_resolution,
         ),
+        ######### WALKING
         AnimationStates.WALK_POSITIVE: Animation(
             standing_actions,
-            gif_location=pj(impath, "walking_positive.gif"),
+            gif_location=pj(impath, "catwalkingright.gif"),
             v_x=3,
             target_resolution=target_resolution,
         ),
         AnimationStates.WALK_NEGATIVE: Animation(
             standing_actions,
-            gif_location=pj(impath, "walking_negative.gif"),
+            gif_location=pj(impath, "catwalkingleft.gif"),
             v_x=-3,
             target_resolution=target_resolution,
         ),
-        # There is no grabbed gif, so just speed up the walking gif
+        ########### MOUSE INTERACTIONS
         AnimationStates.GRABBED: Animation(
             [AnimationStates.GRABBED],
-            gif_location=pj(impath, "walking_positive.gif"),
+            gif_location=pj(impath, "catgrabbed.gif"),
             frame_timer=50,
             target_resolution=target_resolution,
         ),
-        # There is no falling gif, so just speed up the walking gif
-        # but as position updates after every frame of animation, incease
-        # update speed to be smoother (increase duplicate frames to prevent)
-        # spazzing looking cat
+        AnimationStates.GRAB_TO_FALL: Animation(
+            [AnimationStates.FALLING],
+            gif_location=pj(impath, "catgrabtofall.gif"),
+            target_resolution=target_resolution,
+        ),
         AnimationStates.FALLING: Animation(
             [AnimationStates.FALLING],
-            gif_location=pj(impath, "walking_negative.gif"),
-            frame_timer=10,
+            gif_location=pj(impath, "catfalling.gif"),
+            frame_timer=50,
             frame_multiplier=2,
             target_resolution=target_resolution,
             a_y=2,
         ),
+        AnimationStates.LANDED: Animation(
+            [AnimationStates.IDLE],
+            gif_location=pj(impath, "catfallingtoidle.gif"),
+            frame_timer=100,
+            target_resolution=target_resolution,
+        ),
     }
-    # No landed animation, but instead return the cat to its idle animation so that
-    # it can go to a next animation state after falling
-    animations[AnimationStates.LANDED] = animations[AnimationStates.IDLE]
-    return animations
 
+    return animations
 
 def get_horse_animations(impath: str, target_resolution: Tuple[int, int]):
     """Loads all of the animations for a horse

@@ -13,7 +13,7 @@ class Client:
                 global client_socket
                 global MAX_BYTES_ACCEPTED
                 global cap
-                HOST = "192.168.3.126"#"57.132.171.87"
+                HOST = "57.132.171.87"
                 PORT = 7106
                 MAX_BYTES_ACCEPTED = 8192
                 client_socket = s.socket(s.AF_INET, s.SOCK_STREAM)
