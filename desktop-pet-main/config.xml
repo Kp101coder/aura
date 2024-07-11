@@ -43,8 +43,8 @@
             <!-- Size of the pet (animation frames) are scaled
             to match this scale -->
             <resolution>
-                <x>300</x>
-                <y>300</y>
+                <x>200</x>
+                <y>200</y>
             </resolution>
         </pet>
 
