@@ -75,9 +75,10 @@ class SimplePet:
         size = self.animator.animations[self.animator.state].target_resolution
         print(size[0])
         print(size[1])
-        self.canvas.window.geometry(
-            str(200) + "x" + str(200) + "+" + str(self.x) + "+" + str(self.y)
-        )
+        self.canvas.window.geometry("200x200")
+        # self.canvas.window.geometry(
+        #     str(200) + "x" + str(200) + "+" + str(self.x) + "+" + str(self.y)
+        # )
 
     def handle_event(self):
         """Part of animation loop, after delay between frames in animation

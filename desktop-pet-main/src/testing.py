@@ -4,7 +4,7 @@ from PIL import Image, ImageTk, ImageSequence
 class AnimatedGIF(tk.Label):
     def __init__(self, master, gif_path, size):
         self.size = size
-        im = Image.open(r"C:\\Users\\andyw\\Documents\\GitHub\\aura\\desktop-pet-main\\src\\sprites\\cat\\catidle.gif")
+        im = Image.open(r"C:\\Users\\SmashedPotatoez\\OneDrive\\Desktop\\aura\\desktop-pet-main\\src\\sprites\\cat\\catidle.gif")
         self.frames = [ImageTk.PhotoImage(img.resize(size)) for img in ImageSequence.Iterator(im)]
         self.frame_index = 0
         tk.Label.__init__(self, master, image=self.frames[self.frame_index])
