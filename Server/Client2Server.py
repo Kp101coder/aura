@@ -8,12 +8,28 @@ import pygame
 from gtts import gTTS
 import time
 
+
+'''
+All responses sent are in json form:
+
+sys (system message)
+question
+image
+
+All responses recived are in json form:
+
+answer
+action
+code
+
+'''
+
 class Client:
         def __init__(self):
                 global client_socket
                 global MAX_BYTES_ACCEPTED
                 global cap
-                HOST = "57.132.171.87"
+                HOST = "57.132.171.87" #Testing: s.gethostbyname(s.gethostname())
                 PORT = 7106
                 MAX_BYTES_ACCEPTED = 8192
                 client_socket = s.socket(s.AF_INET, s.SOCK_STREAM)
@@ -40,19 +56,19 @@ class Client:
                         
         def sendData(self, sys, question=None, image=None):
                 print("Sending Data")
-                if sys not in ["Question", "Quit", "Convo"]:
+                if sys not in ["Question", "Quit", "Convo", "Action"]:
                         raise Exception("You need a valid system message")
                 data = {
-                'sys': sys,
-                'question': question,
-                'image': image
+                        'sys': sys,
+                        'question': question,
+                        'image': image
                 }
                 data = json.dumps(data).encode('utf-8')
 
                 client_socket.sendall(len(data).to_bytes(4, 'big'))
                 client_socket.sendall(data)
                 response = self.receive_response()
-                print(response)
+                response = json.loads(response)
                 return response
 
         def receive_response(self):
@@ -65,7 +81,14 @@ class Client:
                 return data.decode('utf-8')
 
         def disconnect(self):
-                self.sendData("Quit")
+                data = {
+                        'sys': "Quit",
+                        'question': None,
+                        'image': None
+                }
+                data = json.dumps(data).encode('utf-8')
+                client_socket.sendall(len(data).to_bytes(4, 'big'))
+                client_socket.sendall(data)
                 client_socket.close()
 
         def playSound(self, file_path):
@@ -79,10 +102,9 @@ client = Client()
 while True:
     ask = input("T: terminate, C: convo or ask question: ")
     if ask == "T":
-        client.sendData("Quit")
         client.disconnect()
         break
     elif ask == "C":
-        client.sendData("Convo")
+        print(client.sendData("Convo"))
     else:
-        client.sendData("Question", ask)
+        print(client.sendData("Question", ask))
