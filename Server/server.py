@@ -9,7 +9,7 @@ import subprocess
 
 APIKEY = open("apikey openai.txt", "r+").read()
 
-HOST = subprocess.check_output(['hostname', '-I']).decode('utf-8').strip()#Windows: s.gethostbyname(s.gethostname())
+HOST = subprocess.check_output(['hostname', '-I']).decode('utf-8').strip() #Windows: s.gethostbyname(s.gethostname())
 print(HOST)
 PORT = 7106
 MAX_BYTES_ACCEPTED = 4096
@@ -19,36 +19,76 @@ server.bind((HOST,PORT))
 
 server.listen(100)
 
+'''
+Actions are when gpt interprets the user requesting it to interface directly with their system.
+When GPT interprets an action, it adds a special string to the response.
+This string tells the user the next thing is an action.
+the action is a string indicates a specific operation like changing character
+The code loads that action into the output json.
+After the action is the code which tells the specifcs of the action and is also loaded into the json.
+
+For example:
+action: Add Calendar Event
+code: 
+
+All responses sent are in json form:
+
+answer
+action
+code
+
+'''
+
 def handle_client(communication_socket, ai):
     print("Running handle")
-    data = receive_data(communication_socket)
-    data = json.loads(data)
+    clientData = receive_data(communication_socket)
+    clientData = json.loads(clientData)
 
-    sysMessage = data.get('sys')
-    question = data.get('question')
-    image_data = data.get('image')
+    sysMessage = clientData.get('sys')
+    question = clientData.get('question')
+    image_data = clientData.get('image')
 
-    print(f"Message from client: {sysMessage}")
+    print(f"Message from client: {sysMessage}\nQuestion: {question}")
     if sysMessage == "Quit":
         communication_socket.close()
         print("Stopping handle...")
     else:
+        response = None
         if sysMessage == "Convo":
-            list = ai.getConvo()
-            data = {}
-            for i in range(len(list)):
-                data[i] = list[i]
-            data = json.dumps(data).encode('utf-8')
-            communication_socket.send(data)
+            response = str(ai.getConvo())
         elif image_data:
             image = base64.b64decode(image_data)
             with open("Temp/received_image" + str(count("Temp")) + ".jpg", "wb") as f:
                 f.write(image)
             print("Image received.")
-            communication_socket.send(ai.questionImage(question, image_data).encode('utf-8'))
+            response = ai.questionImage(question, image_data)
         else:
-            communication_socket.send(ai.question(question).encode('utf-8'))
+            response = ai.question(question)
+        communication_socket.send(json.dumps(processResponse(response)).encode('utf-8'))
         handle_client(communication_socket, ai)
+
+def processResponse(response):
+    answer = None
+    action = None
+    code = None
+
+    if not response.rfind("Action: ") == -1:
+        answer = response[:response.rfind("Action: ")]
+        action = response[response.rfind("Action: "):response.rfind("Code: ")]
+        if not response.rfind("Code: ") == -1:
+            code = response[response.rfind("Code: "):]
+        else:
+            print("Code not found")
+    else:
+        answer = response
+        print("Action not found")
+
+    data = {
+        'answer' : answer,
+        'action' : action,
+        'code' : code
+    }
+    return data
 
 def count(directory):
     file_count = 0
