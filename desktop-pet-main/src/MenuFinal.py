@@ -1,7 +1,7 @@
 import customtkinter as ctk
-from PIL import Image, ImageTk, ImageSequence
+from PIL import Image, ImageSequence
 
-class SpriteDashboard(ctk.CTk):
+class SpriteDashboard(ctk.CTkToplevel):
     ctk.set_appearance_mode("System")  # Modes: "System" (standard), "Dark", "Light"
     ctk.set_default_color_theme("dark-blue")  # Themes: "blue" (standard), "green", "dark-blue"
 
@@ -15,28 +15,29 @@ class SpriteDashboard(ctk.CTk):
 
         self.geometry(f"{initial_width}x{initial_height}")
 
+        self.sprite_buttons = []
+        self.sprite_images = []
+        self.image_references = []  # To keep references to avoid garbage collection
         self.create_widgets()
 
     def load_sprites(self):
-        self.sprite_buttons = []
-        self.sprite_images = []
-
         for name, file_path in self.list():
-            try:
-                image = Image.open(file_path)
-                frames = [frame.copy() for frame in ImageSequence.Iterator(image)]
-                frames = [frame.resize((100, 100), Image.Resampling.LANCZOS) for frame in frames]
-                photos = [ImageTk.PhotoImage(frame) for frame in frames]
-                button = ctk.CTkButton(self.sprite_frame, image=photos[0], text=name, compound="top")
-                button.image_frames = photos  # keep a reference to avoid garbage collection
-                button.image_index = 0
-                button.image = photos[0]
-                button.name = name  # Store the name in the button instance
-                button.configure(command=lambda btn=button: self.on_sprite_button_click(btn.name))  # Bind click event
-                self.sprite_buttons.append(button)
-                self.sprite_images.append((button, frames))
-            except Exception as e:
-                print(f"Error loading image for {name}: {e}")
+            print(f"Loading sprite: {name} from {file_path}")
+            image = Image.open(file_path)
+            frames = [frame.copy() for frame in ImageSequence.Iterator(image)]
+            frames = [frame.resize((100, 100), Image.Resampling.LANCZOS) for frame in frames]
+            photos = [ctk.CTkImage(frame) for frame in frames]  # Convert to CTkImage
+            print(f"Loaded {len(photos)} frames for {name}")
+            button = ctk.CTkButton(self.sprite_frame, image=photos[0], text=name, compound="top")
+            button.image_frames = photos  # keep a reference to avoid garbage collection
+            button.image_index = 0
+            button.image = photos[0]
+            button.name = name  # Store the name in the button instance
+            button.configure(command=lambda btn=button: self.on_sprite_button_click(btn.name))  # Bind click event
+            self.sprite_buttons.append(button)
+            self.sprite_images.append((button, frames))
+            self.image_references.extend(photos)  # Store photos to avoid garbage collection
+            print(f"Sprite {name} loaded successfully")
 
     def animate(self):
         for button, frames in self.sprite_images:
@@ -92,21 +93,23 @@ class SpriteDashboard(ctk.CTk):
     def list(self):
         # List of sprites with names and file paths
         sprites = [
-        ("Jerry", "sprites/blob/slimeidle.gif"),
-        ("Cat", "sprites/blob/slimeidle.gif"),
-        ("Horse", "sprites/blob/slimeidle.gif"),
-        ("Dog", "sprites/blob/slimeidle.gif"),
-        ("Rabbit", "sprites/blob/slimeidle.gif"),
-        ("John", "sprites/blob/slimeidle.gif"),
-        ("AndySucks", "sprites/blob/slimeidle.gif"),
-        ("Harith", "sprites/blob/slimeidle.gif"),
-        ("KrishpyDonuts", "sprites/blob/slimeidle.gif"),
-        ("VAAYU", "sprites/blob/slimeidle.gif"),
-        ("Aashi", "sprites/blob/slimeidle.gif"),
-        ("Laya", "sprites/blob/slimeidle.gif"),
-        ("Catherine", "sprites/blob/slimeidle.gif"),
-        # Add more sprites here
-    ]
+            ("Jerry", "src/sprites/blob/slimeidle.gif"),
+            ("Cat", "src/sprites/blob/slimeidle.gif"),
+            ("Horse", "src/sprites/blob/slimeidle.gif"),
+            ("Dog", "src/sprites/blob/slimeidle.gif"),
+            ("Rabbit", "src/sprites/blob/slimeidle.gif"),
+            ("John", "src/sprites/blob/slimeidle.gif"),
+            ("AndySucks", "src/sprites/blob/slimeidle.gif"),
+            ("Harith", "src/sprites/blob/slimeidle.gif"),
+            ("KrishpyDonuts", "src/sprites/blob/slimeidle.gif"),
+            ("VAAYU", "src/sprites/blob/slimeidle.gif"),
+            ("Aashi", "src/sprites/blob/slimeidle.gif"),
+            ("Laya", "src/sprites/blob/slimeidle.gif"),
+            ("Catherine", "src/sprites/blob/slimeidle.gif"),
+            # Add more sprites here
+        ]
         return sprites
-app = SpriteDashboard()
-app.mainloop()
+
+if __name__ == "__main__":
+    app = SpriteDashboard()
+    app.mainloop()

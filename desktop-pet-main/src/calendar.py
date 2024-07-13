@@ -366,7 +366,3 @@ class CalendarApp(ctk.CTk):
         self.selected_date = today
         self.selected_tag_id = self.cal.calevent_create(today, '', 'selected_date')
         self.display_events_for_day(today.strftime('%Y-%m-%d'))
-
-if __name__ == "__main__":
-    app = CalendarApp()
-    app.mainloop()
