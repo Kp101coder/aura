@@ -55,7 +55,7 @@ class ChatApplication:
 
 
     def _on_enter_pressed(self, event):
-        msg = self.msg_entry.get()
+        msg = str(self.msg_entry.get()) + "\n"
         self._insert_message(msg, "You")
 
     def _insert_message(self, msg, sender):
