@@ -92,36 +92,21 @@ class SpriteDashboard(ctk.CTk):
     def list(self):
         # List of sprites with names and file paths
         sprites = [
-        ("Jerry", "src/sprites/blob/slimeidle.gif"),
-        ("Cat", "src/sprites/blob/slimeidle.gif"),
-        ("Horse", "src/sprites/blob/slimeidle.gif"),
-        ("Dog", "src/sprites/blob/slimeidle.gif"),
-        ("Rabbit", "src/sprites/blob/slimeidle.gif"),
-        ("John", "src/sprites/blob/slimeidle.gif"),
-        ("AndySucks", "src/sprites/blob/slimeidle.gif"),
-        ("Harith", "src/sprites/blob/slimeidle.gif"),
-        ("KrishpyDonuts", "src/sprites/blob/slimeidle.gif"),
-        ("VAAYU", "src/sprites/blob/slimeidle.gif"),
-        ("Aashi", "src/sprites/blob/slimeidle.gif"),
-        ("Laya", "src/sprites/blob/slimeidle.gif"),
-        ("Catherine", "src/sprites/blob/slimeidle.gif"),
+        ("Jerry", "sprites/blob/slimeidle.gif"),
+        ("Cat", "sprites/blob/slimeidle.gif"),
+        ("Horse", "sprites/blob/slimeidle.gif"),
+        ("Dog", "sprites/blob/slimeidle.gif"),
+        ("Rabbit", "sprites/blob/slimeidle.gif"),
+        ("John", "sprites/blob/slimeidle.gif"),
+        ("AndySucks", "sprites/blob/slimeidle.gif"),
+        ("Harith", "sprites/blob/slimeidle.gif"),
+        ("KrishpyDonuts", "sprites/blob/slimeidle.gif"),
+        ("VAAYU", "sprites/blob/slimeidle.gif"),
+        ("Aashi", "sprites/blob/slimeidle.gif"),
+        ("Laya", "sprites/blob/slimeidle.gif"),
+        ("Catherine", "sprites/blob/slimeidle.gif"),
         # Add more sprites here
     ]
         return sprites
 app = SpriteDashboard()
 app.mainloop()
-
-'''if __name__ == "__main__":
-    ctk.set_appearance_mode("System")  # Modes: "System" (standard), "Dark", "Light"
-    ctk.set_default_color_theme("dark-blue")  # Themes: "blue" (standard), "green", "dark-blue"
-
-    # List of sprites with names and file paths
-    sprites = [
-        ("Jerry", "src/sprites/blob/slimeidle.gif"),
-        ("Cat", "src/sprites/blob/slimeidle.gif"),
-        ("Horse", "src/sprites/blob/slimeidle.gif"),
-        # Add more sprites here
-    ]
-
-    app = SpriteDashboard(sprites)
-    app.mainloop()'''

@@ -10,7 +10,7 @@ class ChatbotGUI(ctk.CTk):
         
         self.geometry("600x600")     
         
-         
+        
         #padding grids
         self.rowconfigure(0, weight=1)    
         self.rowconfigure(1, weight=10)
@@ -62,7 +62,6 @@ class ChatbotGUI(ctk.CTk):
             bubble_frame.pack(anchor="w", padx=10, pady=5)
         else:
             bubble_frame.pack(anchor="e", padx=10, pady=5)
-
 
 if __name__ == "__main__":
     app = ChatbotGUI("Jerry")
