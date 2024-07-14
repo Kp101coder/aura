@@ -37,18 +37,26 @@ answer
 action
 code
 
-'''
+All responses are recived in json form:
 
+sys
+message
+image
+
+Receivable system messages are:
+
+"Question", "Quit", "Convo", "Set Convo"
+'''
 def handle_client(communication_socket, ai):
     print("Running handle")
     clientData = receive_data(communication_socket)
     clientData = json.loads(clientData)
 
     sysMessage = clientData.get('sys')
-    question = clientData.get('question')
+    message = clientData.get('message')
     image_data = clientData.get('image')
 
-    print(f"Message from client: {sysMessage}\nQuestion: {question}")
+    print(f"System Message from client: {sysMessage}\nmessage: {message}")
     if sysMessage == "Quit":
         communication_socket.close()
         print("Stopping handle...")
@@ -56,14 +64,16 @@ def handle_client(communication_socket, ai):
         response = None
         if sysMessage == "Convo":
             response = str(ai.getConvo())
+        elif sysMessage == "Set Convo":
+            ai.setConvo(message)
         elif image_data:
             image = base64.b64decode(image_data)
             with open("Temp/received_image" + str(count("Temp")) + ".jpg", "wb") as f:
                 f.write(image)
             print("Image received.")
-            response = ai.questionImage(question, image_data)
+            response = ai.questionImage(message, image_data)
         else:
-            response = ai.question(question)
+            response = ai.question(message)
         communication_socket.send(json.dumps(processResponse(response)).encode('utf-8'))
         handle_client(communication_socket, ai)
 

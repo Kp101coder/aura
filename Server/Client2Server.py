@@ -13,7 +13,7 @@ import time
 All responses sent are in json form:
 
 sys (system message)
-question
+message
 image
 
 All responses recived are in json form:
@@ -23,7 +23,7 @@ action
 code
 
 '''
-
+"[{}, {}, {}]"
 class Client:
         def __init__(self):
                 global client_socket
@@ -54,13 +54,13 @@ class Client:
                 return data
                 
                         
-        def sendData(self, sys, question=None, image=None):
+        def sendData(self, sys, message=None, image=None):
                 print("Sending Data")
-                if sys not in ["Question", "Quit", "Convo", "Action"]:
+                if sys not in ["Question", "Quit", "Convo", "Set Convo"]:
                         raise Exception("You need a valid system message")
                 data = {
                         'sys': sys,
-                        'question': question,
+                        'message': message,
                         'image': image
                 }
                 data = json.dumps(data).encode('utf-8')
@@ -83,7 +83,7 @@ class Client:
         def disconnect(self):
                 data = {
                         'sys': "Quit",
-                        'question': None,
+                        'message': None,
                         'image': None
                 }
                 data = json.dumps(data).encode('utf-8')
