@@ -1,5 +1,7 @@
 import tkinter as tk
 
+from screeninfo import get_monitors
+
 from ..animation import Animation, AnimationStates, Animator
 from ..window_utils import Canvas
 from src import logger
@@ -72,9 +74,30 @@ class SimplePet:
     def set_geometry(self):
         
         """Update the window position and scale to match that of the pet instance's location and size"""
-        size = self.animator.animations[self.animator.state].target_resolution
+        #size = self.animator.animations[self.animator.state].target_resolution
+        monitor = get_monitors()[0]
+        '''When at a resolution above 2560
+            
+            The window can be found by using the line of best fit from trial and error of 3264 and 3840'''
+        
+        #print("Width: " + str(monitor.width))
+        if monitor.width > 2954:
+            s = int(-0.046875*monitor.width+313)
+        else:
+            s = 200
+        print("s: " + str(s))
+        # match monitor.width:
+        #     case 3840: #
+        #         s=133
+        #     case 3264: #
+        #         s=160
+        #     case 2954:
+        #         s = 200 #WTF
+        #     case _:
+        #         s=200
+
         self.canvas.window.geometry(
-            str(size[0]) + "x" + str(size[1]) + "+" + str(self.x) + "+" + str(self.y)
+            str(s) + "x" + str(s) + "+" + str(self.x) + "+" + str(self.y)
         )
 
     def handle_event(self):
