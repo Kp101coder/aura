@@ -76,9 +76,11 @@ class SimplePet:
         #size = self.animator.animations[self.animator.state].target_resolution
         #The pets geometry can be affected by the windows scale setting. Anything other than 100% will affect
         #the pets rendering
-        s=200
         scale_factor = ctypes.windll.shcore.GetScaleFactorForDevice(0)
-               
+        if not scale_factor == 100:
+            s = int(386.208 * pow(0.992901, scale_factor))
+        else:
+            s = 200
         self.canvas.window.geometry(
             str(s) + "x" + str(s) + "+" + str(self.x) + "+" + str(self.y)
         )

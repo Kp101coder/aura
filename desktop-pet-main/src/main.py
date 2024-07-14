@@ -1,3 +1,4 @@
+import ctypes
 import customtkinter as tk
 from tkinter import *
 from src.animation.animation import AnimationStates
@@ -37,9 +38,12 @@ def start_program(current_pet: str = None):
     logger.debug("Creating tkinter window/config")
     # Get info on the primary monitor (that is where the pet will be)
     monitor = get_monitors()[0]
+    scale_factor = ctypes.windll.shcore.GetScaleFactorForDevice(0)
+    offset = int(pet_config.offset + (10*((scale_factor-100)/25)))
+    print("Offset: " + str(offset))
     resolution = {
         "width": int(monitor.width),
-        "height": int(monitor.height - pet_config.offset),
+        "height": int(monitor.height - offset),
     }
     window = tk.CTk()
     canvas = configure_window(
