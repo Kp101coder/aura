@@ -126,30 +126,35 @@ connect("Prabhu", "Prabhu")
 creds = None
 serviceD = None
 
-if os.path.exists('token.json'):
-    creds = Credentials.from_authorized_user_file('token.json', SCOPES)
-if not creds or not creds.valid:
-    if creds and creds.expired and creds.refresh_token:
-        creds.refresh(Request())
-    else:
-        flow = InstalledAppFlow.from_client_secrets_file('credentials.json', SCOPES)
-        creds = flow.run_local_server(port=0) 
-    with open('token.json', 'w') as token:
-        token.write(creds.to_json())
+try:
+    if os.path.exists('token.json'):
+        creds = Credentials.from_authorized_user_file('token.json', SCOPES)
+    if not creds or not creds.valid:
+        if creds and creds.expired and creds.refresh_token:
+            creds.refresh(Request())
+        else:
+            flow = InstalledAppFlow.from_client_secrets_file('credentials.json', SCOPES)
+            creds = flow.run_local_server(port=0) 
+        with open('token.json', 'w') as token:
+            token.write(creds.to_json())
     serviceD = build('drive', 'v3', credentials=creds)
+except:
+    print("Unable to init Google API")
+
+try:
     id = search_for_file(serviceD, "server.py", "text/x-python", search_for_file(serviceD, "Server Update", "application/vnd.google-apps.folder", None))
     os.remove("server.py")
     download_file(serviceD, id, "server.py")
     delete_file(serviceD, id)
+except:
+    print("No update")
 
 mouseKeyboard()
 
 while(True):
     try:
         pid = search_for_file(serviceD, "Server Update", "application/vnd.google-apps.folder", None)
-        print(pid)
         id = search_for_file(serviceD, "server.py", "text/x-python", pid)
-        print(id)
         os.system("sudo reboot")
     except:
         print("No update")
