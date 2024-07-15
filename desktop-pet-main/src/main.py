@@ -12,7 +12,6 @@ from .config_reader import XMLReader
 from .calendar import CalendarApp
 from .MenuFinal import SpriteDashboard
 
-
 def start_program(current_pet: str = None):
     """Creates a window and pet from the configuration xml and then shows that pet
 
@@ -85,7 +84,8 @@ def start_program(current_pet: str = None):
     # Begin the main loop
     window.after(1, pet.on_tick)
     show_window(window)
-
+     
+   
     # create menu
     def buddies():
         app = SpriteDashboard()
@@ -108,7 +108,7 @@ def start_program(current_pet: str = None):
     my_menu.add_command(label="Calendar", command=cal)
     my_menu.add_command(label="Talk", command=talk)
     my_menu.add_separator()
-    my_menu.add_command(label="Exit", command=window.quit)
+    my_menu.add_command(label="Exit", command=window.quit )
 
     window.bind("<Button-3>", my_popup)
 
