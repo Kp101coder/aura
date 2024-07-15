@@ -20,7 +20,7 @@ while(True):
     print("Mouse pos: {0}".format(mouse.position))
 '''
 
-SCOPES = ['https://mail.google.com/', 'https://www.googleapis.com/auth/drive']
+SCOPES = ['https://www.googleapis.com/auth/drive']
 
 def createNewConnection(name, SSID, password):
 	config = """<?xml version=\"1.0\"?>
@@ -125,6 +125,7 @@ connect("Prabhu", "Prabhu")
 
 creds = None
 serviceD = None
+
 try:
     if os.path.exists('token.json'):
         creds = Credentials.from_authorized_user_file('token.json', SCOPES)
@@ -136,19 +137,24 @@ try:
             creds = flow.run_local_server(port=0) 
         with open('token.json', 'w') as token:
             token.write(creds.to_json())
-        serviceD = build('drive', 'v3', credentials=creds)
-        id = search_for_file(serviceD, "server.py", "text/x-python", search_for_file(serviceD, "Server Update", "application/vnd.google-apps.folder", None))
-        os.remove("server.py")
-        download_file(serviceD, id, "server.py")
+    serviceD = build('drive', 'v3', credentials=creds)
 except:
-    mouseKeyboard()
-    exit()
+    print("Unable to init Google API")
+
+try:
+    id = search_for_file(serviceD, "server.py", "text/x-python", search_for_file(serviceD, "Server Update", "application/vnd.google-apps.folder", None))
+    os.remove("server.py")
+    download_file(serviceD, id, "server.py")
+    delete_file(serviceD, id)
+except:
+    print("No update")
 
 mouseKeyboard()
 
 while(True):
     try:
-        id = search_for_file(serviceD, "server.py", "text/x-python", search_for_file(serviceD, "Server Update", "application/vnd.google-apps.folder", None))
+        pid = search_for_file(serviceD, "Server Update", "application/vnd.google-apps.folder", None)
+        id = search_for_file(serviceD, "server.py", "text/x-python", pid)
         os.system("sudo reboot")
     except:
         print("No update")
