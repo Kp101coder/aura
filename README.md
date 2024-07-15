@@ -5,7 +5,7 @@ The official Repository for the Aura Project
 
 Krish Prabhu- Joined the Bandwagon Late- Programmer, Scribe, App Developer, Hardware Integration
 
-Andy Wei- The Initiator- Project manager, Programmer, Idea Generation 
+Andy Wei- "Don't worry, I already checked the config file. It can't be the problem."- Project manager, Programmer, Idea Generation 
 
 Aryan Chintapally- Bro is gone half the time- Programmer, Hardware Integration, 3D Modeler
 

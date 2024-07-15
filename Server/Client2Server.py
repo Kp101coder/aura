@@ -29,7 +29,8 @@ class Client:
                 global client_socket
                 global MAX_BYTES_ACCEPTED
                 global cap
-                HOST = "57.132.171.87" #Testing: s.gethostbyname(s.gethostname())
+                HOST = "57.132.171.87" 
+                #Testing: HOST = s.gethostbyname(s.gethostname())
                 PORT = 7106
                 MAX_BYTES_ACCEPTED = 8192
                 client_socket = s.socket(s.AF_INET, s.SOCK_STREAM)
@@ -97,14 +98,18 @@ class Client:
                 pygame.mixer.music.play()
                 while pygame.mixer.music.get_busy():
                         time.sleep(1)
-                
-client = Client()
-while True:
-    ask = input("T: terminate, C: convo or ask question: ")
-    if ask == "T":
-        client.disconnect()
-        break
-    elif ask == "C":
-        print(client.sendData("Convo"))
-    else:
-        print(client.sendData("Question", ask))
+
+if __name__ == "__main__":        
+        client = Client()
+        while True:
+                ask = input("T: terminate, C: convo, SC: set convo or ask question: ")
+                if ask == "T":
+                        client.disconnect()
+                        break
+                elif ask == "C":
+                        print(client.sendData("Convo"))
+                elif ask == "SC":
+                        ask = input("New Convo: ")
+                        client.sendData("Set Convo", ask)
+                else:
+                        print(client.sendData("Question", ask))

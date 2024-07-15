@@ -58,7 +58,3 @@ class Chatbot:
         '''Makes the current array of messages the inputted array. Returns the new array'''
         self.messageList = previousList
         return self.messageList
-    
-ai = Chatbot()
-ai.question("Hello")
-ai.print(ai.getConvo())
