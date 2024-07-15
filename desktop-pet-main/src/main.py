@@ -117,5 +117,4 @@ def start_program(current_pet: str = None):
     return pet
 
 def killbuddy():
-    global window
-    window.quit()
+    window.destroy()
