@@ -35,17 +35,6 @@ class AnimatedButton(ctk.CTkButton):
 			ctk_image = ctk.CTkImage(dark_image=Image.open(full_path_data[i]), size=(90,90))
 			ctk_images.append(ctk_image)
 		return ctk_images
-
-	def enter(self):
-		status = 'hover'
-	def leave(self):
-		status = 'idle'
-
-	def decide_status(self, Name):
-		self.bind('<Enter>', self.enter(self))
-		self.bind('<Leave>', self.leave(self))
-		self.import_folders(Name, status)
-		self.infinite_animate()
 			
 
 	def infinite_animate(self):
@@ -58,8 +47,6 @@ class AnimatedButton(ctk.CTkButton):
 window = ctk.CTk()
 window.title('Animations')
 window.geometry('300x200')
-
-window.bind("<Enter>", AnimatedButton.decide_status(self=AnimatedButton,Name='Jerry'))
 
 AnimatedButton(window, 'Jerry', 'hover')
 

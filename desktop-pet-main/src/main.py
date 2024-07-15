@@ -12,6 +12,8 @@ from .config_reader import XMLReader
 from .calendar import CalendarApp
 from .MenuFinal import SpriteDashboard
 
+
+
 def start_program(current_pet: str = None):
     """Creates a window and pet from the configuration xml and then shows that pet
 
