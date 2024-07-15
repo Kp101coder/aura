@@ -1,9 +1,7 @@
 import tkinter as tk
-
 from ..animation import Animation, AnimationStates, Animator
 from ..window_utils import Canvas
 from .simple_pet import SimplePet
-from src import logger
 
 # ! IMPORTANT:
 # ! NOTE: in order to have the pet fall after being grabbed, there must be key value pair in its animator.animations dict for
@@ -37,9 +35,7 @@ class InteractablePet(SimplePet):
         self.x = int(self.x + self.v_x)
         self.y = int(self.y + self.v_y)
 
-        logger.debug(
-            f"Pet Anim/Movement: accel:({self.a_x}, {self.a_y}), vel:({self.v_x}, {self.v_y}), posn:({self.x}, {self.y}) anim:{self.get_current_animation().a_y}"
-        )
+        #print(f"Pet Anim/Movement: accel:({self.a_x}, {self.a_y}), vel:({self.v_x}, {self.v_y}), posn:({self.x}, {self.y}) anim:{self.get_current_animation().a_y}")
 
         # check and move x to be on screen
         size = self.animator.animations[self.animator.state].target_resolution
@@ -101,7 +97,7 @@ class InteractablePet(SimplePet):
             else:
                 self.set_animation_state(AnimationStates.FALLING)
         else:
-            logger.warning(
+            print(
                 f'AnimationStates.LANDED and/or AnimationStates.FALLING are not defined, the \
                 pet cannot "fall" without these states being part of the pets animations!'
             )

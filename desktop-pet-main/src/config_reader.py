@@ -3,7 +3,6 @@ from xml.etree.ElementTree import XML
 from screeninfo import get_monitors
 from xml.dom import minidom
 import distutils.util
-from src import logger
 import pathlib
 import os
 from typing import Tuple

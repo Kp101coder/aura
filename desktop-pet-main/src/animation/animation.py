@@ -6,7 +6,6 @@ from os.path import isfile, join
 from typing import Tuple
 from typing import List
 from PIL import Image
-from src import logger
 from .animation_states import AnimationStates
 
 
@@ -92,7 +91,7 @@ class Animation:
                 else name
             )
         self.name = name
-        logger.info(f"Loading Animation: {self.name}")
+        print(f"Loading Animation: {self.name}")
         if frames is None:
             if gif_location is not None:
                 frames = Animation.load_gif_to_frames(gif_location)
@@ -119,7 +118,7 @@ class Animation:
                 round(frame_timer / 100) * frame_multiplier
             )  # Keep the original multiplier as a factor
             self.frame_timer = 100
-            logger.warning(
+            print(
                 f"frame_timer is too long in {self.name}! Setting timer to 100ms, \
                 but increasing frames by a factor of {frame_multiplier}"
             )
@@ -216,7 +215,7 @@ class Animation:
         Args:
             path (str): absolute path to the file
         """
-        logger.info("START:remove_partial_transparency_png -> " + path)
+        print("START:remove_partial_transparency_png -> " + path)
         # We assume that the data is a png
         png = Image.open(path)
         # Just return the image if it is not a png, we don't know the format otherwise

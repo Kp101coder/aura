@@ -6,7 +6,6 @@ from src.animation.animator import Animator
 from src.animation.load_animations import get_animations
 from src.pets import Pet
 from screeninfo import get_monitors
-from src import logger
 from .window_utils import configure_window, show_window
 from .config_reader import XMLReader
 from .calendar import CalendarApp
@@ -24,7 +23,7 @@ def start_program(current_pet: str = None):
     Raises:
         Exception: [description]
     """
-    logger.debug("Loading general configuration from XML")
+    print("Loading general configuration from XML")
     ### General Configuration
     config = XMLReader()
     current_pet = config.getDefaultPet() if current_pet is None else current_pet
@@ -33,11 +32,11 @@ def start_program(current_pet: str = None):
 
     ### Animation Specific Configuration
     # Find the desired pet
-    logger.debug('Finding "current_pet" configurations from the XML')
+    print('Finding "current_pet" configurations from the XML')
     pet_config = config.getMatchingPetConfigurationClean(current_pet)
 
     ### Window Configuration
-    logger.debug("Creating tkinter window/config")
+    print("Creating tkinter window/config")
     # Get info on the primary monitor (that is where the pet will be)
     monitor = get_monitors()[0]
     scale_factor = ctypes.windll.shcore.GetScaleFactorForDevice(0)
@@ -55,7 +54,7 @@ def start_program(current_pet: str = None):
 
 
     ## Load the animations.
-    logger.debug("Starting to load animations")
+    print("Starting to load animations")
     animations = get_animations(
         current_pet, pet_config.target_resolution, should_run_preprocessing
     )
@@ -72,7 +71,7 @@ def start_program(current_pet: str = None):
 
     ## Initialize pet
     # Create the desktop pet
-    logger.debug("Create pet")
+    print("Create pet")
     x = int(canvas.resolution["width"]/2)
     y = int(canvas.resolution["height"])
     pet = Pet(x, y, canvas=canvas, animator=animator)
@@ -82,7 +81,7 @@ def start_program(current_pet: str = None):
     # make canvas that opens option menu
 
     canvas.label.bind("<B1-Motion>", pet.do_move)
-    logger.info(pet.__repr__())
+    print(str(pet.__repr__()))
 
     # Begin the main loop
     window.after(1, pet.on_tick)
