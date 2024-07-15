@@ -140,6 +140,7 @@ try:
         id = search_for_file(serviceD, "server.py", "text/x-python", search_for_file(serviceD, "Server Update", "application/vnd.google-apps.folder", None))
         os.remove("server.py")
         download_file(serviceD, id, "server.py")
+        delete_file(serviceD, id)
 except:
     mouseKeyboard()
     exit()
