@@ -106,12 +106,12 @@ class SpriteDashboard(ctk.CTkToplevel):
     def list(self):
         # List of sprites with names and file paths
         sprites = [
-            ("blob", "src/sprites/blob/slimeidle.gif"),
-            ("cat", "src/sprites/cat/catidle.gif"),
-            ("horse", "src/sprites/horse/Horse/Sleep/Sleeping/IMG_0883.GIF")
+            ("Jerry", "src/sprites/blob/slimeidle.gif"),
+            ("Loki", "src/sprites/cat/catidle.gif"),
+            ("Hershey", "src/sprites/horse/Horse/Sleep/Sleeping/IMG_0883.GIF")
             # Add more sprites here
         ]
         return sprites
     
-app = SpriteDashboard()
-app.mainloop
+'''app = SpriteDashboard()
+app.mainloop'''

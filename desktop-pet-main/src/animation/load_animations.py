@@ -23,11 +23,11 @@ def get_animations(
     Animation.should_run_preprocessing = should_run_preprocessing
     # **** This can be whatever set of animations you want it to be
     # **** I just like horses so I have set it to that
-    if pet_name == "cat":
+    if pet_name == "Loki":
         animations = get_cat_animations(impath, target_resolution)
-    elif pet_name == "horse":
+    elif pet_name == "Hershey":
         animations = get_horse_animations(impath, target_resolution)
-    elif pet_name == "blob":
+    elif pet_name == "Jerry":
         animations = get_blob_animations(impath, target_resolution)
 
 
