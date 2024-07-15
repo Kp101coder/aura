@@ -98,8 +98,7 @@ class SpriteDashboard(ctk.CTkToplevel):
          
         with open(file="config.xml", mode="wb") as fileupdate:
             tree.write(fileupdate)
-        
-        print(f"Clicked on sprite: {name}")
+    
         self.destroy()
         killbuddy()
         start_program()
@@ -113,3 +112,6 @@ class SpriteDashboard(ctk.CTkToplevel):
             # Add more sprites here
         ]
         return sprites
+    
+app = SpriteDashboard()
+app.mainloop
