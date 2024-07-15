@@ -10,8 +10,8 @@
 
         
         <pet name="Vaayu">
-            <offset>-40</offset>
-            <bg_color>#ff0000</bg_color>
+            <offset>50</offset>
+            <bg_color>#ed1c24</bg_color>
             <resolution>
                 <x>300</x>
                 <y>300</y>

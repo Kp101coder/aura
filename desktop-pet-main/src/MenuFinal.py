@@ -23,8 +23,24 @@ class SpriteDashboard(ctk.CTkToplevel):
         self.image_references = []  # To keep references to avoid garbage collection
         self.create_widgets()
 
-    def load_sprites(self):
-        for name, file_path in self.list():
+    def load_hover_sprites(self):
+            for name, file_path in self.hover_list():
+                image = Image.open(file_path)
+                frames = [frame.copy() for frame in ImageSequence.Iterator(image)]
+                resized_frames = [frame.resize((90, 90), Image.LANCZOS) for frame in frames]  # Resize frames to 90x90
+                photos = [ctk.CTkImage(light_image=frame, size=(90, 90)) for frame in resized_frames]  # Convert to CTkImage
+                button = ctk.CTkButton(self.sprite_frame, image=photos[0], text=name, compound="top", width=100, height=100)
+                button.image_frames = photos  # keep a reference to avoid garbage collection
+                button.image_index = 0
+                button.image = photos[0]
+                button.name = name  # Store the name in the button instance
+                button.configure(command=lambda btn=button: self.on_sprite_button_click(btn.name))  # Bind click event
+                self.sprite_buttons.append(button)
+                self.sprite_images.append((button, resized_frames))
+                self.image_references.extend(photos)  # Store photos to avoid garbage collection
+
+    def load_idle_sprites(self):
+        for name, file_path in self.idle_list():
             image = Image.open(file_path)
             frames = [frame.copy() for frame in ImageSequence.Iterator(image)]
             resized_frames = [frame.resize((90, 90), Image.LANCZOS) for frame in frames]  # Resize frames to 90x90
@@ -72,7 +88,7 @@ class SpriteDashboard(ctk.CTkToplevel):
         self.sprite_frame = ctk.CTkFrame(self.sprite_canvas)
         self.sprite_canvas.create_window((0, 0), window=self.sprite_frame, anchor="nw")
 
-        self.load_sprites()
+        self.load_idle_sprites()
         self.arrange_sprites()
 
         # Bind mouse wheel event to canvas
@@ -103,12 +119,22 @@ class SpriteDashboard(ctk.CTkToplevel):
         killbuddy()
         start_program()
 
-    def list(self):
+    def idle_list(self):
         # List of sprites with names and file paths
         sprites = [
             ("Jerry", "src/sprites/blob/slimeidle.gif"),
             ("Loki", "src/sprites/cat/catidle.gif"),
-            ("Hershey", "src/sprites/horse/Horse/Sleep/Sleeping/IMG_0883.GIF")
+            ("Vaayu", "src/sprites/dog/dogidle.gif")
+            # Add more sprites here
+        ]
+        return sprites
+
+    def hover_list(self):
+        # List of sprites with names and file paths
+        sprites = [
+            ("Jerry", "src/sprites/blob/slimegrabbed.gif"),
+            ("Loki", "src/sprites/cat/catgrabbed.gif"),
+            ("Vaayu", "src/sprites/dog/doggrabbed.gif")
             # Add more sprites here
         ]
         return sprites

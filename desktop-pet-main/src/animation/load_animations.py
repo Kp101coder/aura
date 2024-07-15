@@ -138,11 +138,11 @@ def get_dog_animations(impath: str, target_resolution: Tuple[int, int]):
         Dict[AnimationStates, Animation]
     """
     pj = os.path.join
-    impath = pj(impath, "horse", "Horse")
-    standing_actions = [AnimationStates.IDLE_TO_SLEEP, AnimationStates.GRAZING_START]
+    impath = pj(impath, "dog")
+    standing_actions = [AnimationStates.IDLE_TO_SLEEP]
     standing_actions.extend(repeat(AnimationStates.IDLE, 3))
-    standing_actions.extend(repeat(AnimationStates.WALK_NEGATIVE, 5))
-    standing_actions.extend(repeat(AnimationStates.WALK_POSITIVE, 5))
+    standing_actions.extend(repeat(AnimationStates.WALK_NEGATIVE, 4))
+    standing_actions.extend(repeat(AnimationStates.WALK_POSITIVE, 4))
 
     # These are the animations that our spite can do.
     # ! IMPORTANT:
