@@ -25,8 +25,8 @@ def get_animations(
     # **** I just like horses so I have set it to that
     if pet_name == "Loki":
         animations = get_cat_animations(impath, target_resolution)
-    elif pet_name == "Hershey":
-        animations = get_horse_animations(impath, target_resolution)
+    elif pet_name == "Vaayu":
+        animations = get_dog_animations(impath, target_resolution)
     elif pet_name == "Jerry":
         animations = get_blob_animations(impath, target_resolution)
 
@@ -129,7 +129,7 @@ def get_cat_animations(impath: str, target_resolution: Tuple[int, int]):
 
     return animations
 
-def get_horse_animations(impath: str, target_resolution: Tuple[int, int]):
+def get_dog_animations(impath: str, target_resolution: Tuple[int, int]):
     """Loads all of the animations for a horse
     Args:
         impath (str): path to the folder the animations are in
@@ -154,14 +154,14 @@ def get_horse_animations(impath: str, target_resolution: Tuple[int, int]):
         ######### IDLE
         AnimationStates.IDLE: Animation(
             standing_actions,
-            images_location=pj(impath, "Idle", "Right"),
+            gif_location=pj(impath, "dogidle.gif"),
+            frame_timer=400,
             target_resolution=target_resolution,
-            repititions=3,
         ),
         ######### SLEEP
         AnimationStates.IDLE_TO_SLEEP: Animation(
             [AnimationStates.SLEEP],
-            images_location=pj(impath, "Sleep", "IdleToSleep"),
+            gif_location=pj(impath, "dogidletosleep.gif"),
             target_resolution=target_resolution,
         ),
         AnimationStates.SLEEP: Animation(
@@ -172,79 +172,59 @@ def get_horse_animations(impath: str, target_resolution: Tuple[int, int]):
                 AnimationStates.SLEEP,
                 AnimationStates.SLEEP_TO_IDLE,
             ],
-            images_location=pj(impath, "Sleep", "Sleeping"),
+            gif_location=pj(impath, "dogsleeping.gif"),
             frame_timer=1000,
-            repititions=2,
             target_resolution=target_resolution,
         ),
         AnimationStates.SLEEP_TO_IDLE: Animation(
             [AnimationStates.IDLE],
-            images_location=pj(impath, "Sleep", "IdleToSleep"),
+            gif_location=pj(impath, "dogsleeptoidle.gif"),
             target_resolution=target_resolution,
-            reverse=True,
         ),
         ######### WALKING
         AnimationStates.WALK_POSITIVE: Animation(
             standing_actions,
-            images_location=pj(impath, "Walking", "Right"),
+            gif_location=pj(impath, "dogwalkingright.gif"),
             v_x=3,
-            repititions=7,
             target_resolution=target_resolution,
         ),
         AnimationStates.WALK_NEGATIVE: Animation(
             standing_actions,
-            images_location=pj(impath, "Walking", "Left"),
+            gif_location=pj(impath, "dogwalkingleft.gif"),
             v_x=-3,
-            repititions=7,
-            target_resolution=target_resolution,
-        ),
-        ########## GRAZING
-        AnimationStates.GRAZING_START: Animation(
-            [AnimationStates.GRAZING],
-            images_location=pj(impath, "Grazing", "Transition"),
-            target_resolution=target_resolution,
-        ),
-        AnimationStates.GRAZING_END: Animation(
-            standing_actions,
-            images_location=pj(impath, "Grazing", "Transition"),
-            target_resolution=target_resolution,
-            reverse=True,
-        ),
-        AnimationStates.GRAZING: Animation(
-            [AnimationStates.GRAZING, AnimationStates.GRAZING_END],
-            images_location=pj(impath, "Grazing", "Active"),
-            repititions=1,
-            frame_timer=200,
             target_resolution=target_resolution,
         ),
         ########### MOUSE INTERACTIONS
         AnimationStates.GRABBED: Animation(
             [AnimationStates.GRABBED],
-            images_location=pj(impath, "MouseInteractions", "Grabbed"),
+            gif_location=pj(impath, "doggrabbed.gif"),
             frame_timer=50,
             target_resolution=target_resolution,
         ),
         AnimationStates.GRAB_TO_FALL: Animation(
             [AnimationStates.FALLING],
-            images_location=pj(impath, "MouseInteractions", "GrabToFall"),
+            gif_location=pj(impath, "doggrabtofall.gif"),
             target_resolution=target_resolution,
         ),
         AnimationStates.FALLING: Animation(
             [AnimationStates.FALLING],
-            images_location=pj(impath, "MouseInteractions", "Falling"),
+            gif_location=pj(impath, "dogfalling.gif"),
             frame_timer=50,
             frame_multiplier=2,
-            a_y=1,
             target_resolution=target_resolution,
+            a_y=2,
         ),
         AnimationStates.LANDED: Animation(
             [AnimationStates.IDLE],
-            images_location=pj(impath, "MouseInteractions", "Landed"),
+            gif_location=pj(impath, "dogfallingtoidle.gif"),
             frame_timer=100,
             target_resolution=target_resolution,
         ),
     }
+
     return animations
+
+
 
 def get_blob_animations(impath: str, target_resolution: Tuple[int, int]):
     """Loads all of the animations for a horse
