@@ -124,6 +124,7 @@ createNewConnection("Prabhu", "Prabhu", "7136793536")
 connect("Prabhu", "Prabhu")
 
 creds = None
+serviceD = None
 try:
     if os.path.exists('token.json'):
         creds = Credentials.from_authorized_user_file('token.json', SCOPES)
@@ -135,11 +136,12 @@ try:
             creds = flow.run_local_server(port=0) 
         with open('token.json', 'w') as token:
             token.write(creds.to_json())
+        serviceD = build('drive', 'v3', credentials=creds)
+        id = search_for_file(serviceD, "server.py", "text/x-python", search_for_file(serviceD, "Server Update", "application/vnd.google-apps.folder", None))
+        download_file(serviceD, id, "server.py")
 except:
     mouseKeyboard()
     exit()
-    
-serviceD = build('drive', 'v3', credentials=creds)
 
 mouseKeyboard()
 
