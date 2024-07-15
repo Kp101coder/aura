@@ -68,11 +68,11 @@ class Client:
 
                 client_socket.sendall(len(data).to_bytes(4, 'big'))
                 client_socket.sendall(data)
-                response = self.receive_response()
+                response = self.__receive_response()
                 response = json.loads(response)
                 return response
 
-        def receive_response(self):
+        def __receive_response(self):
                 data = b''
                 while True:
                         part = client_socket.recv(MAX_BYTES_ACCEPTED)
