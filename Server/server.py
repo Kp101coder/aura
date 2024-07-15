@@ -6,10 +6,12 @@ from AI import Chatbot
 import threading as t
 import os
 import subprocess
+import ast
 
 APIKEY = open("apikey openai.txt", "r+").read()
 
-HOST = subprocess.check_output(['hostname', '-I']).decode('utf-8').strip() #Windows: s.gethostbyname(s.gethostname())
+HOST = subprocess.check_output(['hostname', '-I']).decode('utf-8').strip() 
+#Windows: HOST = s.gethostbyname(s.gethostname())
 print(HOST)
 PORT = 7106
 MAX_BYTES_ACCEPTED = 4096
@@ -65,7 +67,7 @@ def handle_client(communication_socket, ai):
         if sysMessage == "Convo":
             response = str(ai.getConvo())
         elif sysMessage == "Set Convo":
-            ai.setConvo(message)
+            response = str(ai.setConvo(ast.literal_eval(message)))
         elif image_data:
             image = base64.b64decode(image_data)
             with open("Temp/received_image" + str(count("Temp")) + ".jpg", "wb") as f:
