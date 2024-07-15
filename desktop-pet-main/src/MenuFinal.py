@@ -91,6 +91,7 @@ class SpriteDashboard(ctk.CTkToplevel):
         sp.call(["python","run.py"])
 
     def on_sprite_button_click(self, name):
+        from .main import killbuddy
         tree = obj.ElementTree(file = "config.xml")
         root = tree.getroot()
         
@@ -103,10 +104,8 @@ class SpriteDashboard(ctk.CTkToplevel):
         
         print(f"Clicked on sprite: {name}")
         atexit.register(self.open_new)
-        exit()
-        
-        
-
+        self.destroy()
+        killbuddy()
 
     def list(self):
         # List of sprites with names and file paths

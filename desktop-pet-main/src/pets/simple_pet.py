@@ -78,7 +78,9 @@ class SimplePet:
         #the pets rendering
         scale_factor = ctypes.windll.shcore.GetScaleFactorForDevice(0)
         if not scale_factor == 100:
-            s = int(386.208 * pow(0.992901, scale_factor))
+            #s = int(386.208 * pow(0.992901, scale_factor))
+            s=200
+            print(str(s))
         else:
             s = 200
         self.canvas.window.geometry(
