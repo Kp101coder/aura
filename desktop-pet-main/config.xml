@@ -1,6 +1,6 @@
 <config>
     
-    <defualt_pet>blob</defualt_pet>
+    <defualt_pet>Loki</defualt_pet>
     
     <force_topmost>true</force_topmost>
     
@@ -9,7 +9,7 @@
     <pets>
 
         
-        <pet name="horse">
+        <pet name="Hershey">
             <offset>-40</offset>
             <bg_color>#ff0000</bg_color>
             <resolution>
@@ -18,7 +18,7 @@
             </resolution>
         </pet>
 
-        <pet name="blob">
+        <pet name="Jerry">
             
             <offset>50</offset>
             
@@ -30,7 +30,7 @@
             </resolution>
         </pet>
 
-        <pet name="cat">
+        <pet name="Loki">
             
             <offset>50</offset>
             
