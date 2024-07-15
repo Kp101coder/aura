@@ -1,6 +1,6 @@
 <config>
     
-    <defualt_pet>Vaayu</defualt_pet>
+    <defualt_pet>Jerry</defualt_pet>
     
     <force_topmost>true</force_topmost>
     
@@ -37,8 +37,8 @@
             <bg_color>#ed1c24</bg_color>
             
             <resolution>
-                <x>400</x>
-                <y>400</y>
+                <x>300</x>
+                <y>300</y>
             </resolution>
         </pet>
 

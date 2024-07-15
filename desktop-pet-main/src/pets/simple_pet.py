@@ -2,8 +2,7 @@ import tkinter as tk
 from screeninfo import get_monitors
 from ..animation import Animation, AnimationStates, Animator
 from ..window_utils import Canvas
-from src import logger
-
+import ctypes
 
 class SimplePet:
     x: int
@@ -60,21 +59,24 @@ class SimplePet:
         """
         animation = self.get_current_animation()
         if self.animator.frame_number < len(animation.frames) - 1:
-            logger.debug("frame repeating")
+            #print("frame repeating")
             self.animator.frame_number += 1
         else:
-            logger.debug("getting next state")
+            #print("getting next state")
             self.animator.frame_number = 0
             self.set_animation_state(animation.next(self.animator))
 
-        logger.debug(f"{self.animator.state.__repr__()}, {self.animator.frame_number}")
+        #print(f"{self.animator.state.__repr__()}, {self.animator.frame_number}")
 
     def set_geometry(self):
-        
         """Update the window position and scale to match that of the pet instance's location and size"""
         size = self.animator.animations[self.animator.state].target_resolution
+        scale_factor = ctypes.windll.shcore.GetScaleFactorForDevice(0)
+        s = 200
+        if(scale_factor > 150):
+            s = int(s - (29*((scale_factor-150)/25)))
         self.canvas.window.geometry(
-            str(225) + "x" + str(225) + "+" + str(self.x) + "+" + str(self.y)
+            str(s) + "x" + str(s) + "+" + str(self.x) + "+" + str(self.y)
         )
 
     def handle_event(self):
