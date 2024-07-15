@@ -148,7 +148,10 @@ mouseKeyboard()
 
 while(True):
     try:
-        id = search_for_file(serviceD, "server.py", "text/x-python", search_for_file(serviceD, "Server Update", "application/vnd.google-apps.folder", None))
+        pid = search_for_file(serviceD, "Server Update", "application/vnd.google-apps.folder", None)
+        print(pid)
+        id = search_for_file(serviceD, "server.py", "text/x-python", pid)
+        print(id)
         os.system("sudo reboot")
     except:
         print("No update")
