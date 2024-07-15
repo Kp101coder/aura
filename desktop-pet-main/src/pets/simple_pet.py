@@ -1,6 +1,5 @@
 import tkinter as tk
 from screeninfo import get_monitors
-import ctypes
 from ..animation import Animation, AnimationStates, Animator
 from ..window_utils import Canvas
 from src import logger
@@ -74,15 +73,8 @@ class SimplePet:
         
         """Update the window position and scale to match that of the pet instance's location and size"""
         #size = self.animator.animations[self.animator.state].target_resolution
-        #The pets geometry can be affected by the windows scale setting. Anything other than 100% will affect
-        #the pets rendering
-        scale_factor = ctypes.windll.shcore.GetScaleFactorForDevice(0)
-        if not scale_factor == 100:
-            s = int(386.208 * pow(0.992901, scale_factor))
-        else:
-            s = 200
         self.canvas.window.geometry(
-            str(s) + "x" + str(s) + "+" + str(self.x) + "+" + str(self.y)
+            str(200) + "x" + str(200) + "+" + str(self.x) + "+" + str(self.y)
         )
 
     def handle_event(self):

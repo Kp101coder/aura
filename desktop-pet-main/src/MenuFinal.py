@@ -87,10 +87,8 @@ class SpriteDashboard(ctk.CTkToplevel):
     def on_mousewheel(self, event):
         self.sprite_canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
 
-    def open_new(self):
-        sp.call(["python","run.py"])
-
     def on_sprite_button_click(self, name):
+        from .main import killbuddy, start_program
         tree = obj.ElementTree(file = "config.xml")
         root = tree.getroot()
         
@@ -102,11 +100,9 @@ class SpriteDashboard(ctk.CTkToplevel):
             tree.write(fileupdate)
         
         print(f"Clicked on sprite: {name}")
-        atexit.register(self.open_new)
-        exit()
-        
-        
-
+        self.destroy()
+        killbuddy()
+        start_program()
 
     def list(self):
         # List of sprites with names and file paths
@@ -117,7 +113,3 @@ class SpriteDashboard(ctk.CTkToplevel):
             # Add more sprites here
         ]
         return sprites
-
-'''if __name__ == "__main__":
-    app = SpriteDashboard()
-    app.mainloop()'''

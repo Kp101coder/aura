@@ -15,6 +15,7 @@ from .MenuFinal import SpriteDashboard
 
 
 def start_program(current_pet: str = None):
+    global window
     """Creates a window and pet from the configuration xml and then shows that pet
 
     Args:
@@ -110,9 +111,12 @@ def start_program(current_pet: str = None):
     my_menu.add_command(label="Calendar", command=cal)
     my_menu.add_command(label="Talk", command=talk)
     my_menu.add_separator()
-    my_menu.add_command(label="Exit", command=window.quit )
+    my_menu.add_command(label="Exit", command=killbuddy)
 
     window.bind("<Button-3>", my_popup)
 
     window.mainloop()
     return pet
+
+def killbuddy():
+    window.destroy()

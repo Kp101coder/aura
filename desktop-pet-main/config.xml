@@ -1,6 +1,6 @@
 <config>
     
-    <defualt_pet>blob</defualt_pet>
+    <defualt_pet>cat</defualt_pet>
     
     <force_topmost>true</force_topmost>
     
@@ -37,8 +37,8 @@
             <bg_color>#ed1c24</bg_color>
             
             <resolution>
-                <x>200</x>
-                <y>200</y>
+                <x>300</x>
+                <y>300</y>
             </resolution>
         </pet>
 

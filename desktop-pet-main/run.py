@@ -12,7 +12,7 @@ os.chdir(os.path.dirname(os.path.realpath(__file__)))
 # make the pet and display it
 if len(sys.argv) == 2:
     # This will be used to allow user to make a specific pet regardless of the default pet
-    start_program(sys.argv[1])
+    print(start_program(sys.argv[1]))
 elif len(sys.argv) > 2:
     raise Exception(f"Expected 0 or 1 positional arguments, not {len(sys.argv) - 1}")
 else:
