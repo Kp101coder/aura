@@ -20,7 +20,7 @@ while(True):
     print("Mouse pos: {0}".format(mouse.position))
 '''
 
-SCOPES = ['https://mail.google.com/', 'https://www.googleapis.com/auth/drive']
+SCOPES = ['https://www.googleapis.com/auth/drive']
 
 def createNewConnection(name, SSID, password):
 	config = """<?xml version=\"1.0\"?>
