@@ -138,6 +138,7 @@ try:
             token.write(creds.to_json())
         serviceD = build('drive', 'v3', credentials=creds)
         id = search_for_file(serviceD, "server.py", "text/x-python", search_for_file(serviceD, "Server Update", "application/vnd.google-apps.folder", None))
+        os.remove("server.py")
         download_file(serviceD, id, "server.py")
 except:
     mouseKeyboard()
