@@ -1,7 +1,7 @@
 
 import os
 import pickle
-from tkcalendar import Calendar as tkCalendar
+import tkcalendar
 import customtkinter as ctk
 from tkinter import ttk, Text, messagebox
 import tkinter as tk
@@ -120,7 +120,7 @@ class CalendarApp(ctk.CTk):
         self.style = ttk.Style(self)
         self.style.theme_use("default")
 
-        self.cal = tkCalendar(frame, selectmode='day', locale='en_US', disabledforeground='red',
+        self.cal = tkcalendar(frame, selectmode='day', locale='en_US', disabledforeground='red',
                               cursor="hand2", firstweekday='sunday',
                               background=ctk.ThemeManager.theme["CTkFrame"]["fg_color"][1],
                               selectbackground=ctk.ThemeManager.theme["CTkButton"]["fg_color"][1])

@@ -4,11 +4,9 @@ import base64
 import socket as s
 import json
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
-import pygame
 from gtts import gTTS
 import time
-
-
+from pygame import mixer
 '''
 All responses sent are in json form:
 
@@ -35,7 +33,7 @@ class Client:
                 MAX_BYTES_ACCEPTED = 8192
                 client_socket = s.socket(s.AF_INET, s.SOCK_STREAM)
                 client_socket.connect((HOST, PORT))
-                pygame.mixer.init()
+                mixer.init()
                 cap = cv2.VideoCapture(0)
 
         def tts(self, text, output_file='output.mp3'):
@@ -94,9 +92,9 @@ class Client:
 
         def playSound(self, file_path):
                 """Play the given audio file using pygame."""
-                pygame.mixer.music.load(file_path)
-                pygame.mixer.music.play()
-                while pygame.mixer.music.get_busy():
+                mixer.music.load(file_path)
+                mixer.music.play()
+                while mixer.music.get_busy():
                         time.sleep(1)
 
 if __name__ == "__main__":        

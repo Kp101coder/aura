@@ -8,13 +8,16 @@ from src.pets import Pet
 from screeninfo import get_monitors
 from .window_utils import configure_window, show_window
 from .config_reader import XMLReader
-from .calendar import CalendarApp
+from .calendarAPI import CalendarApp
 from .MenuFinal import SpriteDashboard
+from .ChatGPTmadeUI import ChatbotGUI
+from .Client2Server import Client
 
 
 
 def start_program(current_pet: str = None):
     global window
+    ai = Client()
     """Creates a window and pet from the configuration xml and then shows that pet
 
     Args:
@@ -93,13 +96,13 @@ def start_program(current_pet: str = None):
         app = SpriteDashboard()
         app.mainloop()
 
-
     def cal():
         calendar_app = CalendarApp()
         calendar_app.mainloop()
 
     def talk():
-        pass
+        app=ChatbotGUI(str(config.getDefaultPet()), ai)
+        app.mainloop()
 
     def my_popup(event):
         my_menu.tk_popup(event.x_root, event.y_root)

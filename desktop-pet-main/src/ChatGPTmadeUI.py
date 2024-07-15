@@ -1,12 +1,12 @@
 import tkinter as tk
 import customtkinter as ctk
 from tkinter import END
-from Client2Server import Client
+from .Client2Server import Client
 
 
 class ChatbotGUI(ctk.CTk):
 
-    def __init__(self, name):
+    def __init__(self, name, ai):
         
         super().__init__()
         self.title(f"{name}'s Corner")
@@ -14,7 +14,7 @@ class ChatbotGUI(ctk.CTk):
         self.geometry("600x600")     
         
         
-        self.client = Client()
+        self.client = ai
 
         #padding grids
         self.rowconfigure(0, weight=1)    
@@ -52,11 +52,12 @@ class ChatbotGUI(ctk.CTk):
 
     def send_message(self, event=None):
         user_message = self.entry.get()
-        self.client.sendData(sys="Question", message=user_message)
         if user_message.strip() != "":
             self.create_speech_bubble(user_message, "right")
             self.entry.delete(0, END)
-            bot_response = self.client.receive_response()
+            self.update()
+            response = self.client.sendData(sys="Question", message=user_message)
+            bot_response = response.get('answer')
             self.create_speech_bubble(bot_response, "left")
 
     def create_speech_bubble(self, message, side):
