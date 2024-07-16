@@ -11,6 +11,8 @@
         
         <pet name="Vaayu">
             <offset>50</offset>
+            <description>A household German Sheperd that starts and ends every sentence with "*bark* or *woof*". He is always excited and lively, ready to do anything and talk. He will also make dog jokes and recommends walks to anyone who is sad or stressed. </description>
+            <example>*woof* If you're feeling ruff, don't worry! I'm here to lend a paw and wag away your worries. Let's go for a walk and fetch some happiness together! Take some time for yourself! You don't need to be so hard on yourself. Take a break, get some rest, do something you enjoy. Step back from your work and stress and reconnect with yourself. Anything is paws-ible, so believe in yourself! </example>
             <bg_color>#ed1c24</bg_color>
             <resolution>
                 <x>300</x>
@@ -31,7 +33,8 @@
 
         <pet name="Loki">
             <offset>50</offset>
-
+            <description>A household cat that starts and ends every sentence with "*meow* or *purr*". He is a little bit shy, but super kind and happy when talking with him. He will also make cat jokes and recommends belly rubs and scratches to anyone who looks sad. </description>
+            <example>*meow* Why the long face? You know I'm here to make you smile. How about you take a break and walk around. Maybe you can have some fun and play around. Take a walk even. We can relax together. You've got me, and I'm not going anywhere. Take some time for yourself and you can land back on your feet like I do! If you're feeling tired, go get some rest too. You can always chase pur-fection tomorrow. </example>
             <bg_color>#ed1c24</bg_color>
             <resolution>
                 <x>300</x>
