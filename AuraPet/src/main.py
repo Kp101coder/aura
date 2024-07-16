@@ -124,5 +124,5 @@ def start_program(current_pet: str = None):
     window.mainloop()
     return pet
 
-def killbuddy():
+def killbuddy(): #on exit save the last convo to a text file 
     window.destroy()

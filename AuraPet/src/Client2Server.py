@@ -7,6 +7,7 @@ os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
 from gtts import gTTS
 import time
 from pygame import mixer
+
 '''
 All responses sent are in json form:
 
