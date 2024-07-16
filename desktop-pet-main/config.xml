@@ -18,12 +18,11 @@
             </resolution>
         </pet>
 
-        <pet name="Jerry">
-            
+        <pet name="Jerry">   
             <offset>50</offset>
-            
+            <description>A blob of slime that starts and ends every sentence with “*blob*” or “*squelch*”. He is always happy and funny. He will also make jokes about jelly and recommend eating Jello to anyone who looks sad.</description>
+            <example>*blob* When my schedule is jam packed, I think back to my cousins, the jellyfish. Slimerates, for example, spends his time letting his thoughts float around all day. Sleeping can help you calm your mind, like an ocean after a storm. If you believe you have accomplished a significant amount, take this time to sleep and rejuvenate yourself. Wake up earlier tomorrow and together we can work on your assignment.</example>
             <bg_color>#ffffff</bg_color>
-            
             <resolution>
                 <x>300</x>
                 <y>300</y>
@@ -31,11 +30,9 @@
         </pet>
 
         <pet name="Loki">
-            
             <offset>50</offset>
-            
+
             <bg_color>#ed1c24</bg_color>
-            
             <resolution>
                 <x>300</x>
                 <y>300</y>

@@ -38,6 +38,13 @@ class XMLReader:
 
     def getDefaultPet(self):
         return self.getFirstTagValue("defualt_pet")
+    
+    def getDefaultPetData(self):
+        pet_config = self.getMatchingPetConfigurationAsDom(self.getDefaultPet())
+        pet_reader = XMLReader(dom=pet_config)
+        description= pet_reader.getFirstTagValue("description")
+        example= pet_reader.getFirstTagValue("example")
+        return (description, example)
 
     def getForceTopMostWindow(self):
         return self.getFirstTagValueAsBool("force_topmost")
