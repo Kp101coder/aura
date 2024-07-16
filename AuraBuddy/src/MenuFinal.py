@@ -28,7 +28,7 @@ class SpriteDashboard(ctk.CTkToplevel):
         self.create_widgets()
 
     def load_sprites(self):
-
+        self.list = self.idle_list
         for name, file_path in self.list():
             #seperate the loading of images and buttons, and then make it so it loads both idle and hover 
             #images but when hover it switches what is loaded onto the buttons.
