@@ -44,7 +44,7 @@ class Animator:
         """
         # If the state is the same, then do nothing
         # As we don't want the animation to keep reseting
-        print(f"{self.state.__repr__()} changing to {state.__repr__()}")
+        #print(f"{self.state.__repr__()} changing to {state.__repr__()}")
         if state == self.state:
             return False
         self.frame_number = 0

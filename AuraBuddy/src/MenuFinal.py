@@ -11,6 +11,10 @@ class SpriteDashboard(ctk.CTkToplevel):
     def __init__(self):
         super().__init__()
         self.title("Sprite Dashboard")
+         
+        self.status = False
+        self.list = []
+        
 
         # Calculate initial window size based on three buttons in width and three rows in height
         initial_width = 377  # 100 is button width, 20 is padx, 40 is for margins
@@ -24,7 +28,10 @@ class SpriteDashboard(ctk.CTkToplevel):
         self.create_widgets()
 
     def load_sprites(self):
+
         for name, file_path in self.list():
+            #seperate the loading of images and buttons, and then make it so it loads both idle and hover 
+            #images but when hover it switches what is loaded onto the buttons.
             image = Image.open(file_path)
             frames = [frame.copy() for frame in ImageSequence.Iterator(image)]
             resized_frames = [frame.resize((90, 90), Image.LANCZOS) for frame in frames]  # Resize frames to 90x90
@@ -38,6 +45,9 @@ class SpriteDashboard(ctk.CTkToplevel):
             self.sprite_buttons.append(button)
             self.sprite_images.append((button, resized_frames))
             self.image_references.extend(photos)  # Store photos to avoid garbage collection
+            button.bind("<Enter>", self.on_hover)
+            button.bind("<Leave>", self.not_hover)
+        
 
     def animate(self):
         for button, frames in self.sprite_images:
@@ -102,8 +112,17 @@ class SpriteDashboard(ctk.CTkToplevel):
         self.destroy()
         killbuddy()
         start_program()
+           
 
-    def list(self):
+    def on_hover(self, event = None):
+        self.status = True
+        print("onHover")
+
+    def not_hover(self, event = None):
+        self.status = False
+        print("notHover")
+
+    def idle_list(self):
         # List of sprites with names and file paths
         sprites = [
             ("Jerry", "src/sprites/blob/slimeidle.gif"),
@@ -112,6 +131,18 @@ class SpriteDashboard(ctk.CTkToplevel):
             # Add more sprites here
         ]
         return sprites
+    
+    def hover_list(self):
+        # List of sprites with names and file paths
+        sprites = [
+            ("Jerry", "src/sprites/blob/slimegrabbed.gif"),
+            ("Loki", "src/sprites/cat/catgrabbed.gif"),
+            ("Vaayu", "src/sprites/dog/doggrabbed.gif")
+            # Add more sprites here
+        ]
+        return sprites
+
+
     
 '''app = SpriteDashboard()
 app.mainloop'''
