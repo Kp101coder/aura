@@ -1,0 +1,7 @@
+Welcome to the Aura community! We hope you enjoy your companion.
+When running the software the first time, make sure to sign in to your google account on your default browser.
+Once you sign in, give it a few seconds to load. 
+When you start the software, it may take about 10 seconds to start.
+This is normal as the software is currently in open alpha.
+If you encounter any errors, let us know at: aurabusinessventure@gmail.com
+Enjoy!
