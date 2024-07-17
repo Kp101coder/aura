@@ -38,10 +38,11 @@ class Client:
                 cap = cv2.VideoCapture(0)
                 self.sendData("Question", initalMessage)
 
-        def tts(self, text, output_file='output.mp3'):
+        def tts(self, text, output_file='Temp/output.mp3'):
                 """Convert text to speech and save it to an output file."""
-                tts = gTTS(text)
+                tts = gTTS(text, lang='en', tld='co.in')
                 tts.save(output_file)
+                self.__playSound(output_file)
                 return output_file
 
         def capture(self):
@@ -92,7 +93,7 @@ class Client:
                 client_socket.sendall(data)
                 client_socket.close()
 
-        def playSound(self, file_path):
+        def __playSound(self, file_path):
                 """Play the given audio file using pygame."""
                 mixer.music.load(file_path)
                 mixer.music.play()

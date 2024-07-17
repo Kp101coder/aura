@@ -3,6 +3,7 @@ import customtkinter as ctk
 from tkinter import END
 from .Client2Server import Client
 import ast
+import os
 
 
 
@@ -75,6 +76,8 @@ class ChatbotGUI(ctk.CTk):
             response = self.client.sendData(sys="Question", message=user_message)
             bot_response = response.get('answer')
             self.create_speech_bubble(bot_response, "left")
+            # self.update()
+            # os.remove(self.client.tts(bot_response))
 
     def create_speech_bubble(self, message, side):
         bubble_frame = ctk.CTkFrame(self.canvas, corner_radius=15, fg_color="#5c5b5b", width=360)
