@@ -31,7 +31,7 @@ After the action is the code which tells the specifcs of the action and is also 
 
 For example:
 action: Add Calendar Event
-code: 
+code: (calendar stuff)
 
 All responses sent are in json form:
 
