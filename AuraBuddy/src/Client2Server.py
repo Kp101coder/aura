@@ -24,7 +24,7 @@ code
 '''
 "[{}, {}, {}]"
 class Client:
-        def __init__(self, initalMessage):
+        def __init__(self, initalMessage = None):
                 global client_socket
                 global MAX_BYTES_ACCEPTED
                 global cap
@@ -36,7 +36,8 @@ class Client:
                 client_socket.connect((HOST, PORT))
                 mixer.init()
                 cap = cv2.VideoCapture(0)
-                self.sendData("Question", initalMessage)
+                if initalMessage != None:
+                        self.sendData("Question", initalMessage)
 
         def tts(self, text, output_file='Temp/output.mp3'):
                 """Convert text to speech and save it to an output file."""
