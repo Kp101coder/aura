@@ -24,19 +24,21 @@ code
 '''
 "[{}, {}, {}]"
 class Client:
-        def __init__(self, initalMessage):
+        def __init__(self, initalMessage = None):
                 global client_socket
                 global MAX_BYTES_ACCEPTED
                 global cap
                 HOST = "57.132.171.87" 
                 #Testing: HOST = s.gethostbyname(s.gethostname())
                 PORT = 7106
-                MAX_BYTES_ACCEPTED = 8192
+                MAX_BYTES_ACCEPTED = 4096
                 client_socket = s.socket(s.AF_INET, s.SOCK_STREAM)
                 client_socket.connect((HOST, PORT))
+                client_socket.settimeout(30)
                 mixer.init()
                 cap = cv2.VideoCapture(0)
-                self.sendData("Question", initalMessage)
+                if initalMessage != None:
+                        self.sendData("Init", initalMessage)
 
         def tts(self, text, output_file='Temp/output.mp3'):
                 """Convert text to speech and save it to an output file."""
@@ -54,11 +56,10 @@ class Client:
                         data = base64.b64encode(image_file.read()).decode('utf-8')
                 os.remove(path)
                 return data
-                
-                        
+        
         def sendData(self, sys, message=None, image=None):
                 print("Sending Data")
-                if sys not in ["Question", "Quit", "Convo", "Set Convo"]:
+                if sys not in ["Question", "Quit", "Convo", "Set Convo", "Init"]:
                         raise Exception("You need a valid system message")
                 data = {
                         'sys': sys,
@@ -66,7 +67,6 @@ class Client:
                         'image': image
                 }
                 data = json.dumps(data).encode('utf-8')
-
                 client_socket.sendall(len(data).to_bytes(4, 'big'))
                 client_socket.sendall(data)
                 response = self.__receive_response()
@@ -101,9 +101,9 @@ class Client:
                         time.sleep(1)
 
 if __name__ == "__main__":        
-        client = Client("hello")
+        client = Client("You need to determine the emotion sent in the image if the user ask you to. Response with your closest guess.")
         while True:
-                ask = input("T: terminate, C: convo, SC: set convo or ask question: ")
+                ask = input("T: terminate, C: convo, SC: set convo , P: Pic and question, or ask question: ").upper()
                 if ask == "T":
                         client.disconnect()
                         break
@@ -112,5 +112,8 @@ if __name__ == "__main__":
                 elif ask == "SC":
                         ask = input("New Convo: ")
                         client.sendData("Set Convo", ask)
+                elif ask == "P":
+                        ask = input("Question: ")
+                        print(client.sendData("Question", ask, client.capture()).get('answer'))
                 else:
-                        print(client.sendData("Question", ask))
+                        print(client.sendData("Question", ask).get('answer'))
