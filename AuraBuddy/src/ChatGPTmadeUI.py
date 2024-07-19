@@ -2,13 +2,15 @@ import tkinter as tk
 from tktooltip import ToolTip
 import customtkinter as ctk
 from tkinter import END
-from Client2Server import Client #.Client2Server when runing run.py
+from .Client2Server import Client #.Client2Server when runing run.py
 from PIL import Image
 import tkinter.font as tkFont
+import json
+import ast
 
 
 
-class ChatbotGUI(ctk.CTk):
+class ChatbotGUI(ctk.CTkToplevel):
 
     def __init__(self, name, ai):
         
@@ -37,7 +39,7 @@ class ChatbotGUI(ctk.CTk):
         bgColor = "#2a2b2b"
 
         # Create main frame
-        self.scroll_frame = ctk.CTkScrollableFrame(self, border_width= 3, border_color="#5c5b5b")
+        self.scroll_frame = ctk.CTkScrollableFrame(self, border_width= 3, fg_color=bgColor, border_color="#5c5b5b")
         self.scroll_frame.grid(row=1,column=1, sticky="nsew")
         
         
@@ -56,9 +58,9 @@ class ChatbotGUI(ctk.CTk):
 
         #Load Prev Convo Button
         load_image = ctk.CTkImage(Image.open("src/images/white_reload_sign.png"))
-        self.load_prev_convo= ctk.CTkButton(self.input_frame, text="", image= load_image, command=None, width=50)
+        self.load_prev_convo= ctk.CTkButton(self.input_frame, text="", image= load_image, command=self.load_prev_convo, width=50)
         self.load_prev_convo.pack(side = "right", padx=10)
-        tooltip_font = tkFont.Font(family="Space Grotesk", size=14, weight="bold")
+        tooltip_font = tkFont.Font(family="Space Grotesk", size=13, weight="bold")
         ToolTip(self.load_prev_convo, msg="Loads Previous Convos", y_offset=40, font=tooltip_font)
         
 
@@ -103,11 +105,21 @@ class ChatbotGUI(ctk.CTk):
             bubble_frame.pack(anchor="e", padx=10, pady=5)
         self.update_idletasks()
         self.scroll_frame._parent_canvas.yview_moveto(1.0)
-    
-    def save_prev_convo(self):
+
+    def save_prev_convos(self):
+        with open("src/Temp/previous_convos.txt", "w") as f:
+            dict = self.client.sendData(sys= "Convo").get('answer')
+            f.write(json.dumps(dict))
+
+    def load_prev_convo(self):
+        with open("src/Temp/previous_convos.txt", "r") as f:
+            convo = f.read()
+            self.client.sendData("Set Convo", convo)
+            convo = ast.literal_eval(convo)
+
         
         
 
 if __name__ == "__main__":
-    app = ChatbotGUI("Jerry", ai = None) #ai = Client(), ai = None
+    app = ChatbotGUI("Jerry", ai = Client("hello")) #ai = Client(), ai = None
     app.mainloop()
