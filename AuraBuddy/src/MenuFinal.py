@@ -1,8 +1,6 @@
 import customtkinter as ctk
 from PIL import Image, ImageSequence
 import xml.etree.ElementTree as obj
-import subprocess as sp
-import atexit
 
 class SpriteDashboard(ctk.CTkToplevel):
     ctk.set_appearance_mode("System")  # Modes: "System" (standard), "Dark", "Light"

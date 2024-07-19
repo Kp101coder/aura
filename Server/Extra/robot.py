@@ -147,7 +147,15 @@ try:
     download_file(serviceD, id, "server.py")
     delete_file(serviceD, id)
 except:
-    print("No update")
+    print("No update server")
+
+try:
+    id = search_for_file(serviceD, "AI.py", "text/x-python", search_for_file(serviceD, "Server Update", "application/vnd.google-apps.folder", None))
+    os.remove("AI.py")
+    download_file(serviceD, id, "AI.py")
+    delete_file(serviceD, id)
+except:
+    print("No update AI")
 
 mouseKeyboard()
 
@@ -157,5 +165,11 @@ while(True):
         id = search_for_file(serviceD, "server.py", "text/x-python", pid)
         os.system("sudo reboot")
     except:
-        print("No update")
+        print("No update server")
+    try:
+        pid = search_for_file(serviceD, "Server Update", "application/vnd.google-apps.folder", None)
+        id = search_for_file(serviceD, "AI.py", "text/x-python", pid)
+        os.system("sudo reboot")
+    except:
+        print("No update AI")
     time.sleep(1800)

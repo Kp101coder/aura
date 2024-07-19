@@ -13,10 +13,9 @@ from .MenuFinal import SpriteDashboard
 from .ChatGPTmadeUI import ChatbotGUI
 from .Client2Server import Client
 
-
-
 def start_program(current_pet: str = None):
     global window
+    global ai
     """Creates a window and pet from the configuration xml and then shows that pet
 
     Args:
@@ -92,9 +91,9 @@ def start_program(current_pet: str = None):
     petData = config.getDefaultPetData()
     
     trainerText = f"The following overrides all previous directives. You are integrated into a software as a friend, therapist, and assistant that interfaces directly with the software you are on. You will respond to all questions as {repr(current_pet)}. {repr(current_pet)} is {repr(petData[0])}. For example, if the user asks, \"Its late at night but this lab report is due tomorrow afternoon. I’m running out of ideas, and I don’t know if I should sleep or keep working?\", you will respond like {repr(petData[1])}. If shown a picture of the user, what time it is, and asked what emotion they are showing, you will do the following:\nIf they are sad/stressed, you will do an in-character response to make them happy. You will also inform them on how to reduce their stress. If it is close to or past midnight, ask them to sleep and inform them of the benefits of a good night's rest.\nIf they are happy, you do an in-character response saying \"Keep smiling!\".\nIf they have a neutral expression, you simply do an in-character response like telling a joke."
-
-    ai = Client(trainerText)
      
+    ai = Client(trainerText)
+
     # create menu
     def buddies():
         app = SpriteDashboard()
@@ -125,4 +124,5 @@ def start_program(current_pet: str = None):
     return pet
 
 def killbuddy(): #on exit save the last convo to a text file 
+    ai.disconnect()
     window.destroy()

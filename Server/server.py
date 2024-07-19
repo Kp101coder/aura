@@ -1,5 +1,4 @@
 import socket as s
-import io
 import json
 import base64
 from AI import Chatbot
@@ -68,6 +67,8 @@ def handle_client(communication_socket, ai):
             response = str(ai.getConvo())
         elif sysMessage == "Set Convo":
             response = str(ai.setConvo(ast.literal_eval(message)))
+        elif sysMessage == "Init":
+            response = str(ai.init(message))
         elif image_data:
             image = base64.b64decode(image_data)
             with open("Temp/received_image" + str(count("Temp")) + ".jpg", "wb") as f:
