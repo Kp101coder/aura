@@ -1,9 +1,10 @@
 import tkinter as tk
+from tktooltip import ToolTip
 import customtkinter as ctk
 from tkinter import END
-from .Client2Server import Client
-import ast
-import os
+from Client2Server import Client #.Client2Server when runing run.py
+from PIL import Image
+import tkinter.font as tkFont
 
 
 
@@ -14,7 +15,9 @@ class ChatbotGUI(ctk.CTk):
         super().__init__()
         self.title(f"{name}'s Corner")
         
-        self.geometry("600x600")     
+        self.geometry("600x600") 
+        self.minsize(600, 600)   
+        ctk.set_appearance_mode("Dark") 
         
         
         self.client = ai
@@ -34,7 +37,7 @@ class ChatbotGUI(ctk.CTk):
         bgColor = "#2a2b2b"
 
         # Create main frame
-        self.scroll_frame = ctk.CTkScrollableFrame(self, border_width= 3, border_color="#5c5b5b", fg_color=bgColor)
+        self.scroll_frame = ctk.CTkScrollableFrame(self, border_width= 3, border_color="#5c5b5b")
         self.scroll_frame.grid(row=1,column=1, sticky="nsew")
         
         
@@ -51,9 +54,19 @@ class ChatbotGUI(ctk.CTk):
         self.entry.pack(side = "left", pady=10, padx=10, expand=True , fill = "x")
         self.entry.bind("<Return>", self.send_message)
 
-    # Send button
-        self.send_button = ctk.CTkButton(self.input_frame, text="Send", command=self.send_message)
-        self.send_button.pack(side = "right", pady=10, padx=10)
+        #Load Prev Convo Button
+        load_image = ctk.CTkImage(Image.open("src/images/white_reload_sign.png"))
+        self.load_prev_convo= ctk.CTkButton(self.input_frame, text="", image= load_image, command=None, width=50)
+        self.load_prev_convo.pack(side = "right", padx=10)
+        tooltip_font = tkFont.Font(family="Space Grotesk", size=14, weight="bold")
+        ToolTip(self.load_prev_convo, msg="Loads Previous Convos", y_offset=40, font=tooltip_font)
+        
+
+        # Send button
+        self.send_button = ctk.CTkButton(self.input_frame, text="Send", command=self.send_message, width=75)
+        self.send_button.pack(side = "right", padx=5)
+
+    
     #New entry
        # self.entry = ctk.CTkTextbox(self.input_frame, height=20, wrap = 'word')
        # self.entry.pack(side = "left", pady=10, padx=10, expand=True, fill = "x")
@@ -90,8 +103,11 @@ class ChatbotGUI(ctk.CTk):
             bubble_frame.pack(anchor="e", padx=10, pady=5)
         self.update_idletasks()
         self.scroll_frame._parent_canvas.yview_moveto(1.0)
+    
+    def save_prev_convo(self):
+        
         
 
 if __name__ == "__main__":
-    app = ChatbotGUI("Jerry", ai = Client())
+    app = ChatbotGUI("Jerry", ai = None) #ai = Client(), ai = None
     app.mainloop()

@@ -101,7 +101,7 @@ class Client:
                         time.sleep(1)
 
 if __name__ == "__main__":        
-        client = Client()
+        client = Client("hello")
         while True:
                 ask = input("T: terminate, C: convo, SC: set convo or ask question: ")
                 if ask == "T":
