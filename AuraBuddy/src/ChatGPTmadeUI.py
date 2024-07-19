@@ -2,10 +2,6 @@ import tkinter as tk
 import customtkinter as ctk
 from tkinter import END
 from .Client2Server import Client
-import ast
-import os
-
-
 
 class ChatbotGUI(ctk.CTk):
 
