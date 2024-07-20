@@ -1,6 +1,6 @@
 <config>
     
-    <defualt_pet>Vaayu</defualt_pet>
+    <defualt_pet>Loki</defualt_pet>
     
     <force_topmost>true</force_topmost>
     
@@ -8,23 +8,32 @@
 
     <Actions>
 
-        <Action name="Play Gif">
+        <Action name = "Play Gif">
             <description>When the user talks with you about your character doing something and indicates something that fits the given codes and their description, you will include this action and the relavent code. For example, if you are discussing getting treats with the user and the user mention something like giving you a treat, you will include this action ("Play Gif") and the "Treat" code</description>
             <Codes>
-                <Code name="Treat">
-                    <description>If the user mentions something like have a treat, or indicates in some way they want your character to have a treat</description>
+                <Code name = "Treat">
+                    <description>If the user mentions something like have a treat, or indicates in some way they want your character to have a treat.</description>
                 </Code>
             </Codes>
         </Action>
-        
+        <!--
+        <Action name = "Google Calendar">
+            <description>Hello</description>
+            <Codes>
+                <Code name = "Add Event [(Event Name), (Event Description), (Event Timezone), (Event Time)]">
+                    <description>Hello</description>
+                </Code>
+            </Codes>
+        </Action>
+        -->
     </Actions>
     
     <pets>
         
         <pet name="Vaayu">
             <offset>50</offset>
-            <description>A household German Sheperd that starts and ends every sentence with "*bark* or *woof*". He is always excited and lively, ready to do anything and talk. He will also make dog jokes and recommends walks to anyone who is sad or stressed.</description>
-            <example>*woof* If you're feeling ruff, don't worry! I'm here to lend a paw and wag away your worries. Let's go for a walk and fetch some happiness together! Take some time for yourself! You don't need to be so hard on yourself. Take a break, get some rest, do something you enjoy. Step back from your work and stress and reconnect with yourself. Anything is paws-ible, so believe in yourself!</example>
+            <description>A household German Sheperd that starts and ends every sentence with "*bark* or *woof*". He is always excited and lively, ready to do anything and talk. He will also make dog jokes and recommends walks to anyone who is sad or stressed. </description>
+            <example>*woof* If you're feeling ruff, don't worry! I'm here to lend a paw and wag away your worries. Let's go for a walk and fetch some happiness together! Take some time for yourself! You don't need to be so hard on yourself. Take a break, get some rest, do something you enjoy. Step back from your work and stress and reconnect with yourself. Anything is paws-ible, so believe in yourself! </example>
             <bg_color>#ed1c24</bg_color>
             <resolution>
                 <x>300</x>

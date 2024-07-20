@@ -5,13 +5,3 @@ When you start the software, it may take about 10 seconds to start.
 This is normal as the software is currently in open alpha.
 If you encounter any errors, let us know at: aurabusinessventure@gmail.com
 Enjoy!
-
-IMPORTANT:
-Due to our app being unsigned because we cannot afford a code signing certificate, 
-Windows believes our program is a Trojan. Unfortunatly, small developers like us run into these issue :(
-
-After installing, you WILL get a warning from Windows Defender Smartscreen. 
-You must click MORE INFO and then the RUN ANYWAY button will show up.
-Click the RUN ANYWAY button and proceed through install.
-If you get a notification from Windows Defender, click the notification and click on the Severe Trojan.
-Then click allow.

@@ -69,26 +69,18 @@ def handle_client(communication_socket, ai):
             print("Running reader")
             prints.append("Running reader")
             communication_socket.send(str(prints).encode('utf-8'))
-        elif sysMessage == "Convo":
-            response = ai.getConvo()
-            data = {
-                'answer' : response,
-                'action' : None,
-                'code' : None
-            }
-            communication_socket.send(json.dumps(data).encode('utf-8'))
         else:
             message = clientData.get('message')
             image_data = clientData.get('image')
             print(f"Message from client: {message}")
             prints.append(f"Message from client: {message}")
             response = None
-            if sysMessage == "Set Convo":
-                ai.setConvo(ast.literal_eval(message))
-                response = "Done"
+            if sysMessage == "Convo":
+                response = str(ai.getConvo())
+            elif sysMessage == "Set Convo":
+                response = str(ai.setConvo(ast.literal_eval(message)))
             elif sysMessage == "Init":
-                ai.init(message)
-                response = "Done"
+                response = str(ai.init(message))
             elif image_data:
                 image = base64.b64decode(image_data)
                 with open("Temp/received_image" + str(count("Temp")) + ".jpg", "wb") as f:
@@ -107,10 +99,10 @@ def processResponse(response):
     code = None
 
     if not response.rfind("Action: ") == -1:
-        answer = response[:response.rfind("Action: ")].rstrip()
-        action = response[response.rfind("Action: ")+len("Action: "):response.rfind("Code: ")].rstrip()
+        answer = response[:response.rfind("Action: ")]
+        action = response[response.rfind("Action: ")+len("Action: "):response.rfind("Code: ")]
         if not response.rfind("Code: ") == -1:
-            code = response[response.rfind("Code: ")+len("Code: "):].rstrip()
+            code = response[response.rfind("Code: ")+len("Code: "):]
         else:
             prints.append("Code not found")
             print("Code not found")
