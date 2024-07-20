@@ -58,8 +58,10 @@ def start_program(current_pet: str = None):
     def initAI():
         print("Running background AI thread")
         global ai
-        ai = Client(trainerText)
-        my_menu.add_command(label="Talk", command=talk)
+        with open("src/Temp/previous_convos.txt", "r") as f:
+            convo = f.read()
+        ai = Client(convo)
+        my_menu.add_command(label="Talk", command=talk, args = [current_pet, trainerText])
         my_menu.add_separator()
         my_menu.add_command(label="Exit", command=killbuddy)
 
@@ -80,7 +82,7 @@ def start_program(current_pet: str = None):
     monitor = get_monitors()[0]
     scale_factor = ctypes.windll.shcore.GetScaleFactorForDevice(0)
     offset = int(pet_config.offset + (10*((scale_factor-100)/25)))
-    
+
     print("Offset: " + str(offset))
 
     resolution = {
@@ -136,10 +138,6 @@ def start_program(current_pet: str = None):
         calendar_app = CalendarApp()
         calendar_app.mainloop()
 
-    def talk():
-        app=ChatbotGUI(current_pet, ai)
-        app.mainloop()
-
     def my_popup(event):
         my_menu.tk_popup(event.x_root, event.y_root)
         my_menu.grab_release()
@@ -152,6 +150,10 @@ def start_program(current_pet: str = None):
 
     window.mainloop()
     return pet
+
+def talk(current_pet, trainerText):
+    app=ChatbotGUI(current_pet, ai, trainerText)
+    app.mainloop()
 
 def killbuddy(): #on exit save the last convo to a text file 
     with open("src/Temp/previous_convos.txt", "w") as f:

@@ -10,7 +10,7 @@ import ast
 
 class ChatbotGUI(ctk.CTkToplevel):
 
-    def __init__(self, name, ai):
+    def __init__(self, name, ai, trainerText):
         
         super().__init__()
         self.title(f"{name}'s Corner")
@@ -19,7 +19,7 @@ class ChatbotGUI(ctk.CTkToplevel):
         self.minsize(600, 600)   
         ctk.set_appearance_mode("Dark") 
         
-        
+        self.initialMessage = trainerText
         self.client = ai
 
         #padding grids
@@ -56,21 +56,28 @@ class ChatbotGUI(ctk.CTkToplevel):
 
         #Load Prev Convo Button
         load_image = ctk.CTkImage(Image.open("src/images/white_reload_sign.png"))
-        self.load_prev_convo= ctk.CTkButton(self.input_frame, text="", image= load_image, command=self.load_prev_convo, width=50)
+        self.load_prev_convo= ctk.CTkButton(self.input_frame, text="", image= load_image, command=self.reset, width=50)
         self.load_prev_convo.pack(side = "right", padx=10)
         tooltip_font = tkFont.Font(family="Space Grotesk", size=13, weight="bold")
-        ToolTip(self.load_prev_convo, msg="Loads Previous Convos", y_offset=40, font=tooltip_font)
+        ToolTip(self.load_prev_convo, msg="Reset Conversation", y_offset=40, font=tooltip_font)
         
 
         # Send button
         self.send_button = ctk.CTkButton(self.input_frame, text="Send", command=self.send_message, width=75)
         self.send_button.pack(side = "right", padx=5)
 
+        self.after_idle(func=self.load_prev_convo)
+
     
     #New entry
        # self.entry = ctk.CTkTextbox(self.input_frame, height=20, wrap = 'word')
        # self.entry.pack(side = "left", pady=10, padx=10, expand=True, fill = "x")
        # self.entry.bind("<Return>", self.send_message)
+
+    def reset(self):
+        self.client.sendInit(str({"role": "system", "content": self.initialMessage}))
+        self.destroy()
+        self = ChatbotGUI()
 
     def send_message(self, event=None):
         user_message = self.entry.get()#1.0, END for text box
@@ -101,8 +108,7 @@ class ChatbotGUI(ctk.CTkToplevel):
         with open("src/Temp/previous_convos.txt", "r") as f:
             convo = f.read()
         if convo != "":
-            self.client.sendData("Set Convo", convo)
-            convo = ast.literal_eval(convo) 
+            convo = ast.literal_eval(convo)
             for m in convo:
                 if m.get('role') == "user":
                     self.create_speech_bubble(m.get("content"), "1 LV 80085")

@@ -81,15 +81,12 @@ def handle_client(communication_socket, ai):
                 'code' : None
             }
             communication_socket.send(json.dumps(data).encode('utf-8'))
-        elif sysMessage == "Init":
-            ai.init(message)
+        elif sysMessage == "Set Convo":
+            ai.setConvo(ast.literal_eval(message))
         else:
             image_data = clientData.get('image')
             response = None
-            if sysMessage == "Set Convo":
-                ai.setConvo(ast.literal_eval(message))
-                response = "Done"
-            elif image_data:
+            if image_data:
                 image = base64.b64decode(image_data)
                 with open("Temp/received_image" + str(count("Temp")) + ".jpg", "wb") as f:
                     f.write(image)

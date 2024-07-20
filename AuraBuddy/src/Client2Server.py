@@ -23,7 +23,7 @@ code
 
 '''
 class Client:
-        def __init__(self, initalMessage = None):
+        def __init__(self, initialMessage = None):
                 global client_socket
                 global MAX_BYTES_ACCEPTED
                 global cap
@@ -36,8 +36,8 @@ class Client:
                 client_socket.settimeout(30)
                 mixer.init()
                 cap = cv2.VideoCapture(0)
-                if initalMessage != None:
-                        self.sendInit(initalMessage)
+                if initialMessage != None:
+                        self.sendInit(initialMessage)
 
         def tts(self, text, output_file='Temp/output.mp3'):
                 """Convert text to speech and save it to an output file."""
@@ -58,7 +58,7 @@ class Client:
         
         def sendData(self, sys, message=None, image=None):
                 print("Sending Data")
-                if sys not in ["Question", "Quit", "Convo", "Set Convo", "Init"]:
+                if sys not in ["Question", "Quit", "Convo"]:
                         raise Exception("You need a valid system message")
                 data = {
                         'sys': sys,
@@ -75,7 +75,7 @@ class Client:
         def sendInit(self, message):
                 print("Sending Init Data")
                 data = {
-                        'sys': "Init",
+                        'sys': "Set Convo",
                         'message': message,
                         'image': None
                 }

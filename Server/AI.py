@@ -5,11 +5,6 @@ class Chatbot:
         self.client = OpenAI(api_key=apiKey)
         self.messageList = []
         self.MODEL="gpt-4o-mini"
-    
-    def init(self, initMessage):
-        '''Sets the inital system message and returns the current conversation'''
-        self.messageList.append({"role": "system", "content": initMessage})
-        return self.getConvo()
 
     def question(self, question):
         """Send a question to the ChatGPT API and return the response."""
