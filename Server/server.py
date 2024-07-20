@@ -107,10 +107,10 @@ def processResponse(response):
     code = None
 
     if not response.rfind("Action: ") == -1:
-        answer = response[:response.rfind("Action: ")]
-        action = response[response.rfind("Action: ")+len("Action: "):response.rfind("Code: ")]
+        answer = response[:response.rfind("Action: ")].rstrip()
+        action = response[response.rfind("Action: ")+len("Action: "):response.rfind("Code: ")].rstrip()
         if not response.rfind("Code: ") == -1:
-            code = response[response.rfind("Code: ")+len("Code: "):]
+            code = response[response.rfind("Code: ")+len("Code: "):].rstrip()
         else:
             prints.append("Code not found")
             print("Code not found")
