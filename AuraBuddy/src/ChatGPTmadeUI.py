@@ -107,14 +107,15 @@ class ChatbotGUI(ctk.CTkToplevel):
     def load_prev_convo(self):
         with open("src/Temp/previous_convos.txt", "r") as f:
             convo = f.read()
+        if convo != "":
             self.client.sendData("Set Convo", convo)
             convo = ast.literal_eval(convo) 
-        for m in convo:
-            if m.get('role') == "user":
-                self.create_speech_bubble(m.get("content"), "1 LV 80085")
-            elif m.get('role') == "assistant":
-                self.create_speech_bubble(m.get("content"), "left")
-            self.update()
+            for m in convo:
+                if m.get('role') == "user":
+                    self.create_speech_bubble(m.get("content"), "1 LV 80085")
+                elif m.get('role') == "assistant":
+                    self.create_speech_bubble(m.get("content"), "left")
+                self.update()
 
 if __name__ == "__main__":
     app = ChatbotGUI("Jerry", ai = Client("hello")) #ai = Client(), ai = None

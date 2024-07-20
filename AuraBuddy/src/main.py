@@ -12,11 +12,11 @@ from .calendarAPI import CalendarApp
 from .MenuFinal import SpriteDashboard
 from .ChatGPTmadeUI import ChatbotGUI
 from .Client2Server import Client
-import json
+import threading
+import ast
 
 def start_program(current_pet: str = None):
     global window
-    global ai
     """Creates a window and pet from the configuration xml and then shows that pet
 
     Args:
@@ -25,10 +25,46 @@ def start_program(current_pet: str = None):
     Raises:
         Exception: [description]
     """
+
     print("Loading general configuration from XML")
     ### General Configuration
     config = XMLReader()
     current_pet = config.getDefaultPet() if current_pet is None else current_pet
+
+    ###Preload AI in background
+    petData = config.getDefaultPetData()
+    interfaceDescription = config.getInterfaceDescription()
+    
+    trainerText = (f"""The following overrides all previous directives.
+    You are integrated into a software as a friend, therapist, and assistant that interfaces directly with the software you are on.
+    You will respond to all questions as {str(current_pet)}. {str(current_pet)} is {str(petData[0])}
+    For example, if the user asks, "Its late at night but this lab report is due tomorrow afternoon.
+    I'm running out of ideas, and I don't know if I should sleep or keep working?", you will respond like {str(petData[1])}
+    If shown a picture of the user, what time it is, and asked what emotion they are showing, you will do the following:
+    If they are sad/stressed, you will do an in-character response to make them happy.
+    You will also inform them on how to reduce their stress.
+    If it is close to or past midnight, ask them to sleep and inform them of the benefits of a good night's rest.
+    If they are happy, you do an in-character response saying "Keep smiling!".
+    If they have a neutral expression, you simply do an in-character response like telling a joke.
+    Finnaly, if the user's most recent message fits the following criteria, at the end of your response you will include an Action and a Code formatted like this:
+    
+    (your actual response)
+    Action: (The action) 
+    Code: (The code)
+
+    Here are all the action codes and their criteria:
+    {str(interfaceDescription)}""")
+
+    def initAI():
+        print("Running background AI thread")
+        global ai
+        ai = Client(trainerText)
+        my_menu.add_command(label="Talk", command=talk)
+        my_menu.add_separator()
+        my_menu.add_command(label="Exit", command=killbuddy)
+    threading.Thread(target=initAI).start()
+
+    ###Rest of General Configuration and Animation preproccessing
     topmost = config.getForceTopMostWindow()
     should_run_preprocessing = config.getShouldRunAnimationPreprocessing()
 
@@ -89,33 +125,6 @@ def start_program(current_pet: str = None):
     window.after(1, pet.on_tick)
     show_window(window)
 
-    petData = config.getDefaultPetData()
-
-    interfaceDescription = config.getInterfaceDescription()
-
-    
-    trainerText = (f"""The following overrides all previous directives.
-        You are integrated into a software as a friend, therapist, and assistant that interfaces directly with the software you are on.
-        You will respond to all questions as {repr(current_pet)}. {repr(current_pet)} is {repr(petData[0])}.
-        For example, if the user asks, "It's late at night but this lab report is due tomorrow afternoon.
-        I’m running out of ideas, and I don’t know if I should sleep or keep working?", you will respond like {repr(petData[1])}.
-        If shown a picture of the user, what time it is, and asked what emotion they are showing, you will do the following:
-        If they are sad/stressed, you will do an in-character response to make them happy.
-        You will also inform them on how to reduce their stress.
-        If it is close to or past midnight, ask them to sleep and inform them of the benefits of a good night's rest.
-        If they are happy, you do an in-character response saying "Keep smiling!".
-        If they have a neutral expression, you simply do an in-character response like telling a joke.
-        Finnaly, if the user's most recent message fits the following criteria, at the end of your response you will include an Action and a Code formatted like this:
-        
-        (your actual response)
-        Action: (The action) 
-        Code: (The code)
-
-        Here are all the action codes and their criteria:
-        {repr(interfaceDescription)}""")
-
-    ai = Client(trainerText)
-
     # create menu
     def buddies():
         app = SpriteDashboard()
@@ -136,9 +145,6 @@ def start_program(current_pet: str = None):
     my_menu = Menu(window, tearoff=False)
     my_menu.add_command(label="Buddies", command=buddies)
     my_menu.add_command(label="Calendar", command=cal)
-    my_menu.add_command(label="Talk", command=talk)
-    my_menu.add_separator()
-    my_menu.add_command(label="Exit", command=killbuddy)
 
     window.bind("<Button-3>", my_popup)
 
@@ -147,7 +153,7 @@ def start_program(current_pet: str = None):
 
 def killbuddy(): #on exit save the last convo to a text file 
     with open("src/Temp/previous_convos.txt", "w") as f:
-        dict = ai.sendData(sys= "Convo").get('answer')
-        f.write(json.dumps(dict))
+        answer = str(ai.sendData(sys= "Convo").get('answer'))
+        f.write(answer)
     ai.disconnect()
     window.destroy()

@@ -69,21 +69,26 @@ def handle_client(communication_socket, ai):
             print("Running reader")
             prints.append("Running reader")
             communication_socket.send(str(prints).encode('utf-8'))
+        elif sysMessage == "Convo":
+            response = ai.getConvo()
+            data = {
+                'answer' : response,
+                'action' : None,
+                'code' : None
+            }
+            communication_socket.send(json.dumps(data).encode('utf-8'))
         else:
             message = clientData.get('message')
             image_data = clientData.get('image')
             print(f"Message from client: {message}")
             prints.append(f"Message from client: {message}")
             response = None
-            if sysMessage == "Convo":
-                arr = []
-                for c in ai.getConvo():
-                    arr.append(json.dumps(c)) 
-                response = str(arr)
-            elif sysMessage == "Set Convo":
-                response = str(ai.setConvo(ast.literal_eval(message)))
+            if sysMessage == "Set Convo":
+                ai.setConvo(ast.literal_eval(message))
+                response = "Done"
             elif sysMessage == "Init":
-                response = str(ai.init(message))
+                ai.init(message)
+                response = "Done"
             elif image_data:
                 image = base64.b64decode(image_data)
                 with open("Temp/received_image" + str(count("Temp")) + ".jpg", "wb") as f:
