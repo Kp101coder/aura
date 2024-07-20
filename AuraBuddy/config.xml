@@ -5,9 +5,30 @@
     <force_topmost>true</force_topmost>
     
     <should_run_preprocessing>false</should_run_preprocessing>
+
+    <Actions>
+
+        <Action name = "Play Gif">
+            <description>When the user talks with you about your character doing something and indicates something that fits the given codes and their description, you will include this action and the relavent code. For example, if you are discussing getting treats with the user and the user mention something like giving you a treat, you will include this action ("Play Gif") and the "Treat" code</description>
+            <Codes>
+                <Code name = "Treat">
+                    <description>If the user mentions something like have a treat, or indicates in some way they want your character to have a treat.</description>
+                </Code>
+            </Codes>
+        </Action>
+        <!--
+        <Action name = "Google Calendar">
+            <description>Hello</description>
+            <Codes>
+                <Code name = "Add Event [(Event Name), (Event Description), (Event Timezone), (Event Time)]">
+                    <description>Hello</description>
+                </Code>
+            </Codes>
+        </Action>
+        -->
+    </Actions>
     
     <pets>
-
         
         <pet name="Vaayu">
             <offset>50</offset>

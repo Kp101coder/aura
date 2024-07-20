@@ -51,6 +51,32 @@ class XMLReader:
 
     def getShouldRunAnimationPreprocessing(self):
         return self.getFirstTagValueAsBool("should_run_preprocessing")
+    
+    def getInterfaceDescription(self):
+        actionData = []
+        actions = self.dom.getElementsByTagName("Action")
+        for action in actions:
+            name = action.getAttribute("name")
+            actionReader = XMLReader(dom=action)
+            description = actionReader.getFirstTagValue("description")
+            codesData = []
+            codes = actionReader.dom.getElementsByTagName("Code")
+            for code in codes:
+                codeName = code.getAttribute("name")
+                codeReader = XMLReader(dom=code)
+                codeDescription = codeReader.getFirstTagValue("description")
+                codesDict = {
+                    'name' : codeName,
+                    'description' : codeDescription
+                }
+                codesData.append(codesDict)
+            dict = {
+                'name' : name,
+                'description' : description,
+                'codes' : codesData
+            }
+            actionData.append(dict)
+        return actionData
 
     def getMatchingPetConfigurationAsDom(self, pet: str) -> minidom:
         pets = self.dom.getElementsByTagName("pet")
@@ -98,3 +124,7 @@ class XMLReader:
     @staticmethod
     def xml_bool(val: str) -> bool:
         return bool(distutils.util.strtobool(val))
+
+if __name__ == "__main__":
+    config = XMLReader()
+    print(config.getInterfaceDescription())
