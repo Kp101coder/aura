@@ -12,6 +12,7 @@ from .calendarAPI import CalendarApp
 from .MenuFinal import SpriteDashboard
 from .ChatGPTmadeUI import ChatbotGUI
 from .Client2Server import Client
+import json
 
 def start_program(current_pet: str = None):
     global window
@@ -146,6 +147,8 @@ def start_program(current_pet: str = None):
     return pet
 
 def killbuddy(): #on exit save the last convo to a text file 
-    ChatbotGUI.save_prev_convos(self=ChatbotGUI, ai = ai)
+    with open("src/Temp/previous_convos.txt", "w") as f:
+        dict = ai.sendData(sys= "Convo").get('answer')
+        f.write(json.dumps(dict))
     ai.disconnect()
     window.destroy()

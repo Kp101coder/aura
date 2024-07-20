@@ -8,8 +8,6 @@ import tkinter.font as tkFont
 import json
 import ast
 
-
-
 class ChatbotGUI(ctk.CTkToplevel):
 
     def __init__(self, name, ai):
@@ -87,8 +85,8 @@ class ChatbotGUI(ctk.CTkToplevel):
         if user_message.strip() != "":
             self.create_speech_bubble(user_message, "right")
             self.entry.delete(0, END)
-            self.update()
             response = self.client.sendData(sys="Question", message=user_message)
+            print(response)
             bot_response = response.get('answer')
             self.create_speech_bubble(bot_response, "left")
             # self.update()
@@ -105,20 +103,18 @@ class ChatbotGUI(ctk.CTkToplevel):
             bubble_frame.pack(anchor="e", padx=10, pady=5)
         self.update_idletasks()
         self.scroll_frame._parent_canvas.yview_moveto(1.0)
-
-    def save_prev_convos(self):
-        with open("src/Temp/previous_convos.txt", "w") as f:
-            dict = self.client.sendData(sys= "Convo").get('answer')
-            f.write(json.dumps(dict))
+        self.update()
 
     def load_prev_convo(self):
         with open("src/Temp/previous_convos.txt", "r") as f:
             convo = f.read()
             self.client.sendData("Set Convo", convo)
-            convo = ast.literal_eval(convo)
-
-        
-        
+            convo = ast.literal_eval(convo) 
+        for m in convo:
+            if m.get('role') == "user":
+                self.create_speech_bubble(m.get("content"), "1 LV 80085")
+            elif m.get('role') == "assistant":
+                self.create_speech_bubble(m.get("content"), "left")
 
 if __name__ == "__main__":
     app = ChatbotGUI("Jerry", ai = Client("hello")) #ai = Client(), ai = None
