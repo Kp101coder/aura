@@ -60,6 +60,10 @@ def handle_client(communication_socket, ai):
     sysMessage = clientData.get('sys')
     print(f"System Message from client: {sysMessage}")
     prints.append(f"System Message from client: {sysMessage}")
+    message = clientData.get('message')
+    print(f"Message from client: {message}")
+    prints.append(f"Message from client: {message}")
+
     if sysMessage == "Quit":
         communication_socket.close()
         print("Stopping handle...")
@@ -77,17 +81,13 @@ def handle_client(communication_socket, ai):
                 'code' : None
             }
             communication_socket.send(json.dumps(data).encode('utf-8'))
+        elif sysMessage == "Init":
+            ai.init(message)
         else:
-            message = clientData.get('message')
             image_data = clientData.get('image')
-            print(f"Message from client: {message}")
-            prints.append(f"Message from client: {message}")
             response = None
             if sysMessage == "Set Convo":
                 ai.setConvo(ast.literal_eval(message))
-                response = "Done"
-            elif sysMessage == "Init":
-                ai.init(message)
                 response = "Done"
             elif image_data:
                 image = base64.b64decode(image_data)

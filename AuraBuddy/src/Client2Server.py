@@ -38,7 +38,7 @@ class Client:
                 mixer.init()
                 cap = cv2.VideoCapture(0)
                 if initalMessage != None:
-                        self.sendData("Init", initalMessage)
+                        self.sendInit(initalMessage)
 
         def tts(self, text, output_file='Temp/output.mp3'):
                 """Convert text to speech and save it to an output file."""
@@ -72,6 +72,17 @@ class Client:
                 response = self.__receive_response()
                 response = json.loads(response)
                 return response
+        
+        def sendInit(self, message):
+                print("Sending Init Data")
+                data = {
+                        'sys': "Init",
+                        'message': message,
+                        'image': None
+                }
+                data = json.dumps(data).encode('utf-8')
+                client_socket.sendall(len(data).to_bytes(4, 'big'))
+                client_socket.sendall(data)
 
         def __receive_response(self):
                 data = b''
