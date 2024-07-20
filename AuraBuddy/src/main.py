@@ -146,5 +146,6 @@ def start_program(current_pet: str = None):
     return pet
 
 def killbuddy(): #on exit save the last convo to a text file 
+    ChatbotGUI.save_prev_convos(self=ChatbotGUI, ai = ai)
     ai.disconnect()
     window.destroy()
