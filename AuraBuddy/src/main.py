@@ -114,7 +114,6 @@ def start_program(current_pet: str = None):
         Here are all the action codes and their criteria:
         {repr(interfaceDescription)}""")
 
-     
     ai = Client(trainerText)
 
     # create menu

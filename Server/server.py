@@ -76,7 +76,10 @@ def handle_client(communication_socket, ai):
             prints.append(f"Message from client: {message}")
             response = None
             if sysMessage == "Convo":
-                response = str(ai.getConvo())
+                arr = []
+                for c in ai.getConvo():
+                    arr.append(json.dumps(c)) 
+                response = str(arr)
             elif sysMessage == "Set Convo":
                 response = str(ai.setConvo(ast.literal_eval(message)))
             elif sysMessage == "Init":
@@ -99,7 +102,7 @@ def processResponse(response):
     code = None
 
     if not response.rfind("Action: ") == -1:
-        answer = response[:response.rfind("Action: ")]
+        answer = response[:response.rfind("Action: ")].rstrip()
         action = response[response.rfind("Action: ")+len("Action: "):response.rfind("Code: ")].rstrip()
         if not response.rfind("Code: ") == -1:
             code = response[response.rfind("Code: ")+len("Code: "):].rstrip()

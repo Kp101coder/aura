@@ -85,8 +85,8 @@ class ChatbotGUI(ctk.CTkToplevel):
         if user_message.strip() != "":
             self.create_speech_bubble(user_message, "right")
             self.entry.delete(0, END)
+            self.update()
             response = self.client.sendData(sys="Question", message=user_message)
-            print(response)
             bot_response = response.get('answer')
             self.create_speech_bubble(bot_response, "left")
             # self.update()
@@ -103,7 +103,6 @@ class ChatbotGUI(ctk.CTkToplevel):
             bubble_frame.pack(anchor="e", padx=10, pady=5)
         self.update_idletasks()
         self.scroll_frame._parent_canvas.yview_moveto(1.0)
-        self.update()
 
     def load_prev_convo(self):
         with open("src/Temp/previous_convos.txt", "r") as f:
@@ -115,6 +114,7 @@ class ChatbotGUI(ctk.CTkToplevel):
                 self.create_speech_bubble(m.get("content"), "1 LV 80085")
             elif m.get('role') == "assistant":
                 self.create_speech_bubble(m.get("content"), "left")
+            self.update()
 
 if __name__ == "__main__":
     app = ChatbotGUI("Jerry", ai = Client("hello")) #ai = Client(), ai = None
