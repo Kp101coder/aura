@@ -13,7 +13,6 @@ from .MenuFinal import SpriteDashboard
 from .ChatGPTmadeUI import ChatbotGUI
 from .Client2Server import Client
 import threading
-import ast
 
 def start_program(current_pet: str = None):
     global window
@@ -63,7 +62,7 @@ def start_program(current_pet: str = None):
         my_menu.add_command(label="Talk", command=talk)
         my_menu.add_separator()
         my_menu.add_command(label="Exit", command=killbuddy)
-        
+
     threading.Thread(target=initAI).start()
 
     ###Rest of General Configuration and Animation preproccessing
@@ -81,17 +80,18 @@ def start_program(current_pet: str = None):
     monitor = get_monitors()[0]
     scale_factor = ctypes.windll.shcore.GetScaleFactorForDevice(0)
     offset = int(pet_config.offset + (10*((scale_factor-100)/25)))
+    
     print("Offset: " + str(offset))
+
     resolution = {
         "width": int(monitor.width),
         "height": int(monitor.height - offset),
     }
+
     window = tk.CTk()
     canvas = configure_window(
         window, topmost=topmost, bg_color=pet_config.bg_color, resolution=resolution
     )
-
-
 
     ## Load the animations.
     print("Starting to load animations")
