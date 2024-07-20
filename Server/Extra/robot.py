@@ -120,9 +120,6 @@ def mouseKeyboard():
     keyboard.press(Key.enter)
     keyboard.release(Key.enter)
 
-createNewConnection("Prabhu", "Prabhu", "7136793536")
-connect("Prabhu", "Prabhu")
-
 creds = None
 serviceD = None
 
