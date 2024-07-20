@@ -22,7 +22,6 @@ action
 code
 
 '''
-"[{}, {}, {}]"
 class Client:
         def __init__(self, initalMessage = None):
                 global client_socket

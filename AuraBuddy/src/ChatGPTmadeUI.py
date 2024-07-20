@@ -74,13 +74,6 @@ class ChatbotGUI(ctk.CTkToplevel):
        # self.entry.pack(side = "left", pady=10, padx=10, expand=True, fill = "x")
        # self.entry.bind("<Return>", self.send_message)
 
-
-#make button for prev conversaiont
-#make text file that saves previous convos
-#use ast.literal_eval(message))
-#and load those text messages back in the speech bubble format
-#also load the face of the blob up and everything and maybe make a blob thought bubble show up
-
     def send_message(self, event=None):
         user_message = self.entry.get()#1.0, END for text box
         #self.entry.delete(1.0, END) for text box
@@ -116,9 +109,6 @@ class ChatbotGUI(ctk.CTkToplevel):
             convo = f.read()
             self.client.sendData("Set Convo", convo)
             convo = ast.literal_eval(convo)
-
-        
-        
 
 if __name__ == "__main__":
     app = ChatbotGUI("Jerry", ai = Client("hello")) #ai = Client(), ai = None
