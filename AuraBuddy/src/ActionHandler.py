@@ -10,6 +10,7 @@ class ActionHandler():
                 self.set_animation_state(AnimationStates.GIVE_TREAT)
         elif(action == "Computer"):
             if("Shutdown" in code):
-               os.system(f"shutdown /s /t {code[code.rfind("Shutdown ")+len("Shutdown "):]}") 
+               sec = code[code.rfind("Shutdown ")+len("Shutdown "):]
+               os.system(f"shutdown /s /t {sec}") 
 
 

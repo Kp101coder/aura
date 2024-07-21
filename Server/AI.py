@@ -34,7 +34,10 @@ class Chatbot:
     
     def getConvo(self): 
         '''Returns the current array of messages sent between user and AI'''
-        return self.messageList
+        messages = self.messageList
+        if(len(messages) > 0):
+            return messages.pop(0)
+        return messages
     
     def setConvo(self, previousList): 
         '''Makes the current array of messages the inputted array. Returns the new array'''

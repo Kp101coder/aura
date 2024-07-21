@@ -15,11 +15,10 @@ from .ChatGPTmadeUI import ChatbotGUI
 from .Client2Server import Client
 import threading
 from time import strftime
+import ast
 
 def start_program():
     global window
-    global trainerText
-    global current_pet
 
     """Creates a window and pet from the configuration xml and then shows that pet
 
@@ -70,6 +69,7 @@ def start_program():
         with open("src/Temp/previous_convos.txt", "r") as f:
             convo = f.read()
         if convo != "":
+            convo = ast.literal_eval(convo).insert(0,str({"role": "system", "content": trainerText}))
             ai = Client(convo)
         else:
             ai = Client(str([{"role": "system", "content": trainerText}]))
@@ -141,6 +141,10 @@ def start_program():
     window.after(1, pet.on_tick)
     show_window(window)
 
+    def talk():
+        app=ChatbotGUI(current_pet, ai, trainerText)
+        app.mainloop()
+
     # create menu
     def buddies():
         app = SpriteDashboard()
@@ -162,10 +166,6 @@ def start_program():
 
     window.mainloop()
     return pet
-
-def talk():
-    app=ChatbotGUI(current_pet, ai, trainerText)
-    app.mainloop()
 
 def killbuddy(): #on exit save the last convo to a text file 
     with open("src/Temp/previous_convos.txt", "w") as f:

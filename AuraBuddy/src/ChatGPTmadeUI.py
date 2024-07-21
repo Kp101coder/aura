@@ -70,7 +70,6 @@ class ChatbotGUI(ctk.CTkToplevel):
         self.send_button.pack(side = "right", padx=5)
 
         self.after_idle(func=self.load_prev_convo)
-
     
     #New entry
        # self.entry = ctk.CTkTextbox(self.input_frame, height=20, wrap = 'word')
@@ -107,15 +106,18 @@ class ChatbotGUI(ctk.CTkToplevel):
         self.scroll_frame._parent_canvas.yview_moveto(1.0)
 
     def load_prev_convo(self):
-        for m in ast.literal_eval(str(self.client.sendData("Convo").get('answer'))):
-            if m.get('role') == "user":
-                self.create_speech_bubble(m.get("content"), "1 LV 80085")
-            elif m.get('role') == "assistant":
-                if("Action:" in m.get("content")):
-                    self.create_speech_bubble(m.get("content")[:m.get("content").rfind("Action:")].rstrip(), "left")
-                else:
-                    self.create_speech_bubble(m.get("content"), "left")
-            self.update()
+        try:
+            for m in ast.literal_eval(str(self.client.sendData("Convo").get('answer'))):
+                if m.get('role') == "user":
+                    self.create_speech_bubble(m.get("content"), "1 LV 80085")
+                elif m.get('role') == "assistant":
+                    if("Action:" in m.get("content")):
+                        self.create_speech_bubble(m.get("content")[:m.get("content").rfind("Action:")].rstrip(), "left")
+                    else:
+                        self.create_speech_bubble(m.get("content"), "left")
+                self.update()
+        except:
+            self.load_prev_convo()
 
 if __name__ == "__main__":
     app = ChatbotGUI("Jerry", ai = Client()) #ai = Client(), ai = None

@@ -21,7 +21,7 @@
             <description>When the user asks you to interface with their computer.</description>
             <Codes>
                 <Code name="Shutdown (Time)">
-                    <description>If the user ask you to shutdown their computer or turn off their computer, you will include this code. Make sure to replace (Time) with whenever they want you to turn off their computer in seconds. If they do not specify, defualt to 1 minute</description>
+                    <description>If the user ask you to shutdown their computer or turn off their computer, you will include this code. Make sure to replace "(Time)" with whenever they want you to turn off their computer in seconds. If they do not give it to you in seconds, convert their time to seconds. You must only replace "(Time)" with a number for seconds and nothing else. If they do not specify, defualt to 1 minute</description>
                 </Code>
             </Codes>
         </Action>
