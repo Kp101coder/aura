@@ -142,7 +142,7 @@ def start_program():
     show_window(window)
 
     def talk():
-        app=ChatbotGUI(current_pet, ai, trainerText)
+        app=ChatbotGUI(current_pet, ai, trainerText, pet)
         app.mainloop()
 
     # create menu

@@ -1,20 +1,20 @@
 import tkinter as tk
-from .animation import Animation, AnimationStates, Animator
-from .pets.interactable_pet import InteractablePet
-from .main import pet
-from .animation import AnimationStates
+from src.pets import Pet
 import os
 
 class ActionHandler():
 
-    animator: Animator
+    pet : Pet
+
+    def __init__(self, pet):
+        self.pet = pet
 
     def handle(self,response):
         action = response.get('action')
         code = response.get('code')
         if(action == "Play Gif"):
             if(code == "Treat"):
-                
+                self.pet.give_treat()
         elif(action == "Computer"):
             if("Shutdown" in code):
                sec = code[code.rfind("Shutdown ")+len("Shutdown "):]

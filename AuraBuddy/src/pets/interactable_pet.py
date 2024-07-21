@@ -104,7 +104,6 @@ class InteractablePet(SimplePet):
             self.set_animation_state(AnimationStates.IDLE)
 
     def give_treat(self, event):
-            
             self.set_animation_state(AnimationStates.IDLE)
             print("gave treat")
             self.set_animation_state(AnimationStates.GIVE_TREAT)
