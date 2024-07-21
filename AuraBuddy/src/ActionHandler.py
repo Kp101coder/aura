@@ -14,7 +14,7 @@ class ActionHandler():
         code = response.get('code')
         if(action == "Play Gif"):
             if(code == "Treat"):
-                self.pet.give_treat
+                self.pet.give_treat()
         elif(action == "Computer"):
             if("Shutdown" in code):
                sec = code[code.rfind("Shutdown ")+len("Shutdown "):]

@@ -11,7 +11,7 @@ from .ActionHandler import ActionHandler
 
 class ChatbotGUI(ctk.CTkToplevel):
     handler : ActionHandler
-    def __init__(self, name, ai, trainerText, pet):
+    def __init__(self, name, ai, trainerText, handler):
         
         super().__init__()
         self.title(f"{name}'s Corner")
@@ -23,7 +23,7 @@ class ChatbotGUI(ctk.CTkToplevel):
         self.initialMessage = trainerText
         self.client = ai
         self.name = name
-        self.handler = ActionHandler(pet)
+        self.handler = handler
 
         #padding grids
         self.rowconfigure(0, weight=1)    
@@ -79,7 +79,7 @@ class ChatbotGUI(ctk.CTkToplevel):
     def reset(self):
         self.client.sendInit(str([{"role": "system", "content": self.initialMessage}]))
         self.destroy()
-        self = ChatbotGUI(self.name, self.client, self.initialMessage)
+        self = ChatbotGUI(self.name, self.client, self.initialMessage, self.handler)
 
     def send_message(self, event=None):
         user_message = self.entry.get()#1.0, END for text box

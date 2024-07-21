@@ -16,6 +16,7 @@ from .Client2Server import Client
 import threading
 from time import strftime
 import ast
+from .ActionHandler import ActionHandler
 
 def start_program():
     global window
@@ -69,8 +70,11 @@ def start_program():
         with open("src/Temp/previous_convos.txt", "r") as f:
             convo = f.read()
         if convo != "":
-            convo = ast.literal_eval(convo).insert(0,str({"role": "system", "content": trainerText}))
-            ai = Client(convo)
+            print(f"Convo 1: {convo}\n\n")
+            convo = ast.literal_eval(convo)
+            convo.insert(0,{"role": "system", "content": trainerText})
+            print(f"Convo 2: {convo}")
+            ai = Client(str(convo))
         else:
             ai = Client(str([{"role": "system", "content": trainerText}]))
         my_menu.add_command(label="Talk", command=talk)
@@ -142,7 +146,7 @@ def start_program():
     show_window(window)
 
     def talk():
-        app=ChatbotGUI(current_pet, ai, trainerText, pet)
+        app=ChatbotGUI(current_pet, ai, trainerText, ActionHandler(pet))
         app.mainloop()
 
     # create menu
