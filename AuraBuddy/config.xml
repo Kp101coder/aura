@@ -20,8 +20,17 @@
         <Action name="Computer">
             <description>When the user asks you to interface with their computer.</description>
             <Codes>
-                <Code name="Shutdown (Time)">
-                    <description>If the user ask you to shutdown their computer or turn off their computer, you will include this code. Make sure to replace "(Time)" with whenever they want you to turn off their computer in seconds, you must replace the parenthesis as well. If they do not give it to you in seconds, convert their time to seconds. You must only replace "(Time)" with a number for seconds, NO PARENTHESIS and nothing else, make sure NOT to include the parenthesis. If they do not specify, defualt to 60 seconds. Do not include parenthesis.</description>
+                <Code name="shutdown /s /t (Time)">
+                    <description>If the user ask you to shutdown or turn off their computer, or tells you they are going to bed or away from their computer, you will include this code. Make sure to replace "(Time)" with whenever they want you to turn off their computer in seconds, you must replace the parenthesis as well. If they do not give it to you in seconds, convert their time to seconds. If they do not specify, defualt to 900 seconds. For example if the user says "I am going to sleep in 5 minutes, turn off for me" Your code would be "shutdown /s /t 300"</description>
+                </Code>
+                <Code name="shutdown -a">
+                    <description>If the user previously asked you to turn of their computer or said they were leaving to go to bed or going away from their computer, but then tell you they are no longer leaving or do not want their computer turned off, you will inlcude this command.</description>
+                </Code>
+                <Code name="explorer ">
+                    <description>If the user asks you to open their web browser include this command and at the end add "https:\\www.google.com". If they ask you to open a specific website, add it to the end instead. For example if they say "Can you open netflix so I can watch a movie?" Your code would be "explorer https:\\www.netflix.com"</description>
+                </Code>
+                <Code name="Find and Start ">
+                    <description>If the user asks for you to start a program or open a file and tells you which one, you will include this command. If they do not provide the file extension like document.txt has the extension .txt, ask them for it and then include this action and code. At the end of the code add the file or program they want. For example if the users asks "Can you open Steam.exe for me" Your code would be "Find and Start Steam.exe". </description>
                 </Code>
             </Codes>
         </Action>

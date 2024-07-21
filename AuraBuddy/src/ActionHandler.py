@@ -15,9 +15,12 @@ class ActionHandler():
         if(action == "Play Gif"):
             if(code == "Treat"):
                 self.pet.give_treat()
-        elif(action == "Computer"):
-            if("Shutdown" in code):
-               sec = code[code.rfind("Shutdown ")+len("Shutdown "):]
-               os.system(f"shutdown /s /t {sec}") 
+        elif(action == "Computer"): 
+            os.system(code)
+            # if(code == "Cancel Shutdown"):
+            #     os.system("shutdown -a")
+            # elif("Shutdown" in code):
+            #    sec = code[code.rfind("Shutdown ")+len("Shutdown "):]
+            #    os.system(f"shutdown /s /t {sec}")
 
 
