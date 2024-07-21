@@ -7,9 +7,10 @@ from PIL import Image
 import tkinter.font as tkFont
 import json
 import ast
+from ActionHandler import ActionHandler
 
 class ChatbotGUI(ctk.CTkToplevel):
-
+    handler : ActionHandler
     def __init__(self, name, ai, trainerText):
         
         super().__init__()
@@ -22,6 +23,7 @@ class ChatbotGUI(ctk.CTkToplevel):
         self.initialMessage = trainerText
         self.client = ai
         self.name = name
+        self.handler = ActionHandler()
 
         #padding grids
         self.rowconfigure(0, weight=1)    
@@ -89,6 +91,7 @@ class ChatbotGUI(ctk.CTkToplevel):
             self.update()
             response = self.client.sendData(sys="Question", message=user_message)
             bot_response = response.get('answer')
+            self.handler.handle(response)
             self.create_speech_bubble(bot_response, "left")
             # self.update()
             # os.remove(self.client.tts(bot_response))
