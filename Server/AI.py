@@ -36,7 +36,7 @@ class Chatbot:
         '''Returns the current array of messages sent between user and AI'''
         messages = self.messageList.copy()
         if(len(messages) > 0):
-            messages = messages.pop(0)
+            messages.pop(0)
             return messages
         return messages
     
