@@ -69,7 +69,10 @@ def start_program():
         global ai
         with open("src/Temp/previous_convos.txt", "r") as f:
             convo = f.read()
-        ai = Client(convo)
+        if convo != "":
+            ai = Client(convo)
+        else:
+            ai = Client(trainerText)
         my_menu.add_command(label="Talk", command=talk)
         my_menu.add_separator()
         my_menu.add_command(label="Exit", command=killbuddy)
