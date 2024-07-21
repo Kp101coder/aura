@@ -69,7 +69,7 @@ def start_program():
         global ai
         with open("src/Temp/previous_convos.txt", "r") as f:
             convo = f.read()
-        if convo != "":
+        if convo != "" and convo != "[]":
             print(f"Convo 1: {convo}\n\n")
             convo = ast.literal_eval(convo)
             convo.insert(0,{"role": "system", "content": trainerText})
