@@ -21,13 +21,10 @@
             <description>When the user asks you to interface with their computer.</description>
             <Codes>
                 <Code name="Shutdown (Time)">
-                    <description>If the user ask you to shutdown their computer or turn off their computer, you will include this code. Make sure to replace (Time) with whenever they as you to turn off their computer.</description>
+                    <description>If the user ask you to shutdown their computer or turn off their computer, you will include this code. Make sure to replace (Time) with whenever they want you to turn off their computer in seconds. If they do not specify, defualt to 1 minute</description>
                 </Code>
             </Codes>
         </Action>
-
-
-        shutdown /s /t 5
         
     </Actions>
     
