@@ -28,15 +28,16 @@ class Client:
                 global MAX_BYTES_ACCEPTED
                 global cap
                 HOST = "57.132.171.87" 
-                #Testing: HOST = s.gethostbyname(s.gethostname())
+                #Testing: 
+                HOST = s.gethostbyname(s.gethostname())
                 PORT = 7106
-                MAX_BYTES_ACCEPTED = 4096
+                MAX_BYTES_ACCEPTED = 2048
                 client_socket = s.socket(s.AF_INET, s.SOCK_STREAM)
                 client_socket.connect((HOST, PORT))
                 client_socket.settimeout(30)
                 mixer.init()
                 cap = cv2.VideoCapture(0)
-                if initialMessage != None:
+                if initialMessage != None and initialMessage != "":
                         self.sendInit(initialMessage)
 
         def tts(self, text, output_file='Temp/output.mp3'):
@@ -111,18 +112,18 @@ class Client:
                         time.sleep(1)
 
 if __name__ == "__main__":        
-        client = Client("You need to determine the emotion sent in the image if the user ask you to. Response with your closest guess.")
+        client = Client()
         while True:
-                ask = input("T: terminate, C: convo, SC: set convo , P: Pic and question, or ask question: ").upper()
-                if ask == "T":
+                ask = input("T: terminate, C: convo, SC: set convo , P: Pic and question, or ask question: ")
+                if ask.upper() == "T":
                         client.disconnect()
                         break
-                elif ask == "C":
+                elif ask.upper() == "C":
                         print(client.sendData("Convo"))
-                elif ask == "SC":
+                elif ask.upper() == "SC":
                         ask = input("New Convo: ")
                         client.sendData("Set Convo", ask)
-                elif ask == "P":
+                elif ask.upper() == "P":
                         ask = input("Question: ")
                         print(client.sendData("Question", ask, client.capture()).get('answer'))
                 else:

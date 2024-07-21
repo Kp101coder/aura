@@ -4,7 +4,7 @@ import base64
 from AI import Chatbot
 import threading as t
 import os
-import subprocess
+import traceback
 import ast
 
 prints = []
@@ -12,8 +12,9 @@ print("Initializing Server")
 prints.append("Initalizing Server")
 APIKEY = open("apikey openai.txt", "r+").read()
 
-HOST = subprocess.check_output(['hostname', '-I']).decode('utf-8').strip() 
-#Windows: HOST = s.gethostbyname(s.gethostname())
+#HOST = subprocess.check_output(['hostname', '-I']).decode('utf-8').strip() 
+#Windows: 
+HOST = s.gethostbyname(s.gethostname())
 print(HOST)
 PORT = 7106
 MAX_BYTES_ACCEPTED = 4096
@@ -52,51 +53,55 @@ Receivable system messages are:
 "Question", "Quit", "Convo", "Set Convo"
 '''
 def handle_client(communication_socket, ai):
-    print("Running handle")
-    prints.append("Running handle")
-    clientData = receive_data(communication_socket)
-    clientData = json.loads(clientData)
+    try:
+        print("Running handle")
+        prints.append("Running handle")
+        clientData = receive_data(communication_socket)
+        clientData = json.loads(clientData)
 
-    sysMessage = clientData.get('sys')
-    print(f"System Message from client: {sysMessage}")
-    prints.append(f"System Message from client: {sysMessage}")
-    message = clientData.get('message')
-    print(f"Message from client: {message}")
-    prints.append(f"Message from client: {message}")
-
-    if sysMessage == "Quit":
-        communication_socket.close()
-        print("Stopping handle...")
-        prints.append("Stoppping handle...")
-    else:
-        if address[0] == '192.168.3.1' and sysMessage == "Send Info":
-            print("Running reader")
-            prints.append("Running reader")
-            communication_socket.send(str(prints).encode('utf-8'))
-        elif sysMessage == "Convo":
-            response = ai.getConvo()
-            data = {
-                'answer' : response,
-                'action' : None,
-                'code' : None
-            }
-            communication_socket.send(json.dumps(data).encode('utf-8'))
-        elif sysMessage == "Set Convo":
-            ai.setConvo(ast.literal_eval(message))
+        sysMessage = clientData.get('sys')
+        print(f"System Message from client: {sysMessage}")
+        prints.append(f"System Message from client: {sysMessage}")
+        message = clientData.get('message')
+        print(f"Message from client: {message}")
+        prints.append(f"Message from client: {message}")
+        if sysMessage == "Quit":
+            communication_socket.close()
+            print("Stopping handle...")
+            prints.append("Stoppping handle...")
         else:
-            image_data = clientData.get('image')
-            response = None
-            if image_data:
-                image = base64.b64decode(image_data)
-                with open("Temp/received_image" + str(count("Temp")) + ".jpg", "wb") as f:
-                    f.write(image)
-                print("Image received")
-                prints.append("Image recieved")
-                response = ai.questionImage(message, image_data)
+            if address[0] == '192.168.3.1' and sysMessage == "Send Info":
+                print("Running reader")
+                prints.append("Running reader")
+                communication_socket.send(str(prints).encode('utf-8'))
+            elif sysMessage == "Convo":
+                response = ai.getConvo()
+                data = {
+                    'answer' : response,
+                    'action' : None,
+                    'code' : None
+                }
+                communication_socket.send(json.dumps(data).encode('utf-8'))
+            elif sysMessage == "Set Convo":
+                ai.setConvo(ast.literal_eval(message))
             else:
-                response = ai.question(message)
-            communication_socket.send(json.dumps(processResponse(response)).encode('utf-8'))
-        handle_client(communication_socket, ai)
+                image_data = clientData.get('image')
+                response = None
+                if image_data:
+                    image = base64.b64decode(image_data)
+                    with open("Temp/received_image" + str(count("Temp")) + ".jpg", "wb") as f:
+                        f.write(image)
+                    print("Image received")
+                    prints.append("Image recieved")
+                    response = ai.questionImage(message, image_data)
+                else:
+                    response = ai.question(message)
+                communication_socket.send(json.dumps(processResponse(response)).encode('utf-8'))
+            handle_client(communication_socket, ai)
+    except:
+        e = traceback.format_exc()
+        print(f"Error: {e}")
+        prints.append(f"Error: {e}")
 
 def processResponse(response):
     answer = None

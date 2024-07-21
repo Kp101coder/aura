@@ -241,3 +241,4 @@ Server/apikey openai.txt
 token.pickle
 logs.log
 Aura Buddy Setup.exe
+AuraBuddy/src/Temp/previous_convos.txt

@@ -21,6 +21,7 @@ class ChatbotGUI(ctk.CTkToplevel):
         
         self.initialMessage = trainerText
         self.client = ai
+        self.name = name
 
         #padding grids
         self.rowconfigure(0, weight=1)    
@@ -56,10 +57,10 @@ class ChatbotGUI(ctk.CTkToplevel):
 
         #Load Prev Convo Button
         load_image = ctk.CTkImage(Image.open("src/images/white_reload_sign.png"))
-        self.load_prev_convo= ctk.CTkButton(self.input_frame, text="", image= load_image, command=self.reset, width=50)
-        self.load_prev_convo.pack(side = "right", padx=10)
+        self.resetButton= ctk.CTkButton(self.input_frame, text="", image= load_image, command=self.reset, width=50)
+        self.resetButton.pack(side = "right", padx=10)
         tooltip_font = tkFont.Font(family="Space Grotesk", size=13, weight="bold")
-        ToolTip(self.load_prev_convo, msg="Reset Conversation", y_offset=40, font=tooltip_font)
+        ToolTip(self.resetButton, msg="Reset Conversation", y_offset=40, font=tooltip_font)
         
 
         # Send button
@@ -75,9 +76,9 @@ class ChatbotGUI(ctk.CTkToplevel):
        # self.entry.bind("<Return>", self.send_message)
 
     def reset(self):
-        self.client.sendInit(str({"role": "system", "content": self.initialMessage}))
+        self.client.sendInit(str([{"role": "system", "content": self.initialMessage}]))
         self.destroy()
-        self = ChatbotGUI()
+        self = ChatbotGUI(self.name, self.client, self.initialMessage)
 
     def send_message(self, event=None):
         user_message = self.entry.get()#1.0, END for text box
@@ -105,17 +106,13 @@ class ChatbotGUI(ctk.CTkToplevel):
         self.scroll_frame._parent_canvas.yview_moveto(1.0)
 
     def load_prev_convo(self):
-        with open("src/Temp/previous_convos.txt", "r") as f:
-            convo = f.read()
-        if convo != "":
-            convo = ast.literal_eval(convo)
-            for m in convo:
-                if m.get('role') == "user":
-                    self.create_speech_bubble(m.get("content"), "1 LV 80085")
-                elif m.get('role') == "assistant":
-                    self.create_speech_bubble(m.get("content"), "left")
-                self.update()
+        for m in ast.literal_eval(str(self.client.sendData("Convo").get('answer'))):
+            if m.get('role') == "user":
+                self.create_speech_bubble(m.get("content"), "1 LV 80085")
+            elif m.get('role') == "assistant":
+                self.create_speech_bubble(m.get("content"), "left")
+            self.update()
 
 if __name__ == "__main__":
-    app = ChatbotGUI("Jerry", ai = Client("hello")) #ai = Client(), ai = None
+    app = ChatbotGUI("Jerry", ai = Client()) #ai = Client(), ai = None
     app.mainloop()

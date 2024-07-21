@@ -9,7 +9,7 @@ class ServerReader:
         HOST = "57.132.171.87"
         #Testing: HOST = s.gethostbyname(s.gethostname())
         PORT = 7106
-        MAX_BYTES_ACCEPTED = 4096
+        MAX_BYTES_ACCEPTED = 2048
         client_socket = s.socket(s.AF_INET, s.SOCK_STREAM)
         client_socket.connect((HOST, PORT))
         client_socket.settimeout(30)
@@ -18,6 +18,8 @@ class ServerReader:
         print("Sending Data")
         data = {
             'sys': "Send Info",
+            'message' : None,
+            'image' : None
         }
         data = json.dumps(data).encode('utf-8')
         client_socket.sendall(len(data).to_bytes(4, 'big'))
@@ -28,10 +30,12 @@ class ServerReader:
     def __receive_response(self):
         data = b''
         while True:
-                part = client_socket.recv(MAX_BYTES_ACCEPTED)
-                data += part
-                if len(part) < MAX_BYTES_ACCEPTED:
-                        break
+            part = client_socket.recv(MAX_BYTES_ACCEPTED)
+            print(f"Part Len: {len(part)}")
+            data += part
+            print(f"Part: {part}")
+            if len(part) < MAX_BYTES_ACCEPTED:
+                break
         return data.decode('utf-8')
 
     def disconnect(self):

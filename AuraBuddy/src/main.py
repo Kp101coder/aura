@@ -1,4 +1,5 @@
 import ctypes
+from functools import partial
 import customtkinter as tk
 from tkinter import *
 from src.animation.animation import AnimationStates
@@ -14,8 +15,10 @@ from .ChatGPTmadeUI import ChatbotGUI
 from .Client2Server import Client
 import threading
 
-def start_program(current_pet: str = None):
+def start_program():
     global window
+    global trainerText
+    global current_pet
 
     """Creates a window and pet from the configuration xml and then shows that pet
 
@@ -29,7 +32,7 @@ def start_program(current_pet: str = None):
     print("Loading general configuration from XML")
     ### General Configuration
     config = XMLReader()
-    current_pet = config.getDefaultPet() if current_pet is None else current_pet
+    current_pet = config.getDefaultPet()
 
     ###Preload AI in background
     petData = config.getDefaultPetData()
@@ -61,7 +64,7 @@ def start_program(current_pet: str = None):
         with open("src/Temp/previous_convos.txt", "r") as f:
             convo = f.read()
         ai = Client(convo)
-        my_menu.add_command(label="Talk", command=talk, args = [current_pet, trainerText])
+        my_menu.add_command(label="Talk", command=talk)
         my_menu.add_separator()
         my_menu.add_command(label="Exit", command=killbuddy)
 
@@ -151,13 +154,13 @@ def start_program(current_pet: str = None):
     window.mainloop()
     return pet
 
-def talk(current_pet, trainerText):
+def talk():
     app=ChatbotGUI(current_pet, ai, trainerText)
     app.mainloop()
 
 def killbuddy(): #on exit save the last convo to a text file 
     with open("src/Temp/previous_convos.txt", "w") as f:
-        answer = str(ai.sendData(sys= "Convo").get('answer'))
+        answer = str(ai.sendData("Convo").get('answer'))
         f.write(answer)
     ai.disconnect()
     window.destroy()
