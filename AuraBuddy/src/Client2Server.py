@@ -65,12 +65,13 @@ class Client:
                         'message': message,
                         'image': image
                 }
+                print(f"Data: {data}")
                 data = json.dumps(data).encode('utf-8')
                 client_socket.sendall(len(data).to_bytes(4, 'big'))
                 client_socket.sendall(data)
                 response = self.__receive_response()
                 response = json.loads(response)
-                print(response)
+                print(f"Response: {response}")
                 return response
         
         def sendInit(self, message):
@@ -80,6 +81,7 @@ class Client:
                         'message': message,
                         'image': None
                 }
+                print(f"Data: {data}")
                 data = json.dumps(data).encode('utf-8')
                 client_socket.sendall(len(data).to_bytes(4, 'big'))
                 client_socket.sendall(data)
