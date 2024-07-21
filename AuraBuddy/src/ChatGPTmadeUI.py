@@ -111,7 +111,10 @@ class ChatbotGUI(ctk.CTkToplevel):
             if m.get('role') == "user":
                 self.create_speech_bubble(m.get("content"), "1 LV 80085")
             elif m.get('role') == "assistant":
-                self.create_speech_bubble(m.get("content"), "left")
+                if("Action:" in m.get("content")):
+                    self.create_speech_bubble(m.get("content")[:m.get("content").rfind("Action:")].rstrip(), "left")
+                else:
+                    self.create_speech_bubble(m.get("content"), "left")
             self.update()
 
 if __name__ == "__main__":
