@@ -16,6 +16,7 @@ from .Client2Server import Client
 import threading
 from time import strftime
 import ast
+from .ActionHandler import ActionHandler
 
 def start_program():
     global window
@@ -145,7 +146,7 @@ def start_program():
     show_window(window)
 
     def talk():
-        app=ChatbotGUI(current_pet, ai, trainerText, pet)
+        app=ChatbotGUI(current_pet, ai, trainerText, ActionHandler(pet))
         app.mainloop()
 
     # create menu
