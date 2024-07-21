@@ -22,3 +22,6 @@ class AnimationStates(Enum):
     GRAZING_START = auto()
     GRAZING_END = auto()
     GRAZING = auto()
+
+    # Treat + Actions
+    GIVE_TREAT = auto()

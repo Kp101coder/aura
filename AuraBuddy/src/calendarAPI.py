@@ -1,9 +1,8 @@
-
 import os
-import pickle 
+import pickle
 from tkcalendar.calendar_ import Calendar as calender
 import customtkinter as ctk
-from tkinter import ttk, Text, messagebox
+from tkinter import ttk, Text, messagebox, StringVar
 import tkinter as tk
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
@@ -11,6 +10,10 @@ from google.auth.transport.requests import Request
 from googleapiclient.discovery import build
 from datetime import datetime, timedelta, timezone
 import pytz  # For timezone support
+from PIL import Image  # Import for handling images
+from threading import Thread
+import time
+from plyer import notification  # For cross-platform notifications
 
 # Set up Google Calendar API
 SCOPES = ['https://www.googleapis.com/auth/calendar']
@@ -109,9 +112,12 @@ class CalendarApp(ctk.CTk):
         self.events_by_date = {}  # Initialize events_by_date
         self.selected_date = None  # Initialize selected_date
         self.selected_tag_id = None  # Initialize selected_tag_id
+        self.notif_time = StringVar(value="30 minutes")  # Default notification lead time
         self.create_widgets()
         self.load_events()
         self.select_current_date()  # Select current date and display its events
+        self.show_daily_notification()
+        self.start_notification_thread()
 
     def create_widgets(self):
         frame = ctk.CTkFrame(self)
@@ -119,6 +125,9 @@ class CalendarApp(ctk.CTk):
 
         self.style = ttk.Style(self)
         self.style.theme_use("default")
+
+        # Set up combobox font size
+        self.style.configure('TCombobox', font=('Helvetica', 12))
 
         self.cal = calender(frame, selectmode='day', locale='en_US', disabledforeground='red',
                               cursor="hand2", firstweekday='sunday',
@@ -142,6 +151,12 @@ class CalendarApp(ctk.CTk):
         self.events_container = ctk.CTkFrame(self.events_frame)
         self.events_container.pack(fill="both", expand=True)
 
+    def get_gear_icon(self):
+        gear_image = Image.open("gear_icon.png")
+        gear_image = gear_image.resize((20, 20), Image.Resampling.LANCZOS)
+        gear_icon = ctk.CTkImage(light_image=gear_image, dark_image=gear_image, size=(20, 20))
+        return gear_icon
+
     def create_event_controls(self, parent):
         controls_frame = ctk.CTkFrame(parent)
         controls_frame.pack(fill="x", padx=10, pady=10)
@@ -154,6 +169,9 @@ class CalendarApp(ctk.CTk):
 
         self.edit_button = ctk.CTkButton(controls_frame, text="Edit Event", command=self.edit_event, state='disabled')
         self.edit_button.pack(side='left', padx=10)
+
+        self.settings_button = ctk.CTkButton(controls_frame, text="", image=self.get_gear_icon(), command=self.open_settings)
+        self.settings_button.pack(side='left', padx=10)
 
     def display_events_for_selected_day(self, event):
         selected_date = self.cal.selection_get()
@@ -266,7 +284,7 @@ class CalendarApp(ctk.CTk):
         start_frame.pack(pady=5)
         start_entry = ctk.CTkEntry(start_frame, width=100)
         start_entry.pack(side="left")
-        start_ampm = ttk.Combobox(start_frame, values=["AM", "PM"], width=5)
+        start_ampm = ttk.Combobox(start_frame, values=["AM", "PM"], width=5, font=("Helvetica", 14))  # Increased width
         start_ampm.set("AM")
         start_ampm.pack(side="left")
 
@@ -276,13 +294,13 @@ class CalendarApp(ctk.CTk):
         end_frame.pack(pady=5)
         end_entry = ctk.CTkEntry(end_frame, width=100)
         end_entry.pack(side="left")
-        end_ampm = ttk.Combobox(end_frame, values=["AM", "PM"], width=5)
+        end_ampm = ttk.Combobox(end_frame, values=["AM", "PM"], width=5, font=("Helvetica", 14))  # Increased width
         end_ampm.set("AM")
         end_ampm.pack(side="left")
 
         timezone_label = ctk.CTkLabel(prompt, text="Time Zone:")
         timezone_label.pack(pady=5)
-        timezone_combobox = ttk.Combobox(prompt, values=pytz.all_timezones)
+        timezone_combobox = ttk.Combobox(prompt, values=pytz.all_timezones, width=15, font=("Helvetica", 14))  # Increased width
         timezone_combobox.set('UTC')
         timezone_combobox.pack(pady=5)
 
@@ -322,6 +340,11 @@ class CalendarApp(ctk.CTk):
             return
         event = add_event(summary, description, start_datetime, end_datetime, location, timezone)
         if event:
+            notification.notify(
+                title="Event Added",
+                message=f"Event '{summary}' has been added successfully.",
+                timeout=2
+            )
             print(f"Event added successfully: {event.get('htmlLink')}")
         else:
             print("Failed to add event")
@@ -337,6 +360,11 @@ class CalendarApp(ctk.CTk):
 
     def remove_event_callback(self, event_id):
         delete_event(event_id)
+        notification.notify(
+            title="Event Removed",
+            message=f"Event has been removed successfully.",
+            timeout=2
+        )
         self.load_events()
         self.display_events_for_day(self.selected_date.strftime('%Y-%m-%d'))
 
@@ -353,6 +381,11 @@ class CalendarApp(ctk.CTk):
             return
         event = update_event(event_id, summary, description, start_datetime, end_datetime, location, timezone)
         if event:
+            notification.notify(
+                title="Event Updated",
+                message=f"Event '{summary}' has been updated successfully.",
+                timeout=2
+            )
             print(f"Event updated successfully: {event.get('htmlLink')}")
         else:
             print("Failed to update event")
@@ -366,3 +399,75 @@ class CalendarApp(ctk.CTk):
         self.selected_date = today
         self.selected_tag_id = self.cal.calevent_create(today, '', 'selected_date')
         self.display_events_for_day(today.strftime('%Y-%m-%d'))
+
+    def open_settings(self):
+        settings_window = ctk.CTkToplevel(self)
+        settings_window.title("Settings")
+        settings_window.geometry("400x300")
+        settings_window.grab_set()  # Make the new window modal
+
+        settings_label = ctk.CTkLabel(settings_window, text="Settings", font=("Helvetica", 16))
+        settings_label.pack(pady=20)
+
+        # Notification settings
+        notif_frame = ctk.CTkFrame(settings_window)
+        notif_frame.pack(pady=10, padx=10, fill='x')
+
+        notif_label = ctk.CTkLabel(notif_frame, text="Notification lead time:")
+        notif_label.pack(side="left", padx=10)
+        
+    
+        notif_times = ["1 minute", "5 minutes", "10 minutes", "20 minutes", "30 minutes", "1 hour", "2 hours", "4 hours"]
+        notif_dropdown = ttk.Combobox(notif_frame, textvariable=self.notif_time, values=notif_times, width=20, font=("Helvetica", 14))  # Increased width
+        notif_dropdown.pack(side="left", padx=10)
+        notif_dropdown.set(self.notif_time.get())
+
+        confirm_button = ctk.CTkButton(settings_window, text="Confirm", command=settings_window.destroy)
+        confirm_button.pack(pady=20)
+
+    def show_daily_notification(self):
+        today_str = datetime.today().strftime('%Y-%m-%d')
+        if today_str in self.events_by_date:
+            num_events = len(self.events_by_date[today_str])
+            notification.notify(
+                title="Today's Events",
+                message=f"You have {num_events} events today.",
+                timeout=3
+            )
+
+    def start_notification_thread(self):
+        self.notif_thread = Thread(target=self.check_for_notifications)
+        self.notif_thread.daemon = True
+        self.notif_thread.start()
+
+    def check_for_notifications(self):
+        while True:
+            now = datetime.now().astimezone()
+            for event_date, events in self.events_by_date.items():
+                for event in events:
+                    start = event['start'].get('dateTime')
+                    start_dt = datetime.fromisoformat(start).astimezone() if start else None
+                    if start_dt:
+                        lead_time = self.get_lead_time_delta()
+                        notif_time = start_dt - lead_time
+                        if now >= notif_time and now < start_dt:
+                            notification.notify(
+                                title="Upcoming Event",
+                                message=f"{event['summary']} is starting soon!",
+                                timeout=4
+                            )
+            time.sleep(60)  # Check every minute
+
+    def get_lead_time_delta(self):
+        lead_time_str = self.notif_time.get()
+        if "minute" in lead_time_str:
+            minutes = int(lead_time_str.split()[0])
+            return timedelta(minutes=minutes)
+        elif "hour" in lead_time_str:
+            hours = int(lead_time_str.split()[0])
+            return timedelta(hours=hours)
+        return timedelta(minutes=30)  # Default to 30 minutes
+
+if __name__ == "__main__":
+    app = CalendarApp()
+    app.mainloop()
