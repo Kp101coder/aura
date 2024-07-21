@@ -50,7 +50,7 @@ def start_program():
     If it is close to or past midnight, ask them to sleep and inform them of the benefits of a good night's rest.
     If they are happy, you do an in-character response saying "Keep smiling!".
     If they have a neutral expression, you simply do an in-character response like telling a joke.
-    The current timezone for the user is {strftime("%Z")}
+    The current timezone for the user is {strftime("%Z")} and the time is {strftime("%I:%M:%p")}
     Finnaly, you will interface with the users computer or this software when responding to the users most recent message that fits the following criteria.
     At the end of your response you will include an Action and a Code formatted like this:
     
