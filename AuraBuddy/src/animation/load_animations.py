@@ -45,9 +45,10 @@ def get_cat_animations(impath: str, target_resolution: Tuple[int, int]):
     pj = os.path.join
     impath = pj(impath, "cat")
     standing_actions = [AnimationStates.IDLE_TO_SLEEP]
-    standing_actions.extend(repeat(AnimationStates.IDLE, 3))
-    standing_actions.extend(repeat(AnimationStates.WALK_NEGATIVE, 4))
-    standing_actions.extend(repeat(AnimationStates.WALK_POSITIVE, 4))
+    standing_actions.extend(repeat(AnimationStates.IDLE, 10))
+    standing_actions.extend(repeat(AnimationStates.IDLE_TO_SLEEP, 20))
+    # standing_actions.extend(repeat(AnimationStates.WALK_NEGATIVE, 4))
+    # standing_actions.extend(repeat(AnimationStates.WALK_POSITIVE, 4))
 
     # These are the animations that our spite can do.
     # ! IMPORTANT:
@@ -125,6 +126,12 @@ def get_cat_animations(impath: str, target_resolution: Tuple[int, int]):
             frame_timer=100,
             target_resolution=target_resolution,
         ),
+        AnimationStates.GIVE_TREAT: Animation(
+            [AnimationStates.GIVE_TREAT],
+            gif_location=pj(impath, "cattreat.gif"),
+            frame_timer=200,
+            target_resolution=target_resolution,
+        ),
     }
 
     return animations
@@ -140,9 +147,10 @@ def get_dog_animations(impath: str, target_resolution: Tuple[int, int]):
     pj = os.path.join
     impath = pj(impath, "dog")
     standing_actions = [AnimationStates.IDLE_TO_SLEEP]
-    standing_actions.extend(repeat(AnimationStates.IDLE, 3))
-    standing_actions.extend(repeat(AnimationStates.WALK_NEGATIVE, 4))
-    standing_actions.extend(repeat(AnimationStates.WALK_POSITIVE, 4))
+    standing_actions.extend(repeat(AnimationStates.IDLE, 10))
+    standing_actions.extend(repeat(AnimationStates.IDLE_TO_SLEEP, 20))
+    # standing_actions.extend(repeat(AnimationStates.WALK_NEGATIVE, 4))
+    # standing_actions.extend(repeat(AnimationStates.WALK_POSITIVE, 4))
 
     # These are the animations that our spite can do.
     # ! IMPORTANT:
@@ -220,6 +228,12 @@ def get_dog_animations(impath: str, target_resolution: Tuple[int, int]):
             frame_timer=100,
             target_resolution=target_resolution,
         ),
+        AnimationStates.GIVE_TREAT: Animation(
+            [AnimationStates.GIVE_TREAT],
+            gif_location=pj(impath, "dogtreat.gif"),
+            frame_timer=200,
+            target_resolution=target_resolution,
+        ),
     }
 
     return animations
@@ -237,9 +251,10 @@ def get_blob_animations(impath: str, target_resolution: Tuple[int, int]):
     pj = os.path.join
     impath = pj(impath, "blob")
     standing_actions = [AnimationStates.IDLE_TO_SLEEP]
-    standing_actions.extend(repeat(AnimationStates.IDLE, 3))
-    standing_actions.extend(repeat(AnimationStates.WALK_NEGATIVE, 4))
-    standing_actions.extend(repeat(AnimationStates.WALK_POSITIVE, 4))
+    standing_actions.extend(repeat(AnimationStates.IDLE, 10))
+    standing_actions.extend(repeat(AnimationStates.IDLE_TO_SLEEP, 20))
+    # standing_actions.extend(repeat(AnimationStates.WALK_NEGATIVE, 4))
+    # standing_actions.extend(repeat(AnimationStates.WALK_POSITIVE, 4))
 
     # These are the animations that our spite can do.
     # ! IMPORTANT:

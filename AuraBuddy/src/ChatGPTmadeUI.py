@@ -7,7 +7,7 @@ from PIL import Image
 import tkinter.font as tkFont
 import json
 import ast
-from ActionHandler import ActionHandler
+from .ActionHandler import ActionHandler
 
 class ChatbotGUI(ctk.CTkToplevel):
     handler : ActionHandler
@@ -93,9 +93,7 @@ class ChatbotGUI(ctk.CTkToplevel):
             bot_response = response.get('answer')
             self.handler.handle(response)
             self.create_speech_bubble(bot_response, "left")
-            # self.update()
-            # os.remove(self.client.tts(bot_response))
-
+           
     def create_speech_bubble(self, message, side):
         bubble_frame = ctk.CTkFrame(self.canvas, corner_radius=15, fg_color="#5c5b5b", width=360)
         bubble_label = ctk.CTkLabel(bubble_frame, text=message, wraplength=250, justify="left" if side == "left" else "right")
