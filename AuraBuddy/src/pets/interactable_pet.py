@@ -2,6 +2,7 @@ import tkinter as tk
 from ..animation import Animation, AnimationStates, Animator
 from ..window_utils import Canvas
 from .simple_pet import SimplePet
+import time
 
 # ! IMPORTANT:
 # ! NOTE: in order to have the pet fall after being grabbed, there must be key value pair in its animator.animations dict for
@@ -103,12 +104,14 @@ class InteractablePet(SimplePet):
             )
             self.set_animation_state(AnimationStates.IDLE)
 
-    def give_treat(self, event):
-            print("okay")
-            # self.set_animation_state(AnimationStates.IDLE)
-            # print("gave treat")
-            # self.set_animation_state(AnimationStates.GIVE_TREAT)
-            # print("gave treat")
+    def give_treat(self):
+            self.set_animation_state(AnimationStates.IDLE)  
+            self.set_animation_state(AnimationStates.GIVE_TREAT)
+            time.sleep(10)
+            self.set_animation_state(AnimationStates.IDLE)
+
+            
+  
 
     def do_move(self, event):
         """Mouse movement while clicked"""
