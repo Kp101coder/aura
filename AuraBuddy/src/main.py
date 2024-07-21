@@ -14,6 +14,7 @@ from .MenuFinal import SpriteDashboard
 from .ChatGPTmadeUI import ChatbotGUI
 from .Client2Server import Client
 import threading
+from time import strftime
 
 def start_program():
     global window
@@ -49,14 +50,19 @@ def start_program():
     If it is close to or past midnight, ask them to sleep and inform them of the benefits of a good night's rest.
     If they are happy, you do an in-character response saying "Keep smiling!".
     If they have a neutral expression, you simply do an in-character response like telling a joke.
-    Finnaly, if the user's most recent message fits the following criteria, at the end of your response you will include an Action and a Code formatted like this:
+    The current timezone for the user is {strftime("%Z")}
+    Finnaly, you will interface with the users computer or this software when responding to the users most recent message that fits the following criteria.
+    At the end of your response you will include an Action and a Code formatted like this:
     
     (your actual response)
     Action: (The action) 
     Code: (The code)
 
     Here are all the action codes and their criteria:
-    {str(interfaceDescription)}""")
+    {str(interfaceDescription)}
+
+    Include the action if their description matches what the user is asking and then one of the relavent codes that pertain to that action.
+    For example, if you are discussing getting treats with the user and the user mention something like giving you a treat, you will include the action "Play Gif" and the "Treat" code.""")
 
     def initAI():
         print("Running background AI thread")

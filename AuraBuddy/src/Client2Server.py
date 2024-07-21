@@ -28,8 +28,7 @@ class Client:
                 global MAX_BYTES_ACCEPTED
                 global cap
                 HOST = "57.132.171.87" 
-                #Testing: 
-                HOST = s.gethostbyname(s.gethostname())
+                #Testing: HOST = s.gethostbyname(s.gethostname())
                 PORT = 7106
                 MAX_BYTES_ACCEPTED = 2048
                 client_socket = s.socket(s.AF_INET, s.SOCK_STREAM)
@@ -71,6 +70,7 @@ class Client:
                 client_socket.sendall(data)
                 response = self.__receive_response()
                 response = json.loads(response)
+                print(response)
                 return response
         
         def sendInit(self, message):

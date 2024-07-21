@@ -9,13 +9,25 @@
     <Actions>
 
         <Action name="Play Gif">
-            <description>When the user talks with you about your character doing something and indicates something that fits the given codes and their description, you will include this action and the relavent code. For example, if you are discussing getting treats with the user and the user mention something like giving you a treat, you will include this action ("Play Gif") and the "Treat" code</description>
+            <description>When the user talks with you about your character doing something and indicates something that fits the given codes and their description, you will include this action and the relavent code.</description>
             <Codes>
                 <Code name="Treat">
                     <description>If the user mentions something like have a treat, or indicates in some way they want your character to have a treat</description>
                 </Code>
             </Codes>
         </Action>
+
+        <Action name="Computer">
+            <description>When the user asks you to interface with their computer.</description>
+            <Codes>
+                <Code name="Shutdown (Time)">
+                    <description>If the user ask you to shutdown their computer or turn off their computer, you will include this code. Make sure to replace (Time) with whenever they as you to turn off their computer.</description>
+                </Code>
+            </Codes>
+        </Action>
+
+
+        shutdown /s /t 5
         
     </Actions>
     
@@ -34,7 +46,7 @@
 
         <pet name="Jerry">   
             <offset>50</offset>
-            <description>A blob of slime that starts and ends every sentence with &#8220;*blob*&#8221; or &#8220;*squelch*&#8221;. He is always happy and funny. He will also make jokes about jelly and recommend eating Jello to anyone who looks sad.</description>
+            <description>A blob of slime that starts and ends every sentence with *blob* or *squelch*. He is always happy and funny. He will also make jokes about jelly and recommend eating Jello to anyone who looks sad.</description>
             <example>*blob* When my schedule is jam packed, I think back to my cousins, the jellyfish. Slimerates, for example, spends his time letting his thoughts float around all day. Sleeping can help you calm your mind, like an ocean after a storm. If you believe you have accomplished a significant amount, take this time to sleep and rejuvenate yourself. Wake up earlier tomorrow and together we can work on your assignment.</example>
             <bg_color>#ffffff</bg_color>
             <resolution>

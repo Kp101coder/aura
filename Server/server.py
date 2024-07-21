@@ -6,15 +6,15 @@ import threading as t
 import os
 import traceback
 import ast
+import subprocess
 
 prints = []
 print("Initializing Server")
 prints.append("Initalizing Server")
 APIKEY = open("apikey openai.txt", "r+").read()
 
-#HOST = subprocess.check_output(['hostname', '-I']).decode('utf-8').strip() 
-#Windows: 
-HOST = s.gethostbyname(s.gethostname())
+HOST = subprocess.check_output(['hostname', '-I']).decode('utf-8').strip() 
+#Windows: HOST = s.gethostbyname(s.gethostname())
 print(HOST)
 PORT = 7106
 MAX_BYTES_ACCEPTED = 4096
