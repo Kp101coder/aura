@@ -127,7 +127,7 @@ def get_cat_animations(impath: str, target_resolution: Tuple[int, int]):
             target_resolution=target_resolution,
         ),
         AnimationStates.GIVE_TREAT: Animation(
-            [AnimationStates.GIVE_TREAT],
+            [AnimationStates.IDLE],
             gif_location=pj(impath, "cattreat.gif"),
             frame_timer=200,
             target_resolution=target_resolution,
@@ -229,7 +229,7 @@ def get_dog_animations(impath: str, target_resolution: Tuple[int, int]):
             target_resolution=target_resolution,
         ),
         AnimationStates.GIVE_TREAT: Animation(
-            [AnimationStates.GIVE_TREAT],
+            [AnimationStates.IDLE],
             gif_location=pj(impath, "dogtreat.gif"),
             frame_timer=200,
             target_resolution=target_resolution,
