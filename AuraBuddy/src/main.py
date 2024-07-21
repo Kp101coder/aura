@@ -72,7 +72,7 @@ def start_program():
         if convo != "":
             ai = Client(convo)
         else:
-            ai = Client(trainerText)
+            ai = Client(str([{"role": "system", "content": trainerText}]))
         my_menu.add_command(label="Talk", command=talk)
         my_menu.add_separator()
         my_menu.add_command(label="Exit", command=killbuddy)
