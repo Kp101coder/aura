@@ -47,6 +47,13 @@ class ServerReader:
         client_socket.sendall(data)
         client_socket.close()
 
+    def getData(self):
+        try:
+            for val in ast.literal_eval(self.sendData()):
+                print(val) 
+        except:
+            self.getData()
+
 if __name__ == "__main__":        
     client = ServerReader()
     while True:
@@ -55,5 +62,4 @@ if __name__ == "__main__":
             client.disconnect()
             break
         else:
-            for val in ast.literal_eval(client.sendData()):
-                print(val)                
+            client.getData()
