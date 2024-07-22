@@ -154,7 +154,7 @@ class CalendarApp(ctk.CTkToplevel):
     def get_gear_icon(self):
         gear_image = Image.open("gear_icon.png")
         gear_image = gear_image.resize((20, 20), Image.Resampling.LANCZOS)
-        gear_icon = ctk.CTkImage(light_image=gear_image, dark_image=gear_image, size=(20, 20))
+        gear_icon = ctk.CTkImage(gear_image)
         return gear_icon
 
     def create_event_controls(self, parent):
@@ -170,7 +170,8 @@ class CalendarApp(ctk.CTkToplevel):
         self.edit_button = ctk.CTkButton(controls_frame, text="Edit Event", command=self.edit_event, state='disabled')
         self.edit_button.pack(side='left', padx=10)
 
-        self.settings_button = ctk.CTkButton(controls_frame, text="", image=self.get_gear_icon(), command=self.open_settings)
+        self.settings_icon = self.get_gear_icon()  # Create the image and keep a reference
+        self.settings_button = ctk.CTkButton(controls_frame, text="", image=self.settings_icon, command=self.open_settings)
         self.settings_button.pack(side='left', padx=10)
 
     def display_events_for_selected_day(self, event):
@@ -284,7 +285,7 @@ class CalendarApp(ctk.CTkToplevel):
         start_frame.pack(pady=5)
         start_entry = ctk.CTkEntry(start_frame, width=100)
         start_entry.pack(side="left")
-        start_ampm = ttk.Combobox(start_frame, values=["AM", "PM"], width=5, font=("Helvetica", 14))  # Increased width
+        start_ampm = ttk.Combobox(start_frame, values=["AM", "PM"], width=10)  # Increased width
         start_ampm.set("AM")
         start_ampm.pack(side="left")
 
@@ -294,13 +295,13 @@ class CalendarApp(ctk.CTkToplevel):
         end_frame.pack(pady=5)
         end_entry = ctk.CTkEntry(end_frame, width=100)
         end_entry.pack(side="left")
-        end_ampm = ttk.Combobox(end_frame, values=["AM", "PM"], width=5, font=("Helvetica", 14))  # Increased width
+        end_ampm = ttk.Combobox(end_frame, values=["AM", "PM"], width=10)  # Increased width
         end_ampm.set("AM")
         end_ampm.pack(side="left")
 
         timezone_label = ctk.CTkLabel(prompt, text="Time Zone:")
         timezone_label.pack(pady=5)
-        timezone_combobox = ttk.Combobox(prompt, values=pytz.all_timezones, width=15, font=("Helvetica", 14))  # Increased width
+        timezone_combobox = ttk.Combobox(prompt, values=pytz.all_timezones, width=50)  # Increased width
         timezone_combobox.set('UTC')
         timezone_combobox.pack(pady=5)
 
@@ -416,9 +417,8 @@ class CalendarApp(ctk.CTkToplevel):
         notif_label = ctk.CTkLabel(notif_frame, text="Notification lead time:")
         notif_label.pack(side="left", padx=10)
         
-    
         notif_times = ["1 minute", "5 minutes", "10 minutes", "20 minutes", "30 minutes", "1 hour", "2 hours", "4 hours"]
-        notif_dropdown = ttk.Combobox(notif_frame, textvariable=self.notif_time, values=notif_times, width=20, font=("Helvetica", 14))  # Increased width
+        notif_dropdown = ttk.Combobox(notif_frame, textvariable=self.notif_time, values=notif_times, width=20)  # Increased width
         notif_dropdown.pack(side="left", padx=10)
         notif_dropdown.set(self.notif_time.get())
 

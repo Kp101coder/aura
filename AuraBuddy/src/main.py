@@ -155,8 +155,8 @@ def start_program():
         app.mainloop()
 
     def cal():
-        calendar_app = CalendarApp()
-        calendar_app.mainloop()
+        app = CalendarApp()
+        app.mainloop()
 
     def my_popup(event):
         my_menu.tk_popup(event.x_root, event.y_root)
