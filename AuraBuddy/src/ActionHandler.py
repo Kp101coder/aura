@@ -1,6 +1,6 @@
-import tkinter as tk
 from src.pets import Pet
 import os
+import src.calendarAPI as c
 
 class ActionHandler():
 
@@ -15,6 +15,10 @@ class ActionHandler():
         if(action == "Play Gif"):
             if(code == "Treat"):
                 self.pet.give_treat()
+        elif(action == "Calendar"):
+            if("Add" in code):
+                arr = str(code).split(":")
+                c.add_event(arr[0], arr[1], arr[2], arr[3], arr[5], arr[6])
         elif(action == "Computer"): 
             os.system(code)
             # if(code == "Cancel Shutdown"):

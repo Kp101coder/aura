@@ -1,1 +1,16 @@
-pip install google-auth google-auth-oauthlib google-auth-httplib2 google-api-python-client pygame gtts openai opencv-python tkinter-tooltip plyer
+google-auth 
+google-auth-oauthlib 
+google-auth-httplib2 
+google-api-python-client 
+pygame 
+gtts 
+openai 
+opencv-python 
+customtkinter 
+tkinter-tooltip 
+plyer 
+screeninfo 
+pillow 
+pystray
+tkcalendar
+pytz

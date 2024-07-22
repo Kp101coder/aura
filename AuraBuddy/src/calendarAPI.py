@@ -103,7 +103,7 @@ def update_event(event_id, summary, description, start_datetime, end_datetime, l
         print(f"Error updating event: {e}")
         return None
 
-class CalendarApp(ctk.CTk):
+class CalendarApp(ctk.CTkToplevel):
     def __init__(self):
         super().__init__()
         self.title("Google Calendar Dashboard")
