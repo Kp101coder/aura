@@ -14,7 +14,8 @@ from .MenuFinal import SpriteDashboard
 from .ChatGPTmadeUI import ChatbotGUI
 from .Client2Server import Client
 import threading
-from time import strftime
+from time import strftime, time
+import keyboard
 import ast
 from .ActionHandler import ActionHandler
 
@@ -80,6 +81,13 @@ def start_program():
         my_menu.add_command(label="Talk", command=talk)
         my_menu.add_separator()
         my_menu.add_command(label="Exit", command=killbuddy)
+        prevTime = time()
+        while(True):
+            if(time() - prevTime > 300 or keyboard.is_pressed('ctrl+space')):
+                response = ai.sendData("Question", f"What emotion is this person showing? The current time is: {strftime("%I:%M:%p")}", ai.capture())
+                if "you look sad" in response:
+                    talk()
+                    
 
     threading.Thread(target=initAI).start()
 

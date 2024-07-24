@@ -18,7 +18,7 @@ class Chatbot:
     
     def questionImage(self, question, imagedata):
         '''Send a question to ChatGPT along with an image for analysis'''
-        self.messageList.append({"role": "user", "content": [
+        self.messageList.append({"role": "system", "content": [
             {"type": "text", "text": question},
             {"type": "image_url", "image_url": {
                 "url": f"data:image/png;base64,{imagedata}"}

@@ -29,9 +29,6 @@
                 <Code name="explorer ">
                     <description>If the user asks you to open their web browser include this command and at the end add "https:\\www.google.com". If they ask you to open a specific website, add it to the end instead. For example if they say "Can you open netflix so I can watch a movie?" Your code would be "explorer https:\\www.netflix.com"</description>
                 </Code>
-                <Code name="Find and Start ">
-                    <description>If the user asks for you to start a program or open a file and tells you which one, you will include this command. If they do not provide the file extension like document.txt has the extension .txt, ask them for it and then include this action and code. At the end of the code add the file or program they want. For example if the users asks "Can you open Steam.exe for me" Your code would be "Find and Start Steam.exe". </description>
-                </Code>
             </Codes>
         </Action>
         
