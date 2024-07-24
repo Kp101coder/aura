@@ -7,7 +7,8 @@ class ServerReader:
         global client_socket
         global MAX_BYTES_ACCEPTED
         HOST = "57.132.171.87"
-        #Testing: HOST = s.gethostbyname(s.gethostname())
+        #Testing: 
+        HOST = s.gethostbyname(s.gethostname())
         PORT = 7106
         MAX_BYTES_ACCEPTED = 2048
         client_socket = s.socket(s.AF_INET, s.SOCK_STREAM)
@@ -51,7 +52,8 @@ class ServerReader:
         try:
             for val in ast.literal_eval(self.sendData()):
                 print(val) 
-        except:
+        except Exception as e:
+            print(e.with_traceback(e.__traceback__))
             self.getData()
 
 if __name__ == "__main__":        

@@ -13,8 +13,9 @@ print("Initializing Server")
 prints.append("Initalizing Server")
 APIKEY = open("apikey openai.txt", "r+").read()
 
-HOST = subprocess.check_output(['hostname', '-I']).decode('utf-8').strip() 
-#Windows: HOST = s.gethostbyname(s.gethostname())
+#HOST = subprocess.check_output(['hostname', '-I']).decode('utf-8').strip() 
+#Windows: 
+HOST = s.gethostbyname(s.gethostname())
 print(HOST)
 PORT = 7106
 MAX_BYTES_ACCEPTED = 4096
@@ -70,7 +71,7 @@ def handle_client(communication_socket, ai):
             print("Stopping handle...")
             prints.append("Stoppping handle...")
         else:
-            if address[0] == '192.168.3.1' and sysMessage == "Send Info":
+            if sysMessage == "Send Info":
                 print("Running reader")
                 prints.append("Running reader")
                 communication_socket.send(str(prints).encode('utf-8'))

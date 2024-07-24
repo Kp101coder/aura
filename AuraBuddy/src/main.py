@@ -77,13 +77,14 @@ def start_program():
         prevTime = time()
         while(True):
             if(time() - prevTime > 300 or keyboard.is_pressed('ctrl+space')):
-                response = ai.sendData("Question", f"""What emotion is this person showing? 
-                                       If they are sad/stressed, you will do an in-character response to make them happy.
-                                       You will also inform them on how to reduce their stress.
-                                       If it is close to or past midnight, ask them to sleep and inform them of the benefits of a good night's rest.
-                                       If they are happy, you do an in-character response saying "Keep smiling!".
-                                       If they have a neutral expression, you simply do an in-character response like telling a joke.
-                                       The current time is: {strftime("%I:%M:%p")}""", ai.capture())
+                response = ai.sendData("Question", 
+f"""What emotion is this person showing? 
+If they are sad/stressed, you will do an in-character response to make them happy.
+You will also inform them on how to reduce their stress.
+If it is close to or past midnight, ask them to sleep and inform them of the benefits of a good night's rest.
+If they are happy, you do an in-character response saying "Keep smiling!".
+If they have a neutral expression, you simply do an in-character response like telling a joke.
+The current time is: {strftime("%I:%M:%p")}""", ai.capture())
                 if "you look sad" in response:
                     talk()
                     

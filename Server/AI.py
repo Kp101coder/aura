@@ -18,7 +18,8 @@ class Chatbot:
     
     def questionImage(self, question, imagedata):
         '''Send a question to ChatGPT along with an image for analysis'''
-        self.messageList.append({"role": "system", "content": [
+        messageListPicture = self.messageList.copy()
+        messageListPicture.append({"role": "user", "content": [
             {"type": "text", "text": question},
             {"type": "image_url", "image_url": {
                 "url": f"data:image/png;base64,{imagedata}"}
@@ -26,7 +27,7 @@ class Chatbot:
         ]})
         response = self.client.chat.completions.create(
             model="gpt-4o",
-            messages=self.messageList,
+            messages=messageListPicture,
             temperature=0.0,
         ).choices[0].message.content
         self.messageList.append({"role": "assistant", "content": response})
