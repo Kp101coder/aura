@@ -58,6 +58,7 @@ def get_events():
     return events
 
 def add_event(summary, description, start_datetime, end_datetime, location, timezone):
+    print([summary, description, start_datetime, end_datetime, location, timezone])
     event = {
         'summary': summary,
         'description': description,

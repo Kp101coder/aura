@@ -70,7 +70,7 @@ def handle_client(communication_socket, ai):
             print("Stopping handle...")
             prints.append("Stoppping handle...")
         else:
-            if address[0] == '192.168.3.1' and sysMessage == "Send Info":
+            if sysMessage == "Send Info":
                 print("Running reader")
                 prints.append("Running reader")
                 communication_socket.send(str(prints).encode('utf-8'))

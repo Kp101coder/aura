@@ -51,7 +51,8 @@ class ServerReader:
         try:
             for val in ast.literal_eval(self.sendData()):
                 print(val) 
-        except:
+        except Exception as e:
+            print(e.with_traceback(e.__traceback__))
             self.getData()
 
 if __name__ == "__main__":        

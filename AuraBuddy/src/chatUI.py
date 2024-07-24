@@ -2,7 +2,7 @@ import tkinter as tk
 from tktooltip import ToolTip
 import customtkinter as ctk
 from tkinter import END
-from .Client2Server import Client #.Client2Server when runing run.py
+from .Client2Server import Client
 from PIL import Image
 import tkinter.font as tkFont
 import json
