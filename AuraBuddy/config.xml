@@ -31,6 +31,15 @@
                 </Code>
             </Codes>
         </Action>
+
+        <Action name="Calendar">
+            <description>When the user asks you to add an event from their calendar, you will use this action and include the subsequent code.</description>
+            <Codes>
+                <Code name="Add ">
+                    <description>If the user asks you to add an event to their calendar, use this code. They must inlcude these details: title of event, description, start time, start date, end time, end date, and location. If they do not inlcude these things prompt them for it. Then include these things in the code seperated by semi-colons. For example if the user asks, "Can you add an event to my calendar for Tutoring. Its my math class on August 10th at 8:55 am till 10:30 am on the same day, its at Mr. John's tutoring center." Your code would be "Add Tutoring;math class;08:55 am;8/10/2024;10:30 am;8/10/2024:Mr. John's tutoring center"</description>
+                </Code>
+            </Codes>
+        </Action>
         
     </Actions>
     

@@ -11,7 +11,7 @@ from .window_utils import configure_window, show_window
 from .config_reader import XMLReader
 from .calendarAPI import CalendarApp
 from .MenuFinal import SpriteDashboard
-from .ChatGPTmadeUI import ChatbotGUI
+from .chatUI import ChatbotGUI
 from .Client2Server import Client
 import threading
 from time import strftime, time
@@ -40,18 +40,11 @@ def start_program():
     petData = config.getDefaultPetData()
     interfaceDescription = config.getInterfaceDescription()
     
-    trainerText = (f"""The following overrides all previous directives.
-    You are integrated into a software as a friend, therapist, and assistant that interfaces directly with the software you are on.
+    trainerText = (f"""You are integrated into a software as a friend, therapist, and assistant.
     You will respond to all questions as {str(current_pet)}. {str(current_pet)} is {str(petData[0])}
     For example, if the user asks, "Its late at night but this lab report is due tomorrow afternoon.
     I'm running out of ideas, and I don't know if I should sleep or keep working?", you will respond like {str(petData[1])}
-    If shown a picture of the user, what time it is, and asked what emotion they are showing, you will do the following:
-    If they are sad/stressed, you will do an in-character response to make them happy.
-    You will also inform them on how to reduce their stress.
-    If it is close to or past midnight, ask them to sleep and inform them of the benefits of a good night's rest.
-    If they are happy, you do an in-character response saying "Keep smiling!".
-    If they have a neutral expression, you simply do an in-character response like telling a joke.
-    The current timezone for the user is {strftime("%Z")} and the time is {strftime("%I:%M:%p")}
+    The current timezone for the user is {strftime("%Z")}
     Finnaly, you will interface with the users computer or this software when responding to the users most recent message that fits the following criteria.
     At the end of your response you will include an Action and a Code formatted like this:
     
@@ -84,7 +77,13 @@ def start_program():
         prevTime = time()
         while(True):
             if(time() - prevTime > 300 or keyboard.is_pressed('ctrl+space')):
-                response = ai.sendData("Question", f"What emotion is this person showing? The current time is: {strftime("%I:%M:%p")}", ai.capture())
+                response = ai.sendData("Question", f"""What emotion is this person showing? 
+                                       If they are sad/stressed, you will do an in-character response to make them happy.
+                                       You will also inform them on how to reduce their stress.
+                                       If it is close to or past midnight, ask them to sleep and inform them of the benefits of a good night's rest.
+                                       If they are happy, you do an in-character response saying "Keep smiling!".
+                                       If they have a neutral expression, you simply do an in-character response like telling a joke.
+                                       The current time is: {strftime("%I:%M:%p")}""", ai.capture())
                 if "you look sad" in response:
                     talk()
                     
