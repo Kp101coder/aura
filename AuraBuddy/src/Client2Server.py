@@ -56,7 +56,7 @@ class Client:
                 os.remove(path)
                 return data
         
-        def sendData(self, sys, message=None, image=None):
+        def sendData(self, sys, message=None, image=None) -> dict:
                 print("Sending Data")
                 if sys not in ["Question", "Quit", "Convo"]:
                         raise Exception("You need a valid system message")
