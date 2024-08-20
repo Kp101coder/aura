@@ -78,13 +78,13 @@ class XMLReader:
             actionData.append(dict)
         return actionData
     
-    def getPetDescription(self, petname: str):
-        pets = self.dom.getElementsByTagName("pet")
+    def getPetDescription(self, pet: str):
+        pets = self.dom.getElementsByTagName("pets")
         for pet in pets:
             name = pet.getAttribute("name")
-            if name == petname:
+            if name == pet:
                 actionReader = XMLReader(dom=pet)
-                return str(actionReader.getFirstTagValue("description"))
+                return actionReader.getFirstTagValue("description")
             
 
     def getMatchingPetConfigurationAsDom(self, pet: str) -> minidom:
@@ -136,4 +136,4 @@ class XMLReader:
 
 if __name__ == "__main__":
     config = XMLReader()
-    print(config.getPetDescription("Vaayu"))
+    print(config.getInterfaceDescription())

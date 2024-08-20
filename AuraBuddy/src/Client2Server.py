@@ -7,6 +7,7 @@ os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
 from gtts import gTTS
 import time
 from pygame import mixer
+from time import strftime, time
 
 '''
 All responses sent are in json form:
@@ -23,21 +24,18 @@ code
 
 '''
 class Client:
-        def __init__(self, initialMessage = None):
-                global client_socket
-                global MAX_BYTES_ACCEPTED
-                global cap
+        def __init__(self, id, pet):
                 HOST = "57.132.171.87" 
                 #Testing: HOST = s.gethostbyname(s.gethostname())
                 PORT = 7106
-                MAX_BYTES_ACCEPTED = 2048
-                client_socket = s.socket(s.AF_INET, s.SOCK_STREAM)
-                client_socket.connect((HOST, PORT))
-                client_socket.settimeout(30)
+                self.MAX_BYTES_ACCEPTED = 2048
+                self.client_socket = s.socket(s.AF_INET, s.SOCK_STREAM)
+                self.client_socket.connect((HOST, PORT))
+                self.client_socket.settimeout(30)
                 mixer.init()
-                cap = cv2.VideoCapture(0)
-                if initialMessage != None and initialMessage != "":
-                        self.sendInit(initialMessage)
+                self.cap = cv2.VideoCapture(0)
+                self.setPet(pet)
+                self.sendID(id)
 
         def tts(self, text, output_file='Temp/output.mp3'):
                 """Convert text to speech and save it to an output file."""
@@ -47,7 +45,7 @@ class Client:
                 return output_file
 
         def capture(self):
-                rep, frame = cap.read()
+                rep, frame = self.cap.read()
                 path = "GPT-Image.jpg"
                 cv2.imwrite(path, frame)
                 data = None
@@ -58,7 +56,7 @@ class Client:
         
         def sendData(self, sys, message=None, image=None) -> dict:
                 print("Sending Data")
-                if sys not in ["Question", "Quit", "Convo"]:
+                if sys not in ["Question", "Quit", "Convo", "Clean Convo"]:
                         raise Exception("You need a valid system message")
                 data = {
                         'sys': sys,
@@ -67,31 +65,43 @@ class Client:
                 }
                 print(f"Data: {data}")
                 data = json.dumps(data).encode('utf-8')
-                client_socket.sendall(len(data).to_bytes(4, 'big'))
-                client_socket.sendall(data)
+                self.client_socket.sendall(len(data).to_bytes(4, 'big'))
+                self.client_socket.sendall(data)
                 response = self.__receive_response()
                 response = json.loads(response)
                 print(f"Response: {response}")
                 return response
         
-        def sendInit(self, message):
-                print("Sending Init Data")
+        def setPet(self, message):
+                print("Sending Pet Data")
                 data = {
-                        'sys': "Set Convo",
+                        'sys': "Pet",
+                        'message': message,
+                        'image': strftime("%Z")
+                }
+                print(f"Data: {data}")
+                data = json.dumps(data).encode('utf-8')
+                self.client_socket.sendall(len(data).to_bytes(4, 'big'))
+                self.client_socket.sendall(data)
+
+        def sendID(self, message):
+                print("Sending ID Data")
+                data = {
+                        'sys': "ID",
                         'message': message,
                         'image': None
                 }
                 print(f"Data: {data}")
                 data = json.dumps(data).encode('utf-8')
-                client_socket.sendall(len(data).to_bytes(4, 'big'))
-                client_socket.sendall(data)
+                self.client_socket.sendall(len(data).to_bytes(4, 'big'))
+                self.client_socket.sendall(data)
 
         def __receive_response(self):
                 data = b''
                 while True:
-                        part = client_socket.recv(MAX_BYTES_ACCEPTED)
+                        part = self.client_socket.recv(self.MAX_BYTES_ACCEPTED)
                         data += part
-                        if len(part) < MAX_BYTES_ACCEPTED:
+                        if len(part) < self.MAX_BYTES_ACCEPTED:
                                 break
                 return data.decode('utf-8')
 
@@ -102,9 +112,9 @@ class Client:
                         'image': None
                 }
                 data = json.dumps(data).encode('utf-8')
-                client_socket.sendall(len(data).to_bytes(4, 'big'))
-                client_socket.sendall(data)
-                client_socket.close()
+                self.client_socket.sendall(len(data).to_bytes(4, 'big'))
+                self.client_socket.sendall(data)
+                self.client_socket.close()
 
         def __playSound(self, file_path):
                 """Play the given audio file using pygame."""
@@ -127,6 +137,6 @@ if __name__ == "__main__":
                         client.sendData("Set Convo", ask)
                 elif ask.upper() == "P":
                         ask = input("Question: ")
-                        print(client.sendData("Question", ask, client.capture()).get('answer'))
+                        print(client.sendData("Question", ask, client.self.capture()).get('answer'))
                 else:
                         print(client.sendData("Question", ask).get('answer'))

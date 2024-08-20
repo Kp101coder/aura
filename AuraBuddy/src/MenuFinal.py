@@ -1,73 +1,87 @@
 import customtkinter as ctk
+import tkinter as tk
 from PIL import Image, ImageSequence
 import xml.etree.ElementTree as obj
+import tkinter.font as tkFont
+from tktooltip import ToolTip
+from .config_reader import XMLReader
 
 class SpriteDashboard(ctk.CTkToplevel):
-    ctk.set_appearance_mode("System")  # Modes: "System" (standard), "Dark", "Light"
-    ctk.set_default_color_theme("dark-blue")  # Themes: "blue" (standard), "green", "dark-blue"
+    ctk.set_appearance_mode("Dark")
+    ctk.set_default_color_theme("dark-blue")
 
     def __init__(self):
         super().__init__()
         self.title("Sprite Dashboard")
-         
-        self.status = False
-        self.list = []
         
-
-        # Calculate initial window size based on three buttons in width and three rows in height
-        initial_width = 377  # 100 is button width, 20 is padx, 40 is for margins
-        initial_height = 135  # Initial height for three rows
-
+        self.list = [
+            ("Jerry", "src/sprites/blob/slimeidle.gif", "src/sprites/blob/slimegrabbed.gif"),
+            ("Loki", "src/sprites/cat/catidle.gif", "src/sprites/cat/catgrabbed.gif"),
+            ("Vaayu", "src/sprites/dog/dogidle.gif", "src/sprites/dog/doggrabbed.gif")
+        ]
+        
+        initial_width = 377
+        initial_height = 135
         self.geometry(f"{initial_width}x{initial_height}")
 
         self.sprite_buttons = []
-        self.sprite_images = []
-        self.image_references = []  # To keep references to avoid garbage collection
         self.create_widgets()
 
     def load_sprites(self):
-        self.list = self.idle_list
-        for name, file_path in self.list():
-            #seperate the loading of images and buttons, and then make it so it loads both idle and hover 
-            #images but when hover it switches what is loaded onto the buttons.
+        tooltip_font = tkFont.Font(family="Space Grotesk", size=13, weight="bold")
+        config = XMLReader()
+        for petTuple in self.list:
+            name = petTuple[0]
+            file_path = petTuple[1]
+            file_path_grab = petTuple[2]
+
             image = Image.open(file_path)
+            imageGrab = Image.open(file_path_grab)
             frames = [frame.copy() for frame in ImageSequence.Iterator(image)]
-            resized_frames = [frame.resize((90, 90), Image.LANCZOS) for frame in frames]  # Resize frames to 90x90
-            photos = [ctk.CTkImage(light_image=frame, size=(90, 90)) for frame in resized_frames]  # Convert to CTkImage
+            frames_grab = [frame.copy() for frame in ImageSequence.Iterator(imageGrab)]
+            photos = [ctk.CTkImage(light_image=frame, size=(90, 90)) for frame in frames]
+            photosGrab = [ctk.CTkImage(light_image=frame, size=(90, 90)) for frame in frames_grab]
             button = ctk.CTkButton(self.sprite_frame, image=photos[0], text=name, compound="top", width=100, height=100)
-            button.image_frames = photos  # keep a reference to avoid garbage collection
+            button.image_frames = photos
+            button.image_frames_grab = photosGrab
             button.image_index = 0
-            button.image = photos[0]
-            button.name = name  # Store the name in the button instance
-            button.configure(command=lambda btn=button: self.on_sprite_button_click(btn.name))  # Bind click event
+            button.status = False
+            button.name = name
+            button.tooltip = ToolTip(button, msg=config.getPetDescription(name), y_offset=40, font=tooltip_font)
             self.sprite_buttons.append(button)
-            self.sprite_images.append((button, resized_frames))
-            self.image_references.extend(photos)  # Store photos to avoid garbage collection
-            button.bind("<Enter>", self.on_hover)
-            button.bind("<Leave>", self.not_hover)
-        
+            button.configure(command=lambda btn=button: self.on_sprite_button_click(btn.name))
+
+            button.bind("<Enter>", lambda event, btn=button: self.on_hover(btn))
+            button.bind("<Leave>", lambda event, btn=button: self.not_hover(btn))
+
+            #this thing somehow calls an imaginary method that shows the tool tip
+            #Throws out errors but without it the tooltip doesnt show, idfk or gaf
+            button.bind("<Enter>", lambda event, btn=button: btn.tooltip.showtip())
+            button.bind("<Leave>", lambda event, btn=button: btn.tooltip.hidetip())
 
     def animate(self):
-        for button, frames in self.sprite_images:
-            button.image_index = (button.image_index + 1) % len(button.image_frames)
-            button.configure(image=button.image_frames[button.image_index])
-        self.after(200, self.animate)  # Adjust the interval for smoother or faster animations
+        for button in self.sprite_buttons:
+            if button.status:
+                button.image_index = (button.image_index + 1) % len(button.image_frames_grab)
+                button.configure(image=button.image_frames_grab[button.image_index])
+            else:
+                button.image_index = (button.image_index + 1) % len(button.image_frames)
+                button.configure(image=button.image_frames[button.image_index])
+        self.after(200, self.animate)
 
     def arrange_sprites(self):
-        max_columns = 3  # Number of buttons per row
+        max_columns = 3
         current_row = 0
         current_column = 0
 
         for i, button in enumerate(self.sprite_buttons):
             button.grid(row=current_row, column=current_column, padx=10, pady=10, sticky="nsew")
 
-            # Update current row and column
             current_column += 1
             if current_column >= max_columns:
                 current_column = 0
                 current_row += 1
 
-        # Make all rows and columns expand equally
         for i in range(current_row + 1):
             self.sprite_frame.grid_rowconfigure(i, weight=1)
         for j in range(max_columns):
@@ -83,25 +97,22 @@ class SpriteDashboard(ctk.CTkToplevel):
         self.load_sprites()
         self.arrange_sprites()
 
-        # Bind mouse wheel event to canvas
         self.sprite_canvas.bind_all("<MouseWheel>", self.on_mousewheel)
-
-        # Update canvas and scroll region
         self.sprite_canvas.update_idletasks()
         self.sprite_canvas.configure(scrollregion=self.sprite_canvas.bbox("all"))
 
-        self.animate()  # Start animation
+        self.animate()
 
     def on_mousewheel(self, event):
         self.sprite_canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
 
     def on_sprite_button_click(self, name):
         from .main import killbuddy, start_program
-        tree = obj.ElementTree(file = "config.xml")
+        tree = obj.ElementTree(file="config.xml")
         root = tree.getroot()
         
         for amounts in root.iter("defualt_pet"):
-            amounts.text= name
+            amounts.text = name
         tree = obj.ElementTree(root)
          
         with open(file="config.xml", mode="wb") as fileupdate:
@@ -111,36 +122,8 @@ class SpriteDashboard(ctk.CTkToplevel):
         killbuddy()
         start_program()
            
+    def on_hover(self, button):
+        button.status = True
 
-    def on_hover(self, event = None):
-        self.status = True
-        print("onHover")
-
-    def not_hover(self, event = None):
-        self.status = False
-        print("notHover")
-
-    def idle_list(self):
-        # List of sprites with names and file paths
-        sprites = [
-            ("Jerry", "src/sprites/blob/slimeidle.gif"),
-            ("Loki", "src/sprites/cat/catidle.gif"),
-            ("Vaayu", "src/sprites/dog/dogidle.gif")
-            # Add more sprites here
-        ]
-        return sprites
-    
-    def hover_list(self):
-        # List of sprites with names and file paths
-        sprites = [
-            ("Jerry", "src/sprites/blob/slimegrabbed.gif"),
-            ("Loki", "src/sprites/cat/catgrabbed.gif"),
-            ("Vaayu", "src/sprites/dog/doggrabbed.gif")
-            # Add more sprites here
-        ]
-        return sprites
-
-
-    
-'''app = SpriteDashboard()
-app.mainloop'''
+    def not_hover(self, button):
+        button.status = False

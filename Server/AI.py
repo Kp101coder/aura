@@ -41,6 +41,11 @@ class Chatbot:
             return messages
         return messages
     
+    def cleanConvo(self): 
+        '''Emptys the current array of messages except the first element. Returns the new array'''
+        self.messageList = [self.messageList[0]]
+        return self.messageList
+    
     def setConvo(self, previousList): 
         '''Makes the current array of messages the inputted array. Returns the new array'''
         self.messageList = previousList

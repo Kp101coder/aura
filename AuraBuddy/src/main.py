@@ -1,5 +1,4 @@
 import ctypes
-from functools import partial
 import customtkinter as tk
 from tkinter import *
 from src.animation.animation import AnimationStates
@@ -13,15 +12,33 @@ from .calendarAPI import CalendarApp
 from .MenuFinal import SpriteDashboard
 from .chatUI import ChatbotGUI
 from .Client2Server import Client
+from .ActionHandler import ActionHandler
+import os
 import threading
 from time import strftime, time
-import keyboard
 import ast
-from .ActionHandler import ActionHandler
 
 def start_program():
     global window
 
+    def initAI():
+        global ai
+        print("Starting background")
+        if os.path.exists("src/Temp/userId.txt"):
+            with open("src/Temp/userId.txt", "r") as f:
+                ai = Client(f.read().rstrip(), current_pet)
+        else:
+            with open("src/Temp/userId.txt", "w+") as f:
+                import secrets
+                password_length = 13
+                key = secrets.token_urlsafe(password_length)
+                ai = Client(key, current_pet)
+                f.write(key)
+        my_menu.add_command(label="Talk", command=talk)
+        my_menu.add_separator()
+        my_menu.add_command(label="Exit", command=killbuddy)
+
+    
     """Creates a window and pet from the configuration xml and then shows that pet
 
     Args:
@@ -35,62 +52,6 @@ def start_program():
     ### General Configuration
     config = XMLReader()
     current_pet = config.getDefaultPet()
-
-    ###Preload AI in background
-    petData = config.getDefaultPetData()
-    interfaceDescription = config.getInterfaceDescription()
-    
-    trainerText = (f"""You are integrated into a software as a friend, therapist, and assistant.
-    You will respond to all questions as {str(current_pet)}. {str(current_pet)} is {str(petData[0])}
-    For example, if the user asks, "Its late at night but this lab report is due tomorrow afternoon.
-    I'm running out of ideas, and I don't know if I should sleep or keep working?", you will respond like {str(petData[1])}
-    The current timezone for the user is {strftime("%Z")}
-    Finnaly, you will interface with the users computer or this software when responding to the users most recent message that fits the following criteria.
-    At the end of your response you will include an Action and a Code formatted like this:
-    
-    (your actual response)
-    Action: (The action) 
-    Code: (The code)
-
-    Here are all the action codes and their criteria:
-    {str(interfaceDescription)}
-
-    Include the action if their description matches what the user is asking and then one of the relavent codes that pertain to that action.
-    For example, if you are discussing getting treats with the user and the user mention something like giving you a treat, you will include the action "Play Gif" and the "Treat" code.""")
-
-    def initAI():
-        print("Running background AI thread")
-        global ai
-        with open("src/Temp/previous_convos.txt", "r") as f:
-            convo = f.read()
-        if convo != "" and convo != "[]":
-            print(f"Convo 1: {convo}\n\n")
-            convo = ast.literal_eval(convo)
-            convo.insert(0,{"role": "system", "content": trainerText})
-            print(f"Convo 2: {convo}")
-            ai = Client(str(convo))
-        else:
-            ai = Client(str([{"role": "system", "content": trainerText}]))
-        my_menu.add_command(label="Talk", command=talk)
-        my_menu.add_separator()
-        my_menu.add_command(label="Exit", command=killbuddy)
-        prevTime = time()
-        while(True):
-            if(time() - prevTime > 300 or keyboard.is_pressed('ctrl+space')):
-                response = ai.sendData("Question", 
-f"""What emotion is this person showing? 
-If they are sad/stressed, you will do an in-character response to make them happy, make sure to include the phrase, "you look sad".
-You will also inform them on how to reduce their stress.
-If it is close to or past midnight, ask them to sleep and inform them of the benefits of a good night's rest.
-If they are happy, you do an in-character response saying "Keep smiling!".
-If they have a neutral expression, you simply do an in-character response like telling a joke.
-The current time is: {strftime("%I:%M:%p")}""", ai.capture())
-                prevTime=time()
-                if "you look sad" in response.get('answer').lower():
-                    talk()
-                    
-
-    threading.Thread(target=initAI).start()
 
     ###Rest of General Configuration and Animation preproccessing
     topmost = config.getForceTopMostWindow()
@@ -150,12 +111,41 @@ The current time is: {strftime("%I:%M:%p")}""", ai.capture())
     canvas.label.bind("<B1-Motion>", pet.do_move)
     print(str(pet.__repr__()))
 
+    def check_ai_response():
+        response = ai.sendData("Question", 
+        f"""What emotion is this person showing? 
+        If they are sad/stressed, you will do an in-character response to make them happy, make sure to include the phrase, "you look sad".
+        You will also inform them on how to reduce their stress.
+        If it is close to or past midnight, ask them to sleep and inform them of the benefits of a good night's rest.
+        If they are happy, you do an in-character response saying "Keep smiling!".
+        If they have a neutral expression, you simply do an in-character response like telling a joke.
+        The current time is: {strftime("%I:%M:%p")}""", ai.capture())
+        if "you look sad" in response.get('answer').lower():
+            if os.path.exists("src/Temp/previous_convos.txt"):
+                convo = ""
+                with open("src/Temp/previous_convos.txt", "r") as f:
+                    convo = f.read()
+                    if convo != "" and convo != "[]":
+                        convo = ast.literal_eval(convo)
+                        convo.append({'role': 'assistant', 'content': response.get('answer')})
+                with open("src/Temp/previous_convos.txt", "w") as f:
+                    f.write(str(convo))
+            else:
+                with open("src/Temp/previous_convos.txt", "x") as f:
+                    f.write([{'role': 'assistant', 'content': response.get('answer')}])
+            talk()
+
+        window.after(1800000, check_ai_response)
+
+    window.after(1800000, check_ai_response)
+
     # Begin the main loop
     window.after(1, pet.on_tick)
     show_window(window)
 
     def talk():
-        app=ChatbotGUI(current_pet, ai, trainerText, ActionHandler(pet))
+        app=ChatbotGUI(current_pet, ai, ActionHandler(pet))
+        app.focus()
         app.mainloop()
 
     # create menu
@@ -175,14 +165,21 @@ The current time is: {strftime("%I:%M:%p")}""", ai.capture())
     my_menu.add_command(label="Buddies", command=buddies)
     my_menu.add_command(label="Calendar", command=cal)
 
+    threading.Thread(target=initAI).start()
+
     window.bind("<Button-3>", my_popup)
 
     window.mainloop()
     return pet
 
 def killbuddy(): #on exit save the last convo to a text file 
-    with open("src/Temp/previous_convos.txt", "w") as f:
-        answer = str(ai.sendData("Convo").get('answer'))
-        f.write(answer)
+    if os.path.exists("src/Temp/previous_convos.txt"):
+        with open("src/Temp/previous_convos.txt", "w") as f:
+            answer = str(ai.sendData("Convo").get('answer'))
+            f.write(answer)
+    else:
+        with open("src/Temp/previous_convos.txt", "x") as f:
+            answer = str(ai.sendData("Convo").get('answer'))
+            f.write(answer)
     ai.disconnect()
     window.destroy()

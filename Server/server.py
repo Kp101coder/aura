@@ -7,6 +7,7 @@ import os
 import traceback
 import ast
 import subprocess
+from config_reader import XMLReader
 
 prints = []
 print("Initializing Server")
@@ -21,6 +22,7 @@ MAX_BYTES_ACCEPTED = 4096
 
 server = s.socket(s.AF_INET, s.SOCK_STREAM)
 server.bind((HOST,PORT))
+server.settimeout(12000)
 
 server.listen(100)
 
@@ -52,7 +54,7 @@ Receivable system messages are:
 
 "Question", "Quit", "Convo", "Set Convo"
 '''
-def handle_client(communication_socket, ai):
+def handle_client(communication_socket, ai, id = "", trainerText = ""):
     try:
         print("Running handle")
         prints.append("Running handle")
@@ -67,6 +69,12 @@ def handle_client(communication_socket, ai):
         prints.append(f"Message from client: {message}")
         if sysMessage == "Quit":
             communication_socket.close()
+            if os.path.exists(f"previous_convos/{id}.txt"):
+                with open(f"previous_convos/{id}.txt", "w") as f:
+                    f.write(str(ai.getConvo()))
+            else:
+                with open(f"previous_convos/{id}.txt", "x") as f:
+                    f.write(str(ai.getConvo()))
             print("Stopping handle...")
             prints.append("Stoppping handle...")
         else:
@@ -82,8 +90,39 @@ def handle_client(communication_socket, ai):
                     'code' : None
                 }
                 communication_socket.send(json.dumps(data).encode('utf-8'))
-            elif sysMessage == "Set Convo":
-                ai.setConvo(ast.literal_eval(message))
+            elif sysMessage == "Clean Convo":
+                ai.cleanConvo()
+            elif sysMessage == "ID":
+                id = message
+                if os.path.exists(f"previous_convos/{id}.txt"):
+                    with open(f"previous_convos/{id}.txt", "r") as f:
+                        convo = f.read()
+                    if convo != "" and convo != "[]":
+                        convo = ast.literal_eval(convo)
+                        convo.insert(0,{"role": "system", "content": trainerText})
+                        ai.setConvo(convo)
+            elif sysMessage == "Pet":
+                config = XMLReader()
+                petData = config.getDefaultPetData()
+                interfaceDescription = config.getInterfaceDescription()
+                trainerText = (f"""You are integrated into a software as a friend, therapist, and assistant.
+                You will respond to all questions as {str(message)}. {str(message)} is {str(petData[0])}
+                For example, if the user asks, "Its late at night but this lab report is due tomorrow afternoon.
+                I'm running out of ideas, and I don't know if I should sleep or keep working?", you will respond like {str(petData[1])}
+                The current timezone for the user is {clientData.get('image')}
+                Finnaly, you will interface with the users computer or this software when responding to the users most recent message that fits the following criteria.
+                At the end of your response you will include an Action and a Code formatted like this:
+                
+                (your actual response)
+                Action: (The action) 
+                Code: (The code)
+
+                Here are all the action codes and their criteria:
+                {str(interfaceDescription)}
+
+                Include the action if their description matches what the user is asking and then one of the relavent codes that pertain to that action.
+                For example, if you are discussing getting treats with the user and the user mention something like giving you a treat, you will include the action "Play Gif" and the "Treat" code.""")
+    
             else:
                 image_data = clientData.get('image')
                 response = None
@@ -97,7 +136,7 @@ def handle_client(communication_socket, ai):
                 else:
                     response = ai.question(message)
                 communication_socket.send(json.dumps(processResponse(response)).encode('utf-8'))
-            handle_client(communication_socket, ai)
+            handle_client(communication_socket, ai, id, trainerText)
     except:
         e = traceback.format_exc()
         print(f"Error: {e}")
