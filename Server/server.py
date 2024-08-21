@@ -23,7 +23,6 @@ MAX_BYTES_ACCEPTED = 4096
 
 server = s.socket(s.AF_INET, s.SOCK_STREAM)
 server.bind((HOST,PORT))
-server.settimeout(12000)
 
 server.listen(100)
 

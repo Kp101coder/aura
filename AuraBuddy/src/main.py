@@ -24,17 +24,20 @@ def start_program():
     def initAI():
         global ai
         print("Starting background")
-        if os.path.exists("src/Temp/userId.txt"):
-            with open("src/Temp/userId.txt", "r") as f:
-                ai = Client(f.read().rstrip(), current_pet)
-        else:
-            with open("src/Temp/userId.txt", "w+") as f:
-                import secrets
-                password_length = 13
-                key = secrets.token_urlsafe(password_length)
-                ai = Client(key, current_pet)
-                f.write(key)
-        my_menu.add_command(label="Talk", command=talk)
+        try:
+            if os.path.exists("src/Temp/userId.txt"):
+                with open("src/Temp/userId.txt", "r") as f:
+                    ai = Client(f.read().rstrip(), current_pet)
+            else:
+                with open("src/Temp/userId.txt", "w+") as f:
+                    import secrets
+                    password_length = 13
+                    key = secrets.token_urlsafe(password_length)
+                    ai = Client(key, current_pet)
+                    f.write(key)
+            my_menu.add_command(label="Talk", command=talk)
+        except Exception as e:
+            print(e)
         my_menu.add_separator()
         my_menu.add_command(label="Exit", command=killbuddy)
 
@@ -173,6 +176,7 @@ def start_program():
     return pet
 
 def killbuddy(): #on exit save the last convo to a text file 
+    window.destroy()
     if os.path.exists("src/Temp/previous_convos.txt"):
         with open("src/Temp/previous_convos.txt", "w") as f:
             answer = str(ai.sendData("Convo").get('answer'))
@@ -182,4 +186,3 @@ def killbuddy(): #on exit save the last convo to a text file
             answer = str(ai.sendData("Convo").get('answer'))
             f.write(answer)
     ai.disconnect()
-    window.destroy()
