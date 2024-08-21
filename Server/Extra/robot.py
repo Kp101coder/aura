@@ -168,8 +168,11 @@ search(service, False)
 mouseKeyboard()
 
 while(True):
-    if search(service, False):
+    try:
+        if search(service, False):
+            os.system("sudo reboot")
+        else:
+            print("Nothing found")
+        time.sleep(900)
+    except:
         os.system("sudo reboot")
-    else:
-        print("Nothing found")
-    time.sleep(900)
