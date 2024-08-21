@@ -89,7 +89,7 @@ class ChatbotGUI(ctk.CTkToplevel):
         self.destroy()
 
     def reset(self):
-        self.client.sendData("Clean Convo")
+        self.client.cleanConvo()
         os.remove("src/Temp/previous_convos.txt")
         self.destroy()
         self = ChatbotGUI(self.name, self.client, self.handler)
