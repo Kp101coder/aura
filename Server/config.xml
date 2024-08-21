@@ -1,10 +1,4 @@
 <config>
-    
-    <defualt_pet>Vaayu</defualt_pet>
-    
-    <force_topmost>true</force_topmost>
-    
-    <should_run_preprocessing>false</should_run_preprocessing>
 
     <Actions>
 

@@ -104,7 +104,7 @@ def handle_client(communication_socket, ai, id = ""):
                         ai.setConvo(convo)
             elif sysMessage == "Pet":
                 config = XMLReader()
-                petData = config.getDefaultPetData()
+                petData = config.getPetDescription(str(message))
                 interfaceDescription = config.getInterfaceDescription()
                 trainerText = (f"""You are integrated into a software as a friend, therapist, and assistant.
                 You will respond to all questions as {str(message)}. {str(message)} is {str(petData[0])}
