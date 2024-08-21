@@ -135,9 +135,9 @@ def start_program():
                     f.write([{'role': 'assistant', 'content': response.get('answer')}])
             talk()
 
-        window.after(1800000, check_ai_response)
+        window.after(600000, check_ai_response)
 
-    window.after(1800000, check_ai_response)
+    window.after(600000, check_ai_response)
 
     # Begin the main loop
     window.after(1, pet.on_tick)
