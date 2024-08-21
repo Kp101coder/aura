@@ -34,7 +34,7 @@ class Chatbot:
         return response
     
     def setTrainerText(self, text):
-        if self.messageList[0].get("role") == "system":
+        if len(self.messageList) > 0 and self.messageList[0].get("role") == "system":
             self.messageList[0] = {"role": "system", "content": text}
         else:
             self.messageList.insert(0, {"role": "system", "content": text})
