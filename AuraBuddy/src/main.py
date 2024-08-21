@@ -15,12 +15,12 @@ from .Client2Server import Client
 from .ActionHandler import ActionHandler
 import os
 import threading
-from time import strftime, time, perf_counter_ns
+from time import strftime, time
 import ast
 
 def start_program():
     global window
-    start = perf_counter_ns()
+
     def initAI():
         global ai
         print("Starting background")
@@ -37,8 +37,6 @@ def start_program():
         my_menu.add_command(label="Talk", command=talk)
         my_menu.add_separator()
         my_menu.add_command(label="Exit", command=killbuddy)
-        import math
-        print(f"Window time: {(windowtime-start)/math.pow(10,9)}\nAI time: {(perf_counter_ns()-start)/math.pow(10,9)}")
 
     
     """Creates a window and pet from the configuration xml and then shows that pet
@@ -170,7 +168,7 @@ def start_program():
     threading.Thread(target=initAI).start()
 
     window.bind("<Button-3>", my_popup)
-    windowtime = perf_counter_ns()
+
     window.mainloop()
     return pet
 
