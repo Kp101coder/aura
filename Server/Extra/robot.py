@@ -168,7 +168,7 @@ mouseKeyboard()
 
 while(True):
     try:
-        if search(service, False):
+        if search(service, pid, False):
             os.system("sudo reboot")
         else:
             print("Nothing found")
