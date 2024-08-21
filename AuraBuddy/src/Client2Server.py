@@ -56,7 +56,7 @@ class Client:
         
         def sendData(self, sys, message=None, image=None) -> dict:
                 print("Sending Data")
-                if sys not in ["Question", "Quit", "Convo", "Clean Convo"]:
+                if sys not in ["Question", "Quit", "Convo"]:
                         raise Exception("You need a valid system message")
                 data = {
                         'sys': sys,
@@ -71,6 +71,18 @@ class Client:
                 response = json.loads(response)
                 print(f"Response: {response}")
                 return response
+        
+        def cleanConvo(self):
+                print("Sending ID Data")
+                data = {
+                        'sys': "Clean Convo",
+                        'message': None,
+                        'image': None
+                }
+                print(f"Data: {data}")
+                data = json.dumps(data).encode('utf-8')
+                self.client_socket.sendall(len(data).to_bytes(4, 'big'))
+                self.client_socket.sendall(data)
         
         def setPet(self, message):
                 print("Sending Pet Data")
