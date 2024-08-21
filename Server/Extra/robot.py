@@ -134,7 +134,8 @@ def search(service, pid, doDownload = True):
             return True
         for item in items:
             print(f"{item['name']} ({item['id']})")
-            os.remove(item['name'])
+            if os.path.exists(item['name']):
+                os.remove(item['name'])
             download_file(service, item['id'], item['name'])
             delete_file(service, item['id'])
 
