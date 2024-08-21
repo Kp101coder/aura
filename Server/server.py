@@ -55,7 +55,7 @@ Receivable system messages are:
 
 "Question", "Quit", "Convo", "Set Convo"
 '''
-def handle_client(communication_socket, ai, id = "", trainerText = ""):
+def handle_client(communication_socket, ai, id = ""):
     try:
         print("Running handle")
         prints.append("Running handle")
@@ -123,6 +123,7 @@ def handle_client(communication_socket, ai, id = "", trainerText = ""):
 
                 Include the action if their description matches what the user is asking and then one of the relavent codes that pertain to that action.
                 For example, if you are discussing getting treats with the user and the user mention something like giving you a treat, you will include the action "Play Gif" and the "Treat" code.""")
+                ai.setTrainerText(trainerText)
     
             else:
                 image_data = clientData.get('image')
@@ -137,7 +138,7 @@ def handle_client(communication_socket, ai, id = "", trainerText = ""):
                 else:
                     response = ai.question(message)
                 communication_socket.send(json.dumps(processResponse(response)).encode('utf-8'))
-            handle_client(communication_socket, ai, id, trainerText)
+            handle_client(communication_socket, ai, id)
     except:
         e = traceback.format_exc()
         print(f"Error: {e}")

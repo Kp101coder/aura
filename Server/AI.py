@@ -33,6 +33,12 @@ class Chatbot:
         self.messageList.append({"role": "assistant", "content": response})
         return response
     
+    def setTrainerText(self, text):
+        if self.messageList[0].get("role") == "system":
+            self.messageList[0] = {"role": "system", "content": text}
+        else:
+            self.messageList.insert(0, {"role": "system", "content": text})
+    
     def getConvo(self): 
         '''Returns the current array of messages sent between user and AI'''
         messages = self.messageList.copy()
