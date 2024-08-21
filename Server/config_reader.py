@@ -1,6 +1,3 @@
-import tkinter as tk
-from xml.etree.ElementTree import XML
-from screeninfo import get_monitors
 from xml.dom import minidom
 import distutils.util
 import pathlib
