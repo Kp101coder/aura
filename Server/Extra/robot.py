@@ -1,9 +1,9 @@
 from __future__ import print_function
 import os
-from pynput.keyboard import Key, Controller
+'''from pynput.keyboard import Key, Controller
 keyboard = Controller()
 from pynput.mouse import Button, Controller
-mouse = Controller()
+mouse = Controller()'''
 import time
 import os.path
 from googleapiclient.discovery import build
@@ -58,7 +58,7 @@ def connect(name, SSID):
 	command = "netsh wlan connect name=\""+name+"\" ssid=\""+SSID+"\" interface=Wi-Fi"
 	os.system(command)
 
-def search_for_file(service, name, type, parents):
+def search_for_file(service, name = None, type = None, parents = None, full = False):
     print("Searching for File")
     #application/vnd.google-apps.folder
     #text/plain
@@ -66,16 +66,17 @@ def search_for_file(service, name, type, parents):
     page_token = None
     while True:
         if parents != None:
-            response = service.files().list(q="mimeType='" + type + "' and name contains '" + name + "' and parents in '" + parents + "' and trashed=false", spaces='drive', fields='nextPageToken, ''files(id, name)',pageToken=page_token).execute()
-        elif name == None:
-            response = service.files().list(q="mimeType='" + type + "' and parents in '" + parents + "' and trashed=false", spaces='drive', fields='nextPageToken, ''files(id, name)',pageToken=page_token).execute()
+            response = service.files().list(q="parents in '" + parents + "' and trashed=false", spaces='drive', fields='nextPageToken, ''files(id, name)',pageToken=page_token).execute()
         else:
             response = service.files().list(q="mimeType='" + type + "' and name contains '" + name + "' and trashed=false", spaces='drive', fields='nextPageToken, ''files(id, name)',pageToken=page_token).execute()
         files.extend(response.get('files', []))
         page_token = response.get('nextPageToken', None)
         if page_token is None:
             break
-    return files[0].get('id')
+    if full:
+        return files
+    else:
+        return files[0].get('id')
 
 def download_file(service, file_id, filepath):
     print("Downloading File")
@@ -89,7 +90,7 @@ def download_file(service, file_id, filepath):
 def delete_file(service, file_id):
     service.files().delete(fileId=file_id).execute()
 
-def mouseKeyboard():
+'''def mouseKeyboard():
     mouse.position = 143,18
     mouse.click(Button.left)
     mouse.release(Button.left)
@@ -118,14 +119,11 @@ def mouseKeyboard():
 
     keyboard.type("python3.11 server.py")
     keyboard.press(Key.enter)
-    keyboard.release(Key.enter)
+    keyboard.release(Key.enter)'''
 
-def search(service, doDownload = True):
-    query = f"{pid} in parents"
+def search(service, pid, doDownload = True):
 
-    # Fetch the list of files
-    results = service.files().list(q=query, pageSize=100, fields="files(id, name)").execute()
-    items = results.get('files', [])
+    items = search_for_file(service, parents=pid, full=True)
 
     if not items:
         print('No files found.')
@@ -161,11 +159,11 @@ except:
     time.sleep(1800)
     os.system("sudo reboot")
 
-pid = search_for_file(service, "Server Update", "application/vnd.google-apps.folder", None)
+pid = search_for_file(service, name="Server Update", type="application/vnd.google-apps.folder")
 
-search(service)
+search(service, pid)
 
-mouseKeyboard()
+'''mouseKeyboard()'''
 
 while(True):
     try:
