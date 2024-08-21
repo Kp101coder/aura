@@ -1,9 +1,9 @@
 from __future__ import print_function
 import os
-'''from pynput.keyboard import Key, Controller
+from pynput.keyboard import Key, Controller
 keyboard = Controller()
 from pynput.mouse import Button, Controller
-mouse = Controller()'''
+mouse = Controller()
 import time
 import os.path
 from googleapiclient.discovery import build
@@ -90,7 +90,7 @@ def download_file(service, file_id, filepath):
 def delete_file(service, file_id):
     service.files().delete(fileId=file_id).execute()
 
-'''def mouseKeyboard():
+def mouseKeyboard():
     mouse.position = 143,18
     mouse.click(Button.left)
     mouse.release(Button.left)
@@ -119,7 +119,7 @@ def delete_file(service, file_id):
 
     keyboard.type("python3.11 server.py")
     keyboard.press(Key.enter)
-    keyboard.release(Key.enter)'''
+    keyboard.release(Key.enter)
 
 def search(service, pid, doDownload = True):
 
@@ -163,7 +163,7 @@ pid = search_for_file(service, name="Server Update", type="application/vnd.googl
 
 search(service, pid)
 
-'''mouseKeyboard()'''
+mouseKeyboard()
 
 while(True):
     try:
