@@ -163,7 +163,7 @@ except:
 
 pid = search_for_file(service, "Server Update", "application/vnd.google-apps.folder", None)
 
-search(service, False)
+search(service)
 
 mouseKeyboard()
 
