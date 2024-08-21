@@ -5,6 +5,7 @@ import xml.etree.ElementTree as obj
 import tkinter.font as tkFont
 from tktooltip import ToolTip
 from .config_reader import XMLReader
+from contextlib import suppress
 
 class SpriteDashboard(ctk.CTkToplevel):
     ctk.set_appearance_mode("Dark")
@@ -54,10 +55,10 @@ class SpriteDashboard(ctk.CTkToplevel):
             button.bind("<Enter>", lambda event, btn=button: self.on_hover(btn))
             button.bind("<Leave>", lambda event, btn=button: self.not_hover(btn))
 
-            #this thing somehow calls an imaginary method that shows the tool tip
-            #Throws out errors but without it the tooltip doesnt show, idfk or gaf
-            button.bind("<Enter>", lambda event, btn=button: btn.tooltip.showtip())
-            button.bind("<Leave>", lambda event, btn=button: btn.tooltip.hidetip())
+            #this thing somehow calls an imaginary method that shows/hides the tool tip
+            #doesnt even do anything wtf but without it doesnt work
+            button.bind("<Enter>", lambda event, btn=button: 1)
+            button.bind("<Leave>", lambda event, btn=button: 1)
 
     def animate(self):
         for button in self.sprite_buttons:

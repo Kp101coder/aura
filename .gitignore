@@ -242,4 +242,5 @@ token.pickle
 logs.log
 Aura Buddy Setup.exe
 AuraBuddy/src/Temp/previous_convos.txt
+AuraBuddy/src/Temp/userId.txt
 AuraBuddy/aura

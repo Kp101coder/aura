@@ -120,8 +120,29 @@ def mouseKeyboard():
     keyboard.press(Key.enter)
     keyboard.release(Key.enter)
 
+def search(service, doDownload = True):
+    query = f"{pid} in parents"
+
+    # Fetch the list of files
+    results = service.files().list(q=query, pageSize=100, fields="files(id, name)").execute()
+    items = results.get('files', [])
+
+    if not items:
+        print('No files found.')
+        return False
+    else:
+        print('Files:')
+        if not doDownload:
+            return True
+        for item in items:
+            print(f"{item['name']} ({item['id']})")
+            os.remove(item['name'])
+            download_file(service, item['id'], item['name'])
+            delete_file(service, item['id'])
+
+print("Starting Server")
 creds = None
-serviceD = None
+service = None
 
 try:
     if os.path.exists('token.json'):
@@ -134,43 +155,21 @@ try:
             creds = flow.run_local_server(port=0) 
         with open('token.json', 'w') as token:
             token.write(creds.to_json())
-    serviceD = build('drive', 'v3', credentials=creds)
+    service = build('drive', 'v3', credentials=creds)
 except:
-    print("Unable to init Google API")
+    print("Failed to init api")
+    time.sleep(1800)
+    os.system("sudo reboot")
 
-pid = search_for_file(serviceD, "Server Update", "application/vnd.google-apps.folder", None)
+pid = search_for_file(service, "Server Update", "application/vnd.google-apps.folder", None)
 
-try:
-    id = search_for_file(serviceD, "server.py", "text/x-python", pid)
-    os.remove("server.py")
-    download_file(serviceD, id, "server.py")
-    delete_file(serviceD, id)
-except:
-    print("No update server")
-
-try:
-    id = search_for_file(serviceD, "AI.py", "text/x-python", pid)
-    os.remove("AI.py")
-    download_file(serviceD, id, "AI.py")
-    delete_file(serviceD, id)
-except:
-    print("No update AI")
+search(service, False)
 
 mouseKeyboard()
 
 while(True):
-    try:
-        pid = search_for_file(serviceD, "Server Update", "application/vnd.google-apps.folder", None)
-    except:
+    if search(service, False):
         os.system("sudo reboot")
-    try:
-        id = search_for_file(serviceD, "server.py", "text/x-python", pid)
-        os.system("sudo reboot")
-    except:
-        print("No update server")
-    try:
-        id = search_for_file(serviceD, "AI.py", "text/x-python", pid)
-        os.system("sudo reboot")
-    except:
-        print("No update AI")
+    else:
+        print("Nothing found")
     time.sleep(900)

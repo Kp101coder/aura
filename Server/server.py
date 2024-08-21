@@ -14,9 +14,10 @@ print("Initializing Server")
 prints.append("Initalizing Server")
 APIKEY = open("apikey openai.txt", "r+").read()
 
-HOST = subprocess.check_output(['hostname', '-I']).decode('utf-8').strip() 
+HOST = subprocess.check_output(['hostname', '-I']).decode('utf-8').strip()
+HOST = HOST[:HOST.find(" ")]
 #Windows: HOST = s.gethostbyname(s.gethostname())
-print(HOST)
+print(f"HOST: {HOST}")
 PORT = 7106
 MAX_BYTES_ACCEPTED = 4096
 
