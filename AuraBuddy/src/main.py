@@ -26,8 +26,14 @@ def start_program():
         print("Starting background")
         try:
             if os.path.exists("src/Temp/userId.txt"):
-                with open("src/Temp/userId.txt", "r") as f:
-                    ai = Client(f.read().rstrip(), current_pet)
+                with open("src/Temp/userId.txt", "w+") as f:
+                    text = f.read().rstrip()
+                    if text == "":
+                        import secrets
+                        password_length = 13
+                        text = secrets.token_urlsafe(password_length)
+                        f.write(text)
+                    ai = Client(text, current_pet)
             else:
                 with open("src/Temp/userId.txt", "w+") as f:
                     import secrets
