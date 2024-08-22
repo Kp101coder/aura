@@ -164,7 +164,7 @@ def handle_client(communication_socket, ai, id = ""):
                 response = None
                 if image_data:
                     image = base64.b64decode(image_data)
-                    with open(f"images/{id}{str(count("images", id))}.jpg", "wb") as f:
+                    with open(f"images/{id}{str(count('images', id))}.jpg", "wb") as f:
                         f.write(image)
                     print("Image received")
                     prints.append("Image recieved")
