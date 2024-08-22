@@ -10,7 +10,7 @@
 ;CHANGE MY APP VERSION ON COMPILEEEEEEEEEEEE      \\\///
  
 #define MyAppName "Aura Buddy"
-#define MyAppVersion "1.0" ;CHANGE MEMMEMEMEMEMEM
+#define MyAppVersion "1.1" ;CHANGE MEMMEMEMEMEMEM
 #define MyAppPublisher "AuraCLE"
 #define MyAppURL "https://aurabuddy.my.canva.site"
 #define MyAppExeName "AuraBuddy.exe"
