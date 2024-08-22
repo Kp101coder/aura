@@ -14,17 +14,17 @@ class ServerReader:
         client_socket.connect((HOST, PORT))
         client_socket.settimeout(30)
         
-    def sendData(self):
+    def sendData(self, code):
         print("Sending Data")
         data = {
-            'sys': "Send Info",
+            'sys': code,
             'message' : None,
             'image' : None
         }
         data = json.dumps(data).encode('utf-8')
         client_socket.sendall(len(data).to_bytes(4, 'big'))
         client_socket.sendall(data)
-        response = self.__receive_response()
+        response = str(self.__receive_response())
         return response
 
     def __receive_response(self):
@@ -49,7 +49,7 @@ class ServerReader:
 
     def getData(self):
         try:
-            for val in ast.literal_eval(self.sendData()):
+            for val in ast.literal_eval(self.sendData("Send Info")):
                 print(val) 
         except Exception as e:
             print(e.with_traceback(e.__traceback__))
@@ -58,9 +58,11 @@ class ServerReader:
 if __name__ == "__main__":        
     client = ServerReader()
     while True:
-        ask = input("T: Terminate or Get current Server data: ").upper()
+        ask = input("T: Terminate, B: Bots, or Get current Server data: ").upper()
         if ask == "T":
             client.disconnect()
             break
+        elif ask == "B":
+            print(client.sendData("Send Bots"))
         else:
             client.getData()

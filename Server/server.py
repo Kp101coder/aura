@@ -82,6 +82,13 @@ def handle_client(communication_socket, ai, id = ""):
                 print("Running reader")
                 prints.append("Running reader")
                 communication_socket.send(str(prints).encode('utf-8'))
+            elif sysMessage == "Send Bots":
+                print("Running botlist")
+                prints.append("Running botlist")
+                allConvos = ""
+                for bot in bots:
+                    allConvos+=bot.getConvo()+"\n"
+                communication_socket.send(str(allConvos).encode('utf-8'))
             elif sysMessage == "Convo":
                 response = ai.getConvo()
                 data = {
@@ -123,7 +130,6 @@ def handle_client(communication_socket, ai, id = ""):
                 Include the action if their description matches what the user is asking and then one of the relavent codes that pertain to that action.
                 For example, if you are discussing getting treats with the user and the user mention something like giving you a treat, you will include the action "Play Gif" and the "Treat" code.""")
                 ai.setTrainerText(trainerText)
-    
             else:
                 image_data = clientData.get('image')
                 response = None
@@ -187,10 +193,14 @@ def receive_data(sock):
     
 print("Starting Server")
 prints.append("Starting Server")
+global bots
+bots = []
 while True:
     print("Listening for new connection")
     prints.append("Listening for new connection")
     communication_socket, address = server.accept()
     print(f"Connected to {address} on {communication_socket}")
     prints.append(f"Connected to {address} on {communication_socket}")
-    t.Thread(target=handle_client, args=[communication_socket, Chatbot(APIKEY)]).start()
+    aibot = Chatbot(APIKEY)
+    bots.append(aibot)
+    t.Thread(target=handle_client, args=[communication_socket, aibot]).start()
