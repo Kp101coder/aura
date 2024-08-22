@@ -58,11 +58,17 @@ class ServerReader:
 if __name__ == "__main__":        
     client = ServerReader()
     while True:
-        ask = input("T: Terminate, B: Bots, or Get current Server data: ").upper()
+        ask = input("T: Terminate, B: Bots, C: Clean Convos, I: Clean Images, V: View Images and Convos directory or Get current Server data: ").upper()
         if ask == "T":
             client.disconnect()
             break
         elif ask == "B":
             print(client.sendData("Send Bots"))
+        elif ask == "C":
+            print(client.sendData("Clean All Convos"))
+        elif ask == "I":
+            print(client.sendData("Clean All Images"))
+        elif ask == "V":
+            print(client.sendData("View Dirs"))
         else:
             client.getData()

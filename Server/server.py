@@ -82,6 +82,35 @@ def handle_client(communication_socket, ai, id = ""):
                 print("Running reader")
                 prints.append("Running reader")
                 communication_socket.send(str(prints).encode('utf-8'))
+            elif sysMessage == "Clean All Convos":
+                print("Running clean all convos")
+                prints.append("Running clean all convos")
+                folder_path = "previous_convos"
+                for filename in os.listdir(folder_path):
+                    file_path = os.path.join(folder_path, filename)
+                    os.remove(file_path)
+                communication_socket.send("Done".encode('utf-8'))
+            elif sysMessage == "Clean All Images":
+                print("Running clean all images")
+                prints.append("Running clean all images")
+                folder_path = "images"
+                for filename in os.listdir(folder_path):
+                    file_path = os.path.join(folder_path, filename)
+                    os.remove(file_path)
+                communication_socket.send("Done".encode('utf-8'))
+            elif sysMessage == "View Dirs":
+                print("Running view dirs")
+                prints.append("Running view dirs")
+                files = []
+                folder_path = "images"
+                for filename in os.listdir(folder_path):
+                    file_path = os.path.join(folder_path, filename)
+                    files.append(file_path)
+                folder_path = "previous_convos"
+                for filename in os.listdir(folder_path):
+                    file_path = os.path.join(folder_path, filename)
+                    files.append(file_path)  
+                communication_socket.send(str(files).encode('utf-8'))
             elif sysMessage == "Send Bots":
                 print("Running botlist")
                 prints.append("Running botlist")
@@ -135,7 +164,7 @@ def handle_client(communication_socket, ai, id = ""):
                 response = None
                 if image_data:
                     image = base64.b64decode(image_data)
-                    with open("Temp/received_image" + str(count("Temp")) + ".jpg", "wb") as f:
+                    with open(f"images/{id}{str(count("images", id))}.jpg", "wb") as f:
                         f.write(image)
                     print("Image received")
                     prints.append("Image recieved")
@@ -174,10 +203,12 @@ def processResponse(response):
     }
     return data
 
-def count(directory):
+def count(directory, name):
     file_count = 0
     for root, dirs, files in os.walk(directory):
-        file_count += len(files)
+        for file in files:
+            if name in file:
+                file_count+=1
     return file_count
 
 def receive_data(sock):
