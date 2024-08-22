@@ -83,8 +83,8 @@ class XMLReader:
         for pet in pets:
             name = pet.getAttribute("name")
             if name == petname:
-                actionReader = XMLReader(dom=pet)
-                return str(actionReader.getFirstTagValue("description"))
+                petReader = XMLReader(dom=pet)
+                return str(petReader.getFirstTagValue("description"))
             
 
     def getMatchingPetConfigurationAsDom(self, pet: str) -> minidom:

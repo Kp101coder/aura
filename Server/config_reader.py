@@ -75,15 +75,15 @@ class XMLReader:
             actionData.append(dict)
         return actionData
     
-    def getPetDescription(self, pet: str):
-        pets = self.dom.getElementsByTagName("pets")
+    def getPetDescription(self, petname : str):
+        pets = self.dom.getElementsByTagName("pet")
         for pet in pets:
             name = pet.getAttribute("name")
-            if name == pet:
-                actionReader = XMLReader(dom=pet)
-                return actionReader.getFirstTagValue("description")
+            if name == petname:
+                petReader = XMLReader(dom=pet)
+                data = (petReader.getFirstTagValue("description"), petReader.getFirstTagValue("example"))
+                return data
             
-
     def getMatchingPetConfigurationAsDom(self, pet: str) -> minidom:
         pets = self.dom.getElementsByTagName("pet")
         pet_config = None

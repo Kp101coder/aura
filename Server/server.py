@@ -14,9 +14,10 @@ print("Initializing Server")
 prints.append("Initalizing Server")
 APIKEY = open("apikey openai.txt", "r+").read()
 
-HOST = subprocess.check_output(['hostname', '-I']).decode('utf-8').strip()
-HOST = HOST[:HOST.find(" ")]
-#Windows: HOST = s.gethostbyname(s.gethostname())
+#HOST = subprocess.check_output(['hostname', '-I']).decode('utf-8').strip()
+#HOST = HOST[:HOST.find(" ")]
+#Windows: 
+HOST = s.gethostbyname(s.gethostname())
 print(f"HOST: {HOST}")
 PORT = 7106
 MAX_BYTES_ACCEPTED = 4096
@@ -106,11 +107,10 @@ def handle_client(communication_socket, ai, id = ""):
                         convo = f.read()
                     if convo != "" and convo != "[]":
                         convo = ast.literal_eval(convo)
-                        convo.insert(0,{"role": "system", "content": trainerText})
                         ai.setConvo(convo)
             elif sysMessage == "Pet":
                 config = XMLReader()
-                petData = config.getPetDescription(str(message))
+                petData = config.getPetDescription(message)
                 interfaceDescription = config.getInterfaceDescription()
                 trainerText = (f"""You are integrated into a software as a friend, therapist, and assistant.
                 You will respond to all questions as {str(message)}. {str(message)} is {str(petData[0])}
@@ -120,9 +120,10 @@ def handle_client(communication_socket, ai, id = ""):
                 Finnaly, you will interface with the users computer or this software when responding to the users most recent message that fits the following criteria.
                 At the end of your response you will include an Action and a Code formatted like this:
                 
-                (your actual response)
-                Action: (The action) 
-                Code: (The code)
+                your response
+
+                Action: The action
+                Code: The code
 
                 Here are all the action codes and their criteria:
                 {str(interfaceDescription)}

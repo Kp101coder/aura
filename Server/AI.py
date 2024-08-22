@@ -52,7 +52,9 @@ class Chatbot:
         self.messageList = [self.messageList[0]]
         return self.messageList
     
-    def setConvo(self, previousList): 
+    def setConvo(self, previousList: list): 
         '''Makes the current array of messages the inputted array. Returns the new array'''
+        header = self.messageList[0]
         self.messageList = previousList
+        self.messageList.insert(0, header)
         return self.messageList

@@ -26,12 +26,12 @@ code
 class Client:
         def __init__(self, id, pet):
                 HOST = "57.132.171.87" 
-                #Testing: HOST = s.gethostbyname(s.gethostname())
+                #Testing: 
+                HOST = s.gethostbyname(s.gethostname())
                 PORT = 7106
                 self.MAX_BYTES_ACCEPTED = 2048
                 self.client_socket = s.socket(s.AF_INET, s.SOCK_STREAM)
                 self.client_socket.connect((HOST, PORT))
-                self.client_socket.settimeout(30)
                 mixer.init()
                 self.cap = cv2.VideoCapture(0)
                 self.setPet(pet)

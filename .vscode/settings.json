@@ -1,5 +1,6 @@
 {
     "python.analysis.extraPaths": [
         "./Server"
-    ]
+    ],
+    "python.analysis.typeCheckingMode": "off"
 }
