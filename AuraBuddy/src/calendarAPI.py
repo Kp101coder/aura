@@ -149,8 +149,9 @@ class CalendarApp(ctk.CTkToplevel):
         self.events_frame.pack(fill="both", padx=10, pady=10, expand=True, side='right')
         self.events_label = ctk.CTkLabel(self.events_frame, text="Events for selected day:", font=("Helvetica", 16))
         self.events_label.pack(pady=10)
-        self.events_container = ctk.CTkFrame(self.events_frame)
-        self.events_container.pack(fill="both", expand=True)
+        self.scrollpane = ctk.CTkScrollableFrame(self.events_frame)
+        self.scrollpane.pack(fill="both", padx=5, pady=5, expand=True)
+        self.events_frame.pack(fill="both", expand=True)
 
     def get_gear_icon(self):
         gear_image = Image.open("gear_icon.png")
@@ -187,7 +188,7 @@ class CalendarApp(ctk.CTkToplevel):
 
     def display_events_for_day(self, date_str):
         print(f"Displaying events for {date_str}")
-        for widget in self.events_container.winfo_children():
+        for widget in self.scrollpane.winfo_children():
             widget.destroy()
 
         self.selected_event = None
@@ -205,10 +206,10 @@ class CalendarApp(ctk.CTkToplevel):
                 description = event.get('description', '')
 
                 event_details = f"{start} - {end}\n{summary}\n{location}\n{description}"
-                event_button = ctk.CTkButton(self.events_container, text=event_details, command=lambda e=event: self.set_selected_event(e))
+                event_button = ctk.CTkButton(self.scrollpane, text=event_details, command=lambda e=event: self.set_selected_event(e))
                 event_button.pack(fill="x", padx=5, pady=5)
         else:
-            no_event_label = ctk.CTkLabel(self.events_container, text="No events for this day.", font=("Helvetica", 12))
+            no_event_label = ctk.CTkLabel(self.scrollpane, text="No events for this day.", font=("Helvetica", 12))
             no_event_label.pack(pady=10)
 
     def set_selected_event(self, event):
