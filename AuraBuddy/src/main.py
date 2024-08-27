@@ -116,32 +116,35 @@ def start_program():
     print(str(pet.__repr__()))
 
     def check_ai_response():
-        response = ai.sendData("Question", 
-        f"""What emotion is this person showing? 
-        If they are sad/stressed, you will do an in-character response to make them happy, make sure to include the phrase, "you look sad".
-        You will also inform them on how to reduce their stress.
-        If it is close to or past midnight, ask them to sleep and inform them of the benefits of a good night's rest.
-        If they are happy, you do an in-character response saying "Keep smiling!".
-        If they have a neutral expression, you simply do an in-character response like telling a joke.
-        The current time is: {strftime("%I:%M:%p")}""", ai.capture())
-        if "you look sad" in response.get('answer').lower():
-            if os.path.exists("src/Temp/previous_convos.txt"):
-                convo = ""
-                with open("src/Temp/previous_convos.txt", "r") as f:
-                    convo = f.read()
-                    if convo != "" and convo != "[]":
-                        convo = ast.literal_eval(convo)
-                        convo.append({'role': 'assistant', 'content': response.get('answer')})
-                with open("src/Temp/previous_convos.txt", "w") as f:
-                    f.write(str(convo))
-            else:
-                with open("src/Temp/previous_convos.txt", "x") as f:
-                    f.write([{'role': 'assistant', 'content': response.get('answer')}])
-            talk()
+        try:
+            response = ai.sendData("Question", 
+            f"""What emotion is this person showing? 
+            If they are sad/stressed, you will do an in-character response to make them happy, make sure to include the phrase, "you look sad".
+            You will also inform them on how to reduce their stress.
+            If it is close to or past midnight, ask them to sleep and inform them of the benefits of a good night's rest.
+            If they are happy, you do an in-character response saying "Keep smiling!".
+            If they have a neutral expression, you simply do an in-character response like telling a joke.
+            The current time is: {strftime("%I:%M:%p")}""", ai.capture())
+            if "you look sad" in response.get('answer').lower():
+                if os.path.exists("src/Temp/previous_convos.txt"):
+                    convo = ""
+                    with open("src/Temp/previous_convos.txt", "r") as f:
+                        convo = f.read()
+                        if convo != "" and convo != "[]":
+                            convo = ast.literal_eval(convo)
+                            convo.append({'role': 'assistant', 'content': response.get('answer')})
+                    with open("src/Temp/previous_convos.txt", "w") as f:
+                        f.write(str(convo))
+                else:
+                    with open("src/Temp/previous_convos.txt", "x") as f:
+                        f.write([{'role': 'assistant', 'content': response.get('answer')}])
+                talk()
 
-        window.after(600000, check_ai_response)
+            window.after(600000, check_ai_response)
+        except:
+            window.after(1000, check_ai_response)
 
-    window.after(600000, check_ai_response)
+    window.after(00000, check_ai_response)
 
     # Begin the main loop
     window.after(1, pet.on_tick)
@@ -179,11 +182,11 @@ def start_program():
 def killbuddy(): #on exit save the last convo to a text file 
     window.destroy()
     if os.path.exists("src/Temp/previous_convos.txt"):
-        with open("src/Temp/previous_convos.txt", "w") as f:
+        with open("src/Temp/previous_convos.txt", "w", encoding='utf-8') as f:
             answer = str(ai.sendData("Convo").get('answer'))
             f.write(answer)
     else:
-        with open("src/Temp/previous_convos.txt", "x") as f:
+        with open("src/Temp/previous_convos.txt", "x", encoding='utf-8') as f:
             answer = str(ai.sendData("Convo").get('answer'))
             f.write(answer)
     ai.disconnect()

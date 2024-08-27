@@ -31,9 +31,7 @@ class ServerReader:
         data = b''
         while True:
             part = client_socket.recv(MAX_BYTES_ACCEPTED)
-            print(f"Part Len: {len(part)}")
             data += part
-            print(f"Part: {part}")
             if len(part) < MAX_BYTES_ACCEPTED:
                 break
         return data.decode('utf-8')
@@ -49,8 +47,10 @@ class ServerReader:
 
     def getData(self):
         try:
-            for val in ast.literal_eval(self.sendData("Send Info")):
-                print(val) 
+            with open("serverText.txt", "w") as f:
+                self.sendData("Send Info")
+                for val in ast.literal_eval():
+                    f.write(val+"\n")
         except Exception as e:
             print(e.with_traceback(e.__traceback__))
             self.getData()

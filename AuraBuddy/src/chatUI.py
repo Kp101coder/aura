@@ -79,11 +79,11 @@ class ChatbotGUI(ctk.CTkToplevel):
 
     def on_closing(self):
         if os.path.exists("src/Temp/previous_convos.txt"):
-            with open("src/Temp/previous_convos.txt", "w") as f:
+            with open("src/Temp/previous_convos.txt", "w", encoding='utf-8') as f:
                 answer = str(self.client.sendData("Convo").get('answer'))
                 f.write(answer)
         else:
-            with open("src/Temp/previous_convos.txt", "x") as f:
+            with open("src/Temp/previous_convos.txt", "x", encoding='utf-8') as f:
                 answer = str(self.client.sendData("Convo").get('answer'))
                 f.write(answer)
         self.destroy()
